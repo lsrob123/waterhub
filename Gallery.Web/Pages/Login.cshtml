@@ -1,0 +1,32 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData[Constants.PageTitle] = "Login";
+}
+
+<div class="panel-tools">
+    @if (!Model.IsLoggedIn)
+    {
+        <form method="post">
+            <input type="password" required="required" name="password" />
+            <button asp-page-handler="Login">@Model.LogIn</button>
+        </form>
+
+    }
+
+    @if (Model.IsLoggedIn)
+    {
+        <span>You are logged in as @Model.UserName</span>
+        <div class="top-gap">
+            <form method="post">
+                <button asp-page-handler="Logout">@Model.LogOut</button>
+            </form>
+        </div>
+    }
+</div>
+
+@section PageHeader
+{
+    <a class="header-link" href="/">@PageDefinitions.Home.PageTitle</a>
+    <span class="arrow">&#9654;</span> @Model.PageTitle
+}
