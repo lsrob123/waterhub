@@ -1,10 +1,10 @@
-﻿using Gallery.Web.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Gallery.Web.Abstractions;
 using Gallery.Web.Models;
 using LiteDB;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Gallery.Web.Repositories
 {
@@ -12,13 +12,6 @@ namespace Gallery.Web.Repositories
     {
         private readonly ILogger<AlbumRepository> _logger;
         private readonly ISettings _settings;
-
-        static AlbumRepository()
-        {
-            var mapper = BsonMapper.Global;
-
-            mapper.Entity<Album>().Id(x => x.Key);
-        }
 
         public AlbumRepository(ISettings settings, ILogger<AlbumRepository> logger)
         {
@@ -31,7 +24,8 @@ namespace Gallery.Web.Repositories
             try
             {
                 using var store = new AlbumDataStore(_settings);
-                store.Albums.Delete(x => x.Name.ToLower() == albumName.ToLower());
+                var existing = GetAlbumByName(albumName);
+                store.Albums.Delete(existing.Key);
             }
             catch (Exception e)
             {
@@ -96,7 +90,7 @@ namespace Gallery.Web.Repositories
             try
             {
                 using var store = new AlbumDataStore(_settings);
-                store.Albums.Delete(x => x.Name.ToLower() == album.Name.ToLower());
+                store.Albums.Delete(album.Key);
                 store.Albums.Insert(album);
             }
             catch (Exception e)

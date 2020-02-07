@@ -12,12 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="data\" />
     <Folder Include="logs\" />
     <Folder Include="TextMaps\" />
     <Folder Include="Abstractions\" />
     <Folder Include="Repositories\" />
-    <Folder Include="wwwroot\images\albums\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +24,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="SkiaSharp" Version="1.68.1.1" />
-    <PackageReference Include="LiteDB" Version="4.1.4" />
+    <PackageReference Include="LiteDB" Version="5.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
   </ItemGroup>
   <ItemGroup>

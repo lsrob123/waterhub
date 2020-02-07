@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Pages
 {

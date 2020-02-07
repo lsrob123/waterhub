@@ -1,5 +1,5 @@
-﻿using Gallery.Web.Abstractions;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Pages
 {

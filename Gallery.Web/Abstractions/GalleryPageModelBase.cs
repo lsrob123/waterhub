@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Abstractions
 {

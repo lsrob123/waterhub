@@ -3,6 +3,7 @@ using Gallery.Web.Config;
 using Gallery.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Pages
 {

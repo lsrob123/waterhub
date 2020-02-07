@@ -1,49 +1,22 @@
-﻿using System;
-using System.IO;
-using Gallery.Web.Abstractions;
+﻿using Gallery.Web.Abstractions;
 using Gallery.Web.Models;
 using LiteDB;
+using WaterHub.Core.Persistence;
 
 namespace Gallery.Web.Repositories
 {
-    public class AlbumDataStore : IDisposable
+    public class AlbumDataStore : LiteDbStoreBase
     {
-        private bool disposed = false;
-        private readonly LiteDatabase _db;
-
-        public AlbumDataStore(ISettings settings)
+        public AlbumDataStore(ISettings settings) : base(settings)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "data", settings.Database);
-            var folderPath = Path.GetDirectoryName(filePath);
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-            var connectionString = new ConnectionString { Mode = LiteDB.FileMode.Exclusive, Filename = filePath };
-            _db = new LiteDatabase(connectionString);
+            BsonMapper.Global.Entity<Album>().Id(x => x.Key);
 
-            Albums = _db.GetCollection<Album>(nameof(Album));
+            Albums = Database.GetCollection<Album>(nameof(Album));
+            
             Albums.EnsureIndex(x => x.Name, true);
             Albums.EnsureIndex(x => x.TimeCreated, false);
         }
 
-        public LiteCollection<Album> Albums { get; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                _db.Dispose();
-            }
-
-            disposed = true;
-        }
+        public ILiteCollection<Album> Albums { get; }
     }
 }

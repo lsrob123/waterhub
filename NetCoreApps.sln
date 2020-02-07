@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterHub.Core", "WaterHub.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7C451FB7-4E30-4166-9E24-A2179CBD4A77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Web", "Blog.Web\Blog.Web.csproj", "{680A8E74-9A3A-4A8C-833A-D73D97D911C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3324D239-1750-4F4E-AEF8-2C2976754681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3324D239-1750-4F4E-AEF8-2C2976754681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3324D239-1750-4F4E-AEF8-2C2976754681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{680A8E74-9A3A-4A8C-833A-D73D97D911C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{680A8E74-9A3A-4A8C-833A-D73D97D911C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{680A8E74-9A3A-4A8C-833A-D73D97D911C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{680A8E74-9A3A-4A8C-833A-D73D97D911C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3324D239-1750-4F4E-AEF8-2C2976754681} = {7C451FB7-4E30-4166-9E24-A2179CBD4A77}

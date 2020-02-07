@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Services
 {

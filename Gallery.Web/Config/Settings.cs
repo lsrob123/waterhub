@@ -13,7 +13,7 @@ namespace Gallery.Web.Config
         }
 
         public string AlbumRootPath => _configuration.GetValue<string>(nameof(AlbumRootPath));
-        public string Database => _configuration.GetValue<string>(nameof(Database));
+        public string LiteDbDatabaseName => _configuration.GetValue<string>(nameof(LiteDbDatabaseName));
 
         public string DefaultThumbnailUriPathForAlbum => _configuration
             .GetValue<string>(nameof(DefaultThumbnailUriPathForAlbum));
