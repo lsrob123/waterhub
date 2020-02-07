@@ -11,7 +11,14 @@ namespace WaterHub.Core.Services
 
         public TextMapService(IHasTextMapFilePath settings)
         {
-            var json = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), settings.TextMapFilePath));
+            string path = Path.Combine(Directory.GetCurrentDirectory(), settings.TextMapFilePath);
+            if (!File.Exists(path))
+            {
+                _maps = new Dictionary<string, string>();
+                return;
+            }
+
+            var json = File.ReadAllText(path);
             _maps = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
         }
 

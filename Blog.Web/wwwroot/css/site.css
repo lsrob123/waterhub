@@ -1,71 +1,187 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #064b70;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+button {
+    cursor: pointer;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 40px;
+    background-color: #ff6030;
+    box-shadow: 0px 3px 8px -2px rgba(0,0,0,0.75);
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .header .page-title {
+        margin: 8px 15px;
+        font-size: 18px;
+        color: white;
+    }
+
+    .header .arrow {
+        color: white;
+        margin: 0 15px;
+        font-size: 12px;
+    }
+
+    .header .header-link {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .header .header-link:hover {
+            font-weight: bold;
+        }
+
+.content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    bottom: 40px;
+    overflow: auto;
+    padding: 0 10px 10px 10px;
+    color: white;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    background-color: #0b6291;
 }
+
+.top-gap {
+    margin-top: 20px;
+}
+
+.panel-tools {
+    margin-bottom: 10px;
+}
+
+.error-message {
+    color: red;
+}
+
+.albums {
+}
+
+    .albums .album-day {
+        margin-bottom: 30px;
+    }
+
+        .albums .album-day .album-day-title {
+            margin: 20px 5px 0 10px;
+            padding: 5px 150px 5px 10px;
+            background-image: linear-gradient(to right, rgba(230,230,255,0.30), rgb(6, 75, 112, 0.5));
+            display: table;
+        }
+
+        .albums .album-day .album-day-box-title {
+            display: block;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            margin: 10px 10px 5px 12px;
+        }
+
+        .albums .album-day .album-day-box {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: start;
+            align-items: flex-start;
+            align-content: flex-start;
+            margin-top: 5px;
+        }
+
+.album-image {
+    display: block;
+    margin: 10px 10px 15px 10px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 3px;
+    background-color: white;
+    box-shadow: 0px 3px 20px 5px rgba(0,0,0,0.8);
+}
+
+
+.album-image-thumb {
+    display: block;
+    height: 100px;
+}
+
+
+.album-info-editor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+    .album-info-editor .album-info-field {
+        margin: 10px;
+    }
+
+.album-info {
+}
+
+.photos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+    align-content: flex-start;
+    margin-top: 10px;
+}
+
+    .photos .photo-block {
+        display: block;
+        margin: 20px;
+        padding: 7px;
+        background-color: white;
+        box-shadow: 0px 3px 20px 5px rgba(0,0,0,0.8);
+    }
+
+        .photos .photo-block a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .photos .photo-block .thumb {
+            height: 300px;
+            display: block;
+        }
+
+        .photos .photo-block .editing-area {
+            font-size: 12px;
+            color: black;
+            margin-top: 10px;
+            font-weight: normal;
+        }
+
+            .photos .photo-block .editing-area .display-order {
+                width: 40px;
+            }
+
+            .photos .photo-block .editing-area .edit-icon {
+                height: 16px;
+                width: auto;
+                display: inline;
+                position: relative;
+                top: 3px;
+                cursor: pointer;
+            }
