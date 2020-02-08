@@ -7,16 +7,21 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <div class="header">
-        <div class="page-title">
-            @RenderSection(Constants.PageHeader, false)
+    <div class="column-container">
+        <div class="center-column">
+            <div class="header">
+                <div class="site-title">@T.GetMap("Health Note")</div>
+                <div class="page-links">
+                    <a class="page-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
+                    <a class="page-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
+                    <a class="page-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
+                </div>
+                @*@RenderSection(Constants.PageHeader, false)*@
+            </div>
+            <div class="content">
+                @RenderBody()
+            </div>
         </div>
-    </div>
-    <div class="content">
-        @RenderBody()
-    </div>
-    <div class="footer">
-
     </div>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
