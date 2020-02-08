@@ -7,6 +7,14 @@
 
 
   <ItemGroup>
+    <Folder Include="Repositories\" />
+    <Folder Include="Services\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\WaterHub.Core\WaterHub.Core.csproj" />
   </ItemGroup>
 </Project>

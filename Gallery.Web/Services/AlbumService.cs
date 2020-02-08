@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WaterHub.Core.Abstractions;
+using WaterHub.Core.Models;
 
 namespace Gallery.Web.Services
 {

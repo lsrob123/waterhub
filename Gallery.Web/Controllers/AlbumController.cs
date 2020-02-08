@@ -1,15 +1,15 @@
 ﻿using Gallery.Web.Abstractions;
-using Gallery.Web.Config;
 using Gallery.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core.Models;
 
 namespace Gallery.Web.Controllers
 {
     [Route("api/album")]
     [ApiController]
-    public class AlbumController: ControllerBase
+    public class AlbumController : ControllerBase
     {
         private readonly ILogger<AlbumController> _logger;
         private readonly IAlbumService _albumService;
@@ -23,7 +23,7 @@ namespace Gallery.Web.Controllers
         [Authorize]
         [HttpPut]
         [Route("{albumName}/image/{processedFileName}")]
-        public IActionResult UpdateUploadImageDisplayOrder([FromRoute]string albumName, 
+        public IActionResult UpdateUploadImageDisplayOrder([FromRoute]string albumName,
             [FromRoute]string processedFileName, [FromBody] UpdateUploadImageDisplayOrderRequest request)
         {
             var result = _albumService.UpdateUploadImageDisplayOrder(albumName, processedFileName, request.DisplayOrder);

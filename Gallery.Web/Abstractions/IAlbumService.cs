@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Gallery.Web.Config;
 using Gallery.Web.Models;
 using Microsoft.AspNetCore.Http;
+using WaterHub.Core.Models;
 
 namespace Gallery.Web.Abstractions
 {

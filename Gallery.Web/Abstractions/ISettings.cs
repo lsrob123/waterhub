@@ -2,7 +2,7 @@
 
 namespace Gallery.Web.Abstractions
 {
-    public interface ISettings: IHashedPasswordQuery, IHasTextMapFilePath, IHasLiteDbDatabaseName
+    public interface ISettings: IHashedPasswordQuery, IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
     {
         string AlbumRootPath { get; }
         string DefaultThumbnailUriPathForAlbum { get; }

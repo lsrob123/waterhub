@@ -1,4 +1,4 @@
-﻿namespace Gallery.Web.Config
+﻿namespace WaterHub.Core.Models
 {
     public enum ProcessResult
     {

@@ -23,7 +23,7 @@ namespace Gallery.Web
 
         public IConfiguration Configuration { get; }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -51,7 +51,6 @@ namespace Gallery.Web
             });
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISettings, Settings>();
