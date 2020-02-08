@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Blog.Web.Abstractions;
+using Blog.Web.Config;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core.Abstractions;
 
 namespace Blog.Web.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BlodPageModelBase<IndexModel>
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, IAuthService authService, ITextMapService textMapService)
+            : base(logger, authService, textMapService)
         {
-            _logger = logger;
         }
+
+        public override string PageName => PageDefinitions.Home.PageName;
+
+        public override string PageTitle => PageDefinitions.Home.PageTitle;
 
         public void OnGet()
         {
-
         }
     }
 }

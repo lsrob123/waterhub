@@ -68,7 +68,10 @@ namespace Blog.Web
                 };
             });
 
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AuthorizePage($"/{PageDefinitions.Edit.PageName}");
+            }); ;
         }
     }
 }
