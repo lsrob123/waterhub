@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #064b70;
+    background-color: #263238;
 }
 
 button {
@@ -15,7 +15,8 @@ button {
     right: 0;
     top: 0;
     height: 40px;
-    background-color: #ff6030;
+    background-color: rgb(203,67,53);
+    background: linear-gradient(110deg, rgb(176, 58, 46) 0, rgb(231, 76, 60) 400px,rgb(176, 58, 46) 400px, rgb(100, 20, 0) 400px, rgb(120, 40, 31) 410px, rgb(176, 58, 46) 100%);
     box-shadow: 0px 3px 8px -2px rgba(0,0,0,0.75);
 }
 
@@ -58,7 +59,7 @@ button {
     right: 0;
     bottom: 0;
     height: 40px;
-    background-color: #0b6291;
+    background-color: #2a373d;
 }
 
 .top-gap {
@@ -82,9 +83,10 @@ button {
 
         .albums .album-day .album-day-title {
             margin: 20px 5px 0 10px;
-            padding: 5px 150px 5px 10px;
-            background-image: linear-gradient(to right, rgba(230,230,255,0.30), rgb(6, 75, 112, 0.5));
+            padding: 5px 250px 5px 10px;
+            background-image: linear-gradient(to right, rgba(230,230,255,0.30), rgb(38, 50, 56));
             display: table;
+            border-radius: 4px 0 0 4px;
         }
 
         .albums .album-day .album-day-box-title {
@@ -92,7 +94,7 @@ button {
             text-decoration: none;
             color: white;
             cursor: pointer;
-            margin: 10px 10px 5px 12px;
+            margin: 12px 10px 5px 15px;
         }
 
         .albums .album-day .album-day-box {

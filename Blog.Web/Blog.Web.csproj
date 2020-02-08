@@ -4,12 +4,24 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\js\site.ts" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
     <Folder Include="Services\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 

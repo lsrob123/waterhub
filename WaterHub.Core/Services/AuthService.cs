@@ -17,7 +17,6 @@ namespace WaterHub.Core.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHashedPasswordQuery _hashedPasswordQuery;
         private readonly ILogger _logger;
-        
 
         public AuthService(IPasswordHasher<UserModelForPasswordProcesses> passwordHasher, IHttpContextAccessor httpContextAccessor,
             ILoggerFactory loggerFactory, IHashedPasswordQuery hashedPasswordQuery)
