@@ -43,8 +43,7 @@ namespace WaterHub.Core
             return services;
         }
 
-        public static ClaimsPrincipal ToClaimsPrincipal<TUserModel>(this TUserModel user,
-            string authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+        public static ClaimsPrincipal ToClaimsPrincipal<TUserModel>(this TUserModel user, string authenticationScheme)
            where TUserModel : class, IUserModelBase, new()
         {
             var identity = new ClaimsIdentity(authenticationScheme);

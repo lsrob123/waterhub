@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
@@ -65,9 +64,10 @@ namespace WaterHub.Core.Services
                 var user = VerifyHashedPassword(username, plainTextPassword);
                 if (user is null)
                     return ProcessResult.Unauthorized;
-              
+
                 var properties = new AuthenticationProperties { IsPersistent = false };
-                await _httpContextAccessor.HttpContext.SignInAsync(user.ToClaimsPrincipal(), properties);
+                await _httpContextAccessor.HttpContext
+                    .SignInAsync(user.ToClaimsPrincipal(CookieAuthenticationDefaults.AuthenticationScheme), properties);
                 return ProcessResult.OK;
             }
             catch (Exception ex)
