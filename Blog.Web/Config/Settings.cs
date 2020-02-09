@@ -17,16 +17,12 @@ namespace Blog.Web.Config
             _env = env;
         }
 
-        public string HashedPassword => _configuration.GetValue<string>(nameof(HashedPassword));
+        public string AdminHashedPassword => _configuration.GetValue<string>(nameof(AdminHashedPassword));
         public string LiteDbDatabaseName => _configuration.GetValue<string>(nameof(LiteDbDatabaseName));
 
         public SerilogSettings SerilogSettings => SerilogSettings.CreateDefaultSettings(_env.IsDevelopment());
 
         public string TextMapFilePath => _configuration.GetValue<string>(nameof(TextMapFilePath));
 
-        public string GetHashedPassword(string username)
-        {
-            return HashedPassword;
-        }
     }
 }

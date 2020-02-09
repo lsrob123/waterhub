@@ -54,7 +54,7 @@ namespace Gallery.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISettings, Settings>();
-            services.AddWaterHubCoreServices<ISettings>();
+            services.AddWaterHubCoreServices<ISettings, ISettings>();
             services.AddSingleton<IAlbumRepository, AlbumRepository>();
             services.AddSingleton<IAlbumService, AlbumService>();
 

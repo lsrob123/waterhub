@@ -1,7 +1,7 @@
-﻿namespace WaterHub.Core.Models
-{
-    public class UserModelForPasswordProcesses:UserModelBase
-    {
+﻿//namespace WaterHub.Core.Models
+//{
+//    public class UserModelForPasswordProcesses:UserModelBase
+//    {
        
-    }
-}
+//    }
+//}

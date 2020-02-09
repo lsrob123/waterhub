@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
+using System.Linq;
+using System.Security.Claims;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -11,16 +14,18 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
-        public static IServiceCollection AddWaterHubCoreServices<TSettings>(this IServiceCollection services)
-            where TSettings : IHashedPasswordQuery, IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
+        public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
+            (this IServiceCollection services)
+            where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
+            where THashedPasswordQuery : IUserQuery
         {
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IHashedPasswordQuery>(x => x.GetRequiredService<TSettings>());
+            services.AddSingleton<IUserQuery>(x => x.GetRequiredService<THashedPasswordQuery>());
             services.AddSingleton<IHasSerilogSettings>(x => x.GetRequiredService<TSettings>());
             services.AddSingleton<IHasTextMapFilePath>(x => x.GetRequiredService<TSettings>());
             services.AddSingleton<IHasLiteDbDatabaseName>(x => x.GetRequiredService<TSettings>());
-            services.AddSingleton<IPasswordHasher<UserModelForPasswordProcesses>, PasswordHasher<UserModelForPasswordProcesses>>();
+            services.AddSingleton<IPasswordHasher<UserModelBase>, PasswordHasher<UserModelBase>>();
             services.AddSingleton<ITextMapService, TextMapService>();
             services.AddSingleton<IImageProcessService, ImageProcessService>();
             services.AddSingleton<IAuthService, AuthService>();
@@ -38,5 +43,39 @@ namespace WaterHub.Core
             return services;
         }
 
+        public static ClaimsPrincipal ToClaimsPrincipal<TUserModel>(this TUserModel user,
+            string authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+           where TUserModel : class, IUserModelBase, new()
+        {
+            var identity = new ClaimsIdentity(authenticationScheme);
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.Username));
+
+            if (user.IsAdmin)
+                identity.AddClaim(new Claim(ClaimTypes.Role, UserModelBase.Admin));
+            else
+                identity.AddClaim(new Claim(ClaimTypes.Email, user.Username));
+
+            if (!string.IsNullOrEmpty(user.MobilePhone))
+                identity.AddClaim(new Claim(ClaimTypes.MobilePhone, user.MobilePhone));
+
+            return new ClaimsPrincipal(identity);
+        }
+
+        public static TUserModel ToUserModel<TUserModel>(this ClaimsPrincipal claimsPrincipal)
+            where TUserModel : class, IUserModelBase, new()
+        {
+            var username = claimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            if (string.IsNullOrWhiteSpace(username))
+                return null;
+
+            var isAdmin = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value == UserModelBase.Admin;
+            return new TUserModel
+            {
+                Username = username,
+                IsAdmin = isAdmin,
+                Email = isAdmin ? null : username,
+                MobilePhone = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone)?.Value
+            };
+        }
     }
 }

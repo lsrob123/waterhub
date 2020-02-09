@@ -2,7 +2,8 @@
 
 namespace Blog.Web.Abstractions
 {
-    public interface ISettings : IHashedPasswordQuery, IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
+    public interface ISettings :IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
     {
+        string AdminHashedPassword { get; }
     }
 }

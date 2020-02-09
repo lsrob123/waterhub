@@ -1,14 +1,22 @@
 ﻿using System.Threading.Tasks;
+using WaterHub.Core.Models;
 
 namespace WaterHub.Core.Abstractions
 {
     public interface IAuthService
     {
-        string HashPassword(string plainTextPassword);
-        bool VerifyHashedPassword(string username, string plainTextPassword);
-        Task<bool> SignInAsync(string username, string plainTextPassword);
-        Task SignOutAsync();
-        bool IsLoggedIn();
         string GetUserIdentityName();
+
+        string HashPassword(string plainTextPassword);
+
+        bool IsAdmin();
+
+        bool IsLoggedIn();
+
+        Task<ProcessResult> SignInAsync(string username, string plainTextPassword);
+
+        Task SignOutAsync();
+
+        UserModelBase VerifyHashedPassword(string username, string plainTextPassword);
     }
 }

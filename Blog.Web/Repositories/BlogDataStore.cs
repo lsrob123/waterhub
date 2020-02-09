@@ -1,4 +1,6 @@
 ﻿using Blog.Web.Abstractions;
+using Blog.Web.Models;
+using LiteDB;
 using WaterHub.Core.Persistence;
 
 namespace Blog.Web.Repositories
@@ -7,14 +9,13 @@ namespace Blog.Web.Repositories
     {
         public BlogDataStore(ISettings settings) : base(settings)
         {
-            //BsonMapper.Global.Entity<Album>().Id(x => x.Key);
+            BsonMapper.Global.Entity<UserModel>().Id(x => x.Key);
 
-            //Albums = Database.GetCollection<Album>(nameof(Album));
+            Users = Database.GetCollection<UserModel>(nameof(Users));
 
-            //Albums.EnsureIndex(x => x.Name, true);
-            //Albums.EnsureIndex(x => x.TimeCreated, false);
+            Users.EnsureIndex(x => x.MobilePhone, true);
         }
 
-        //public ILiteCollection<Album> Albums { get; }
+        public ILiteCollection<UserModel> Users { get; }
     }
 }

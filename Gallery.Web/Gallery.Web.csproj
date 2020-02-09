@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="logs\" />
+    <Folder Include="data\" />
     <Folder Include="TextMaps\" />
     <Folder Include="Abstractions\" />
     <Folder Include="Repositories\" />
