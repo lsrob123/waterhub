@@ -48,4 +48,53 @@
             icon.style.display = none;
         }
     }
+
+    public showToolTip(htmlContent: string, associatedElementId: string) {
+        const tooltipContent = document.getElementById('tooltip-content');
+        tooltipContent.innerHTML = htmlContent;
+
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(tooltipContent);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand("copy");
+        } catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+
+        const associatedElement = document.getElementById(associatedElementId);
+        var viewportOffset = associatedElement.getBoundingClientRect();
+
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.top = `${viewportOffset.top + 20}px`;
+        tooltip.style.left = `${viewportOffset.left - 5}px`;
+
+        tooltip.style.display = 'block';
+    }
+
+    public copyToolTip() {
+        const tooltipContent = document.getElementById('tooltip-content');
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(tooltipContent);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand("copy");
+        } catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+        this.hideToolTip();
+    }
+
+     public hideToolTip() {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.display = 'none';
+    }
 }

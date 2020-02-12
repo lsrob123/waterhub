@@ -27,4 +27,9 @@
 
         return new ApiCallResult().withError(rawResponse.statusText, rawResponse.status);
     }
+
+    public getUrl(ralativePath: string): string {
+        var rootPath = new RegExp(/^.*\//).exec(window.location.href);
+        return `${rootPath}${ralativePath}`;
+    }
 }

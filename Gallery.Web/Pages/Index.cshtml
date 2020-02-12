@@ -30,9 +30,14 @@
                         {
                             foreach (var uploadImage in album.SortedUploadImages)
                             {
-                                <a class="album-image" href="/images/@uploadImage.UriPath" target="@uploadImage.ProcessedFileName">
-                                    <img class="album-image-thumb" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
-                                </a>
+                                <div class="album-image">
+                                    <a href="/images/@uploadImage.UriPath" target="@uploadImage.ProcessedFileName">
+                                        <img class="album-image-thumb" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
+                                    </a>
+                                    <div class="album-image-footer" id="@uploadImage.ProcessedFileName">
+                                        <button onclick="javascript: album.showToolTip(service.getUrl(@Html.Raw(@$"'images/{uploadImage.UriPath}'")), '@uploadImage.ProcessedFileName');">URL</button>
+                                    </div>
+                                </div>
                             }
                         }
                     </div>
@@ -45,6 +50,12 @@
     {
 
     }
+</div>
+
+<div id="tooltip" style="display:none;">
+    <div id="tooltip-content"></div>
+    <button onclick="javascript: album.copyToolTip();">Copy</button>
+    <button onclick="javascript: album.hideToolTip();">Close</button>
 </div>
 
 @section PageHeader

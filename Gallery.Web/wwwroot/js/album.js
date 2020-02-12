@@ -84,6 +84,48 @@ var Album = /** @class */ (function () {
             icon.style.display = none;
         }
     };
+    Album.prototype.showToolTip = function (htmlContent, associatedElementId) {
+        var tooltipContent = document.getElementById('tooltip-content');
+        tooltipContent.innerHTML = htmlContent;
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(tooltipContent);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        try {
+            document.execCommand("copy");
+        }
+        catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+        var associatedElement = document.getElementById(associatedElementId);
+        var viewportOffset = associatedElement.getBoundingClientRect();
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.top = viewportOffset.top + 20 + "px";
+        tooltip.style.left = viewportOffset.left - 5 + "px";
+        tooltip.style.display = 'block';
+    };
+    Album.prototype.copyToolTip = function () {
+        var tooltipContent = document.getElementById('tooltip-content');
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(tooltipContent);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        try {
+            document.execCommand("copy");
+        }
+        catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+        this.hideToolTip();
+    };
+    Album.prototype.hideToolTip = function () {
+        var tooltip = document.getElementById('tooltip');
+        tooltip.style.display = 'none';
+    };
     return Album;
 }());
 //# sourceMappingURL=album.js.map

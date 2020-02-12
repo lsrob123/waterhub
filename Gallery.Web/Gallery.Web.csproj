@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\api-call-result.ts" />
-    <Content Remove="wwwroot\js\service.ts" />
-    <Content Remove="wwwroot\js\settings.ts" />
-    <Content Remove="wwwroot\js\site.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="TextMaps\" />
     <Folder Include="Abstractions\" />

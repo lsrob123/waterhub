@@ -67,6 +67,10 @@ var Service = /** @class */ (function () {
         }); };
         this.settings = settings;
     }
+    Service.prototype.getUrl = function (ralativePath) {
+        var rootPath = new RegExp(/^.*\//).exec(window.location.href);
+        return "" + rootPath + ralativePath;
+    };
     return Service;
 }());
 //# sourceMappingURL=service.js.map
