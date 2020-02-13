@@ -2,6 +2,6 @@
 {
     public interface ITextMapService
     {
-        string GetMap(string key);
+        string GetMap(string key, string context = null);
     }
 }

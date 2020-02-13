@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
-using System.Linq;
-using System.Security.Claims;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -75,6 +74,12 @@ namespace WaterHub.Core
                 Email = isAdmin ? null : username,
                 MobilePhone = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.MobilePhone)?.Value
             };
+        }
+
+        public static bool IsAdmin(this ClaimsPrincipal claimsPrincipal)
+        {
+            var userModel = claimsPrincipal.ToUserModel<UserModelBase>();
+            return userModel?.IsAdmin == true;
         }
     }
 }

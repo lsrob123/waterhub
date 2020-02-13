@@ -1,5 +1,14 @@
-﻿{
-  "Health Note": "健康笔记",
-  "Home": "主页",
-  "Edit": "编辑"
-}
+﻿[
+  {
+    "key": "Home",
+    "value": "主页"
+  },
+  {
+    "key": "Health Note",
+    "value": "健康笔记"
+  },
+  {
+    "key": "Edit",
+    "value": "编辑"
+  }
+]
