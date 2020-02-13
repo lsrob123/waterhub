@@ -11,11 +11,11 @@ using WaterHub.Core.Abstractions;
 
 namespace Gallery.Web.Pages
 {
-    public class AlbumModel : GalleryPageModelBase<AlbumModel>
+    public class AlbumsModel : GalleryPageModelBase<AlbumsModel>
     {
         private readonly IAlbumService _albumService;
 
-        public AlbumModel(ILogger<AlbumModel> logger, IAlbumService albumService,
+        public AlbumsModel(ILogger<AlbumsModel> logger, IAlbumService albumService,
             IAuthService authService, ITextMapService textMapService)
             : base(logger, authService, textMapService)
         {

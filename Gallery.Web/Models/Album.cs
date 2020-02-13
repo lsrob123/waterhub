@@ -31,8 +31,7 @@ namespace Gallery.Web.Models
         public string InfoDisplay => HasUploadImages ? $"{UploadImages.Count} photos" : "(Empty)";
         public string Name { get; protected set; }
         public string ThumbnailUriPath { get; protected set; }
-        public DateTimeOffset TimeCreated { get; protected set; }
-        public DateTimeOffset TimeUpdated { get; protected set; }
+       
         public Dictionary<string, UploadImage> UploadImages { get; protected set; }
         public Visibility Visibility { get; protected set; }
 

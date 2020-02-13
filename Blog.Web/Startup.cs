@@ -1,6 +1,7 @@
 using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Repositories;
+using Blog.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -54,6 +55,7 @@ namespace Blog.Web
             services.AddSingleton<ISettings, Settings>();
             services.AddSingleton<IBlogRepository, BlogRepository>();
             services.AddWaterHubCoreServices<ISettings, IBlogRepository>();
+            services.AddSingleton<IBlogService, BlogService>();
 
             services.AddAuthentication(options =>
             {

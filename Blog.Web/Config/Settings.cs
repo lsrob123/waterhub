@@ -24,5 +24,8 @@ namespace Blog.Web.Config
 
         public string TextMapFilePath => _configuration.GetValue<string>(nameof(TextMapFilePath));
 
+        public int LatestPostsCount => _configuration.GetValue<int>(nameof(LatestPostsCount));
+
+        public int PostsFromSearchCount => _configuration.GetValue<int>(nameof(PostsFromSearchCount));
     }
 }
