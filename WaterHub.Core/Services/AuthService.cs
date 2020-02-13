@@ -64,6 +64,7 @@ namespace WaterHub.Core.Services
                 var user = VerifyHashedPassword(username, plainTextPassword);
                 if (user is null)
                     return ProcessResult.Unauthorized;
+                user.Username ??= username;
 
                 var properties = new AuthenticationProperties { IsPersistent = false };
                 await _httpContextAccessor.HttpContext

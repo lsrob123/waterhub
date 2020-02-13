@@ -24,7 +24,7 @@
                 <div class="album-day-title">@albumDay.Key.ToString("yyyy-MM-dd")</div>
                 @foreach (var album in albumDay.Value)
                 {
-                    <a class="album-day-box-title" href="/album/@album.Name" target="@album.Name"> @album.Name </a>
+                    <a class="album-day-box-title" href="/albums/@album.Name" target="@album.Name"> @album.Name </a>
                     <div class="album-day-box">
                         @if (album.HasUploadImages)
                         {
@@ -35,7 +35,11 @@
                                         <img class="album-image-thumb" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
                                     </a>
                                     <div class="album-image-footer" id="@uploadImage.ProcessedFileName">
-                                        <button onclick="javascript: album.showToolTip(service.getUrl(@Html.Raw(@$"'images/{uploadImage.UriPath}'")), '@uploadImage.ProcessedFileName');">URL</button>
+                                        <img class="album-image-footer-icon" src="~/images/share-square.svg" 
+                                             onclick="javascript: album.showToolTip(service.getUrl(@Html.Raw(@$"'images/{uploadImage.UriPath}'")), '@uploadImage.ProcessedFileName');" />
+                                        <img class="album-image-footer-icon" src="~/images/copy.svg"
+                                             onclick="javascript: album.copyHyperLink('spn_@uploadImage.ProcessedFileName');" />
+                                        <span class="invisible" id="spn_@uploadImage.ProcessedFileName">@Html.Raw(@$"images/{uploadImage.UriPath}")</span>
                                     </div>
                                 </div>
                             }
@@ -54,8 +58,8 @@
 
 <div id="tooltip" style="display:none;">
     <div id="tooltip-content"></div>
-    <button onclick="javascript: album.copyToolTip();">Copy</button>
-    <button onclick="javascript: album.hideToolTip();">Close</button>
+    <button onclick="javascript: album.copyToolTip();">@T.GetMap("Copy URL")</button>
+    <button onclick="javascript: album.hideToolTip();">@T.GetMap("Close")</button>
 </div>
 
 @section PageHeader

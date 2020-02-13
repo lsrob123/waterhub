@@ -82,6 +82,7 @@ var Album = /** @class */ (function () {
             number.style.display = inline;
             span.style.display = none;
             icon.style.display = none;
+            number.focus();
         }
     };
     Album.prototype.showToolTip = function (htmlContent, associatedElementId) {
@@ -125,6 +126,24 @@ var Album = /** @class */ (function () {
     Album.prototype.hideToolTip = function () {
         var tooltip = document.getElementById('tooltip');
         tooltip.style.display = 'none';
+    };
+    Album.prototype.copyHyperLink = function (elementId) {
+        var element = document.getElementById(elementId);
+        var content = element.innerHTML;
+        element.innerHTML = this.service.getUrl(element.innerHTML);
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        try {
+            document.execCommand("copy");
+        }
+        catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+        element.innerHTML = content;
     };
     return Album;
 }());

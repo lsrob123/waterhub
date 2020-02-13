@@ -2,5 +2,17 @@
   {
     "key": "Home",
     "value": "主页"
+  },
+  {
+    "key": "Show URL",
+    "value": "显示链接"
+  },
+  {
+    "key": "Copy URL",
+    "value": "复制链接"
+  },
+  {
+    "key": "Close",
+    "value": "关闭"
   }
 ]

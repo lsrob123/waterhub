@@ -36,7 +36,7 @@ namespace Gallery.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseFileServer();
 
             app.UseRouting();

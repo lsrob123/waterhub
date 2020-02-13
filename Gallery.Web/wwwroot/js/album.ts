@@ -46,6 +46,7 @@
             number.style.display = inline;
             span.style.display = none;
             icon.style.display = none;
+            number.focus();
         }
     }
 
@@ -97,4 +98,25 @@
         const tooltip = document.getElementById('tooltip');
         tooltip.style.display = 'none';
     }
+
+    public copyHyperLink(elementId) {
+        const element = document.getElementById(elementId);
+        const content = element.innerHTML;
+        element.innerHTML = this.service.getUrl(element.innerHTML);
+
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand("copy");
+        } catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+        element.innerHTML = content;
+    }
+
 }

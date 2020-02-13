@@ -128,7 +128,20 @@ button {
 
     .album-image .album-image-footer {
         color: black;
+        text-align: center;
     }
+
+        .album-image .album-image-footer .album-image-footer-icon {
+            height: 16px;
+            cursor: pointer;
+            margin: 5px 5px 0 5px;
+            padding: 2px 5px;
+        }
+
+            .album-image .album-image-footer .album-image-footer-icon:hover {
+                background-color: #ffb080;
+                border-radius: 2px;
+            }
 
 #tooltip {
     position: fixed;
@@ -194,11 +207,13 @@ button {
         .photos .photo-block .editing-area {
             font-size: 12px;
             color: black;
-            margin-top: 10px;
             font-weight: normal;
+            margin: 5px 0 3px 0;
         }
 
             .photos .photo-block .editing-area .display-order {
+                position: relative;
+                top: 1px;
                 width: 40px;
             }
 
@@ -209,4 +224,16 @@ button {
                 position: relative;
                 top: 3px;
                 cursor: pointer;
+                padding: 2px 5px;
             }
+
+                .photos .photo-block .editing-area .edit-icon:hover {
+                    background-color: #ffb080;
+                    border-radius: 2px;
+                }
+
+.invisible {
+    position: fixed;
+    top: -2000px;
+    left: -2000px;
+}

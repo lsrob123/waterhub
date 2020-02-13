@@ -57,7 +57,8 @@ else if (Model.IsLoggedIn)
                     <span id="span_@uploadImage.ProcessedFileName">@uploadImage.DisplayOrder</span> &nbsp;
                     <input style="display:none;" type="number" class="display-order" id="number_@uploadImage.ProcessedFileName"
                            value="@uploadImage.DisplayOrder"
-                           onchange="album.updateUploadImageDisplayOrderAsync('@Model.Album.Name', '@uploadImage.ProcessedFileName', this.value)" /> &nbsp;
+                           onchange="album.updateUploadImageDisplayOrderAsync('@Model.Album.Name', '@uploadImage.ProcessedFileName', this.value)"
+                           onblur="album.toggleEditState('@uploadImage.ProcessedFileName',false)" /> &nbsp;
                     <img id="icon_@uploadImage.ProcessedFileName" class="edit-icon" src="/images/edit.svg"
                          onclick="album.toggleEditState('@uploadImage.ProcessedFileName', true)" />
                 </div>
