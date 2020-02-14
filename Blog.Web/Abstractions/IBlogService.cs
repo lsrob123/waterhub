@@ -7,9 +7,10 @@ namespace Blog.Web.Abstractions
 {
     public interface IBlogService
     {
-        ICollection<Post> ListLatestPosts(int? postCount = null);
+        ListLatestPostsResponse ListLatestPosts(int? postCount = null);
         ProcessResult UpsertPosts(Post post);
         ProcessResult DeletePost(Guid postKey);
         ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
+        GetPostResponse GetPostByKey(Guid postKey);
     }
 }

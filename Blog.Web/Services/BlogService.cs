@@ -20,9 +20,23 @@ namespace Blog.Web.Services
             return _repository.DeletePost(postKey);
         }
 
-        public ICollection<Post> ListLatestPosts(int? postCount = null)
+        public GetPostResponse GetPostByKey(Guid postKey)
         {
-            return _repository.ListLatestPosts(postCount);
+            var response = new GetPostResponse
+            {
+                Post = _repository.GetPostByKey(postKey)
+            };
+            return response;
+        }
+
+        public ListLatestPostsResponse ListLatestPosts(int? postCount = null)
+        {
+            var response = new ListLatestPostsResponse
+            {
+                LatestPosts = _repository.ListLatestPosts(postCount),
+                StickyPosts = _repository.ListStickyPosts(postCount)
+            };
+            return response;
         }
 
         public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords)

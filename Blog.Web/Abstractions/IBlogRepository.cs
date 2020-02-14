@@ -10,6 +10,8 @@ namespace Blog.Web.Abstractions
     {
         UserModel GetUserByUsername(string username);
         ICollection<Post> ListLatestPosts(int? postCount = null);
+        ICollection<Post> ListStickyPosts(int? postCount = null);
+        Post GetPostByKey(Guid postKey);
         ProcessResult UpsertPosts(Post post);
         ProcessResult DeletePost(Guid postKey);
         ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);

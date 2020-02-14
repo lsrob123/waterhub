@@ -23,10 +23,13 @@ namespace Blog.Web.Pages
         public override string PageTitle => PageDefinitions.Home.PageTitle;
 
         public ICollection<Post> LatestPosts;
+        public ICollection<Post> StickyPosts;
 
         public void OnGet()
         {
-            LatestPosts = _blogService.ListLatestPosts();
+            var response = _blogService.ListLatestPosts();
+            LatestPosts = response.LatestPosts ?? new List<Post>();
+            StickyPosts = response.StickyPosts ?? new List<Post>();
         }
     }
 }

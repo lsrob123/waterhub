@@ -18,15 +18,6 @@ namespace Gallery.Web.Services
             return albums;
         }
 
-        public static T WithKey<T>(this T entity, Guid? key = null)
-            where T : EntityBase
-        {
-            key ??= Guid.NewGuid();
-
-            entity.SetKey(key.Value);
-            return entity;
-        }
-
         public static IDictionary<DateTimeOffset, List<Album>> AddAlbum
             (this IDictionary<DateTimeOffset, List<Album>> albums, Album album)
         {

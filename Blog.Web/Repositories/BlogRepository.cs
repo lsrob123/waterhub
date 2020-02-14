@@ -68,6 +68,26 @@ namespace Blog.Web.Repositories
             }
         }
 
+        public ICollection<Post> ListStickyPosts(int? postCount = null)
+        {
+            try
+            {
+                postCount ??= _settings.LatestPostsCount;
+                using var store = new BlogDataStore(_settings);
+                var posts = store.Posts.Query()
+                    .Where(x=>x.Flags.HasFlag(PostFlags.Sticky))
+                    .OrderByDescending(x => x.TimeCreated)
+                    .Limit(postCount.Value)
+                    .ToList();
+                return posts;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return new List<Post>();
+            }
+        }
+
         public ProcessResult UpsertPosts(Post post)
         {
             try
@@ -132,6 +152,21 @@ namespace Blog.Web.Repositories
             {
                 _logger.LogError(e, e.Message);
                 return new List<Post>();
+            }
+        }
+
+        public Post GetPostByKey(Guid postKey)
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                var post = store.Posts.FindById(postKey);
+                return post;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return null;
             }
         }
     }

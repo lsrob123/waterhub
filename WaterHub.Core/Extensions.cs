@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,14 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
+        public static T EnsureValidKey<T>(this T entity)
+          where T : EntityBase
+        {
+            if (entity.Key == default)
+                entity.SetKey(Guid.NewGuid());
+            return entity;
+        }
+
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
             (this IServiceCollection services)
             where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings

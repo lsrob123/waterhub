@@ -7,6 +7,7 @@ namespace Blog.Web.Models
     {
         public string Title { get; set; }
         public string Content { get; set; }
+        public string Flags { get; set; }
         public ICollection<Tag> Tags { get; set; }
     }
 }
