@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Gallery.Web.Config;
+using WaterHub.Core;
 using WaterHub.Core.Models;
 
 namespace Gallery.Web.Models
@@ -14,10 +15,11 @@ namespace Gallery.Web.Models
 
         public Album(string name, string description, string defaultThumbnailUriPath, int dayOffset)
         {
+            this.WithValidKey();
+
             Name = name;
             WithAlbumInfo(description, Visibility.Public);
             DefaultThumbnailUriPath = ThumbnailUriPath = defaultThumbnailUriPath;
-            SetKey(Guid.NewGuid());
 
             TimeCreated = DateTimeOffset.UtcNow.AddDays(dayOffset);
             WithTimeUpdated(DateTimeOffset.UtcNow);

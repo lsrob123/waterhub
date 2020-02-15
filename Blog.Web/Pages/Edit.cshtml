@@ -1,8 +1,14 @@
-﻿@page "{postKey?}"
+﻿@page "{article?}"
 @model Blog.Web.EditModel
 @{
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Edit.PageTitle);
 }
 
-<h1>Edit</h1>
+<form method="post">
+    <div>Title <input type="text" asp-for="PostInEdit.Title" /></div>
+    <div>Content <textarea asp-for="PostInEdit.Content"></textarea></div>
+    <div>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></div>
+    <input type="hidden" asp-for="PostInEdit.Key"/>
+    <button asp-page-handler="Article">Submit</button>
+</form>
 

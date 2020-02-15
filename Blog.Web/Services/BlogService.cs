@@ -15,16 +15,27 @@ namespace Blog.Web.Services
             _repository = repository;
         }
 
-        public ProcessResult DeletePost(Guid postKey)
+        public ProcessResult<Post> DeletePost(Guid postKey)
         {
             return _repository.DeletePost(postKey);
         }
 
         public GetPostResponse GetPostByKey(Guid postKey)
         {
+            var result = _repository.GetPostByKey(postKey);
             var response = new GetPostResponse
             {
-                Post = _repository.GetPostByKey(postKey)
+                Post = result.IsOk ? result.Data : null
+            };
+            return response;
+        }
+
+        public GetPostResponse GetPostByUrlFriendlyTitle(string urlFriendlyTitle)
+        {
+            var result = _repository.GetPostByUrlFriendlyTitle(urlFriendlyTitle);
+            var response = new GetPostResponse
+            {
+                Post = result.IsOk ? result.Data : null
             };
             return response;
         }
@@ -44,9 +55,10 @@ namespace Blog.Web.Services
             return _repository.ListPostsByTags(keywords);
         }
 
-        public ProcessResult UpsertPosts(Post post)
+        public ProcessResult<Post> UpsertPost(Post post)
         {
-            return _repository.UpsertPosts(post);
+            var result = _repository.UpsertPost(post);
+            return result;
         }
     }
 }

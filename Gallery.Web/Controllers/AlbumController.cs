@@ -3,7 +3,7 @@ using Gallery.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WaterHub.Core.Models;
+using System.Net;
 
 namespace Gallery.Web.Controllers
 {
@@ -11,8 +11,8 @@ namespace Gallery.Web.Controllers
     [ApiController]
     public class AlbumController : ControllerBase
     {
-        private readonly ILogger<AlbumController> _logger;
         private readonly IAlbumService _albumService;
+        private readonly ILogger<AlbumController> _logger;
 
         public AlbumController(ILogger<AlbumController> logger, IAlbumService albumService)
         {
@@ -27,10 +27,10 @@ namespace Gallery.Web.Controllers
             [FromRoute]string processedFileName, [FromBody] UpdateUploadImageDisplayOrderRequest request)
         {
             var result = _albumService.UpdateUploadImageDisplayOrder(albumName, processedFileName, request.DisplayOrder);
-            return result.ProcessResult switch
+            return result.Status switch
             {
-                ProcessResult.NotFound => NotFound(),
-                _ => Ok(result.Album.UploadImages[processedFileName]),
+                HttpStatusCode.NotFound => NotFound(),
+                _ => Ok(result.Data.UploadImages[processedFileName]),
             };
         }
     }

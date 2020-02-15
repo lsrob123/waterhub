@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blog.Web.Abstractions;
+﻿using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
@@ -13,31 +12,42 @@ namespace Blog.Web
     {
         private readonly IBlogService _blogService;
 
-        public EditModel(ILogger<EditModel> logger, IAuthService authService, ITextMapService textMapService, IBlogService blogService)
+        public EditModel(ILogger<EditModel> logger, IAuthService authService, ITextMapService textMapService,
+            IBlogService blogService)
           : base(logger, authService, textMapService)
         {
             _blogService = blogService;
         }
 
+        public string ErrorMessage { get; set; }
         public override string PageName => PageDefinitions.Edit.PageName;
-
         public override string PageTitle => PageDefinitions.Edit.PageTitle;
 
+        [BindProperty]
         public Post PostInEdit { get; set; }
 
-        public void OnGet(Guid? postKey)
+        public void OnGet([FromRoute]string article)
         {
-            if (postKey.HasValue)
+            if (string.IsNullOrWhiteSpace(article))
             {
-                var response = _blogService.GetPostByKey(postKey.Value);
-                PostInEdit = response?.Post ?? new Post().EnsureValidKey();
+                PostInEdit = new Post().WithValidKey();
             }
             else
             {
-                PostInEdit = new Post().EnsureValidKey();
+                var response = _blogService.GetPostByUrlFriendlyTitle(article);
+                PostInEdit = response?.Post;
             }
         }
 
-        public Task OnPostArticleAsync(Guid postKey, string title, string content, string flagText)
+        public IActionResult OnPostArticle()
+        {
+            var result = _blogService.UpsertPost(PostInEdit.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
+
+            if (result.IsOk)
+                return RedirectToPage(PageDefinitions.Edit.PageName, new { article = PostInEdit.UrlFriendlyTitle });
+
+            ErrorMessage = result.ErrorMessage;
+            return Page();
+        }
     }
 }

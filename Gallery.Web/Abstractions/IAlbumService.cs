@@ -29,7 +29,7 @@ namespace Gallery.Web.Abstractions
 
         AlbumDaysCollection ListAlbumDays(Visibility visibility);
 
-        (Album Album, ProcessResult ProcessResult) UpdateUploadImageDisplayOrder
+        ProcessResult<Album> UpdateUploadImageDisplayOrder
             (string albumName, string processedFileName, int displayOrder);
     }
 }

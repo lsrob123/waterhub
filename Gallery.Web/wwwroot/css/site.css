@@ -121,27 +121,27 @@ button {
         cursor: pointer;
     }
 
-        .album-image a .album-image-thumb {
-            display: block;
-            height: 100px;
-        }
+.thumb-in-index {
+    display: block;
+    height: 100px;
+}
 
-    .album-image .album-image-footer {
-        color: black;
-        text-align: center;
+.album-image .album-image-footer {
+    color: black;
+    text-align: center;
+}
+
+    .album-image .album-image-footer .album-image-footer-icon {
+        height: 16px;
+        cursor: pointer;
+        margin: 5px 5px 0 5px;
+        padding: 2px 5px;
     }
 
-        .album-image .album-image-footer .album-image-footer-icon {
-            height: 16px;
-            cursor: pointer;
-            margin: 5px 5px 0 5px;
-            padding: 2px 5px;
+        .album-image .album-image-footer .album-image-footer-icon:hover {
+            background-color: #ffb080;
+            border-radius: 2px;
         }
-
-            .album-image .album-image-footer .album-image-footer-icon:hover {
-                background-color: #ffb080;
-                border-radius: 2px;
-            }
 
 #tooltip {
     position: fixed;
@@ -199,38 +199,38 @@ button {
             cursor: pointer;
         }
 
-        .photos .photo-block .thumb {
-            height: 300px;
-            display: block;
+.thumb-in-album {
+    height: 200px;
+    display: block;
+}
+
+.photos .photo-block .editing-area {
+    font-size: 12px;
+    color: black;
+    font-weight: normal;
+    margin: 5px 0 3px 0;
+}
+
+    .photos .photo-block .editing-area .display-order {
+        position: relative;
+        top: 1px;
+        width: 40px;
+    }
+
+    .photos .photo-block .editing-area .edit-icon {
+        height: 16px;
+        width: auto;
+        display: inline;
+        position: relative;
+        top: 3px;
+        cursor: pointer;
+        padding: 2px 5px;
+    }
+
+        .photos .photo-block .editing-area .edit-icon:hover {
+            background-color: #ffb080;
+            border-radius: 2px;
         }
-
-        .photos .photo-block .editing-area {
-            font-size: 12px;
-            color: black;
-            font-weight: normal;
-            margin: 5px 0 3px 0;
-        }
-
-            .photos .photo-block .editing-area .display-order {
-                position: relative;
-                top: 1px;
-                width: 40px;
-            }
-
-            .photos .photo-block .editing-area .edit-icon {
-                height: 16px;
-                width: auto;
-                display: inline;
-                position: relative;
-                top: 3px;
-                cursor: pointer;
-                padding: 2px 5px;
-            }
-
-                .photos .photo-block .editing-area .edit-icon:hover {
-                    background-color: #ffb080;
-                    border-radius: 2px;
-                }
 
 .invisible {
     position: fixed;

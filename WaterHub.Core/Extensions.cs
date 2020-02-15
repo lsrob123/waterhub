@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -14,16 +15,10 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
-        public static T EnsureValidKey<T>(this T entity)
-          where T : EntityBase
-        {
-            if (entity.Key == default)
-                entity.SetKey(Guid.NewGuid());
-            return entity;
-        }
+        private const string Dash = "-", PatternForUrlFriendlyString = @"[^A-Za-z0-9_\.~]+";
 
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
-            (this IServiceCollection services)
+                            (this IServiceCollection services)
             where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
             where THashedPasswordQuery : IUserQuery
         {
@@ -51,6 +46,18 @@ namespace WaterHub.Core
             return services;
         }
 
+        public static string CodedErrorMessage(this Exception exception, Guid? code = null)
+        {
+            code ??= Guid.NewGuid();
+            return $"[{code}]{exception.Message}";
+        }
+
+        public static bool IsAdmin(this ClaimsPrincipal claimsPrincipal)
+        {
+            var userModel = claimsPrincipal.ToUserModel<UserModelBase>();
+            return userModel?.IsAdmin == true;
+        }
+
         public static ClaimsPrincipal ToClaimsPrincipal<TUserModel>(this TUserModel user, string authenticationScheme)
            where TUserModel : class, IUserModelBase, new()
         {
@@ -68,8 +75,15 @@ namespace WaterHub.Core
             return new ClaimsPrincipal(identity);
         }
 
+        public static string ToUrlFriendlyString(this string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new ArgumentNullException(nameof(input));
+            return Regex.Replace(input, PatternForUrlFriendlyString, Dash).ToLower();
+        }
+
         public static TUserModel ToUserModel<TUserModel>(this ClaimsPrincipal claimsPrincipal)
-            where TUserModel : class, IUserModelBase, new()
+                    where TUserModel : class, IUserModelBase, new()
         {
             var username = claimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
             if (string.IsNullOrWhiteSpace(username))
@@ -85,10 +99,20 @@ namespace WaterHub.Core
             };
         }
 
-        public static bool IsAdmin(this ClaimsPrincipal claimsPrincipal)
+        public static T WithUpdateOnTimeUpdated<T>(this T entity)
+          where T : EntityBase
         {
-            var userModel = claimsPrincipal.ToUserModel<UserModelBase>();
-            return userModel?.IsAdmin == true;
+            entity.TimeUpdated = DateTimeOffset.UtcNow;
+            return entity;
+        }
+
+        public static T WithValidKey<T>(this T entity, Guid? key = null) where T : EntityBase
+        {
+            key = key.HasValue && key.Value != default ? key : Guid.NewGuid();
+
+            if (entity.Key == default)
+                entity.Key = key.Value;
+            return entity;
         }
     }
 }

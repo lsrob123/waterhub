@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Blog.Web.Models;
+using System;
 using System.Collections.Generic;
-using Blog.Web.Models;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Abstractions
 {
     public interface IBlogService
     {
-        ListLatestPostsResponse ListLatestPosts(int? postCount = null);
-        ProcessResult UpsertPosts(Post post);
-        ProcessResult DeletePost(Guid postKey);
-        ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
+        ProcessResult<Post> DeletePost(Guid postKey);
+
         GetPostResponse GetPostByKey(Guid postKey);
+
+        GetPostResponse GetPostByUrlFriendlyTitle(string urlFriendlyTitle);
+
+        ListLatestPostsResponse ListLatestPosts(int? postCount = null);
+
+        ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
+
+        ProcessResult<Post> UpsertPost(Post post);
     }
 }

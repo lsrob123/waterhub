@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
@@ -164,24 +165,18 @@ namespace Gallery.Web.Services
             return album;
         }
 
-        public (Album Album, ProcessResult ProcessResult) UpdateUploadImageDisplayOrder
+        public ProcessResult<Album> UpdateUploadImageDisplayOrder
             (string albumName, string processedFileName, int displayOrder)
         {
-            (Album Album, ProcessResult ProcessResult) result = (Album: null, ProcessResult: ProcessResult.Unknown);
             var album = _albumRepository.GetAlbumByName(albumName);
             if (album is null||!album.HasUploadImages|| 
                 !album.UploadImages.TryGetValue(processedFileName, out var uploadImage))
-            {
-                result.ProcessResult = ProcessResult.NotFound;
-                return result;
-            }
+                return new ProcessResult<Album>().AsError(HttpStatusCode.NotFound);
 
             uploadImage.WithDisplayOrder(displayOrder);
             UpdateAlbum(album);
 
-            result.Album = album;
-            result.ProcessResult = ProcessResult.OK;
-            return result;
+            return new ProcessResult<Album>().AsOk(album);
         }
 
         private static void CheckFileExistence(string albumPath, string processedFilePath,

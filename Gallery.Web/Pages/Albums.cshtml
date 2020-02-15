@@ -46,22 +46,25 @@ else if (Model.IsLoggedIn)
         {
             foreach (var uploadImage in Model.Album.SortedUploadImages)
             {
+                var imagePath = Model.IsLoggedIn ? uploadImage.IconUriPath : uploadImage.ThumbnailUriPath;
+                var imageClass = Model.IsLoggedIn ? "thumb-in-index" : "thumb-in-album";
+
                 <div class="photo-block">
                     <a href="/images/@uploadImage.UriPath" target="@uploadImage.ProcessedFileName">
-                        <img class="thumb" src="/images/@uploadImage.ThumbnailUriPath" />
+                        <img class="@imageClass" src="/images/@imagePath" />
                     </a>
                     @if (Model.IsLoggedIn)
                     {
-                <div class="editing-area">
-                    <strong>Display Order</strong> &nbsp;
-                    <span id="span_@uploadImage.ProcessedFileName">@uploadImage.DisplayOrder</span> &nbsp;
-                    <input style="display:none;" type="number" class="display-order" id="number_@uploadImage.ProcessedFileName"
-                           value="@uploadImage.DisplayOrder"
-                           onchange="album.updateUploadImageDisplayOrderAsync('@Model.Album.Name', '@uploadImage.ProcessedFileName', this.value)"
-                           onblur="album.toggleEditState('@uploadImage.ProcessedFileName',false)" /> &nbsp;
-                    <img id="icon_@uploadImage.ProcessedFileName" class="edit-icon" src="/images/edit.svg"
-                         onclick="album.toggleEditState('@uploadImage.ProcessedFileName', true)" />
-                </div>
+                        <div class="editing-area">
+                            <strong>Display Order</strong> &nbsp;
+                            <span id="span_@uploadImage.ProcessedFileName">@uploadImage.DisplayOrder</span> &nbsp;
+                            <input style="display:none;" type="number" class="display-order" id="number_@uploadImage.ProcessedFileName"
+                                   value="@uploadImage.DisplayOrder"
+                                   onchange="album.updateUploadImageDisplayOrderAsync('@Model.Album.Name', '@uploadImage.ProcessedFileName', this.value)"
+                                   onblur="album.toggleEditState('@uploadImage.ProcessedFileName',false)" /> &nbsp;
+                            <img id="icon_@uploadImage.ProcessedFileName" class="edit-icon" src="/images/edit.svg"
+                                 onclick="album.toggleEditState('@uploadImage.ProcessedFileName', true)" />
+                        </div>
                     }
                 </div>
             }

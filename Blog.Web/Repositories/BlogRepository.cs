@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using WaterHub.Core;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Repositories
@@ -17,6 +19,49 @@ namespace Blog.Web.Repositories
         {
             _settings = settings;
             _logger = logger;
+        }
+
+        public ProcessResult<Post> DeletePost(Guid postKey)
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                store.Posts.Delete(postKey);
+                store.Tags.DeleteMany(x => x.PostKey == postKey);
+                return new ProcessResult<Post>().AsOk();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        public ProcessResult<Post> GetPostByKey(Guid postKey)
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                var post = store.Posts.FindById(postKey);
+                return new ProcessResult<Post>().AsOk();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        public ProcessResult<Post> GetPostByUrlFriendlyTitle(string urlFriendlyTitle)
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                var post = store.Posts.FindOne(x => x.UrlFriendlyTitle == urlFriendlyTitle);
+                return new ProcessResult<Post>().AsOk();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
         }
 
         public UserModelBase GetUser(string username)
@@ -68,65 +113,6 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<Post> ListStickyPosts(int? postCount = null)
-        {
-            try
-            {
-                postCount ??= _settings.LatestPostsCount;
-                using var store = new BlogDataStore(_settings);
-                var posts = store.Posts.Query()
-                    .Where(x=>x.Flags.HasFlag(PostFlags.Sticky))
-                    .OrderByDescending(x => x.TimeCreated)
-                    .Limit(postCount.Value)
-                    .ToList();
-                return posts;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return new List<Post>();
-            }
-        }
-
-        public ProcessResult UpsertPosts(Post post)
-        {
-            try
-            {
-                using var store = new BlogDataStore(_settings);
-                var existing = store.Posts.FindById(post.Key);
-                if (!(existing is null))
-                    store.Posts.Delete(post.Key);
-
-                store.Tags.DeleteMany(x => x.PostKey == post.Key);
-                if (!(post.Tags is null))
-                    store.Tags.InsertBulk(post.Tags);
-
-                store.Posts.Insert(post);
-                return ProcessResult.OK;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return ProcessResult.InternalServerError;
-            }
-        }
-
-        public ProcessResult DeletePost(Guid postKey)
-        {
-            try
-            {
-                using var store = new BlogDataStore(_settings);
-                store.Posts.Delete(postKey);
-                store.Tags.DeleteMany(x => x.PostKey == postKey);
-                return ProcessResult.OK;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return ProcessResult.InternalServerError;
-            }
-        }
-
         public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords)
         {
             try
@@ -155,19 +141,53 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public Post GetPostByKey(Guid postKey)
+        public ICollection<Post> ListStickyPosts(int? postCount = null)
         {
             try
             {
+                postCount ??= _settings.LatestPostsCount;
                 using var store = new BlogDataStore(_settings);
-                var post = store.Posts.FindById(postKey);
-                return post;
+                var posts = store.Posts.Query()
+                    .Where(x => x.IsSticky)
+                    .OrderByDescending(x => x.TimeCreated)
+                    .Limit(postCount.Value)
+                    .ToList();
+                return posts;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return null;
+                return new List<Post>();
             }
+        }
+
+        public ProcessResult<Post> UpsertPost(Post post)
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                var existing = store.Posts.FindById(post.Key);
+                if (!(existing is null))
+                    store.Posts.Delete(post.Key);
+
+                store.Tags.DeleteMany(x => x.PostKey == post.Key);
+                if (!(post.Tags is null))
+                    store.Tags.InsertBulk(post.Tags);
+
+                store.Posts.Insert(post);
+                return new ProcessResult<Post>().AsOk(data: post);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        private ProcessResult<Post> InternalServerError(Exception e)
+        {
+            var errorCode = Guid.NewGuid();
+            _logger.LogError(e, e.CodedErrorMessage(errorCode));
+            return new ProcessResult<Post>().AsError(e, errorCode.ToString(), HttpStatusCode.InternalServerError);
         }
     }
 }

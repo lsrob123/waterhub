@@ -16,16 +16,17 @@ namespace Blog.Web.Repositories
             BsonMapper.Global.Entity<Post>().Id(x => x.Key);
             Posts = Database.GetCollection<Post>(nameof(Posts));
             Posts.EnsureIndex(x => x.Title, true);
-            Posts.EnsureIndex(x => x.TimeCreated, true);
+            Posts.EnsureIndex(x => x.UrlFriendlyTitle, true);
+            Posts.EnsureIndex(x => x.TimeCreated);
 
             BsonMapper.Global.Entity<Tag>().Id(x => x.Key);
             Tags = Database.GetCollection<Tag>(nameof(Tags));
             Tags.EnsureIndex(x => x.Text);
-            Tags.EnsureIndex(x => x.PostKey, true);
+            Tags.EnsureIndex(x => x.PostKey);
         }
 
-        public ILiteCollection<UserModel> Users { get; }
         public ILiteCollection<Post> Posts { get; }
         public ILiteCollection<Tag> Tags { get; }
+        public ILiteCollection<UserModel> Users { get; }
     }
 }
