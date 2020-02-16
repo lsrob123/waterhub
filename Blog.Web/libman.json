@@ -1,5 +1,14 @@
 {
   "version": "1.0",
   "defaultProvider": "cdnjs",
-  "libraries": []
+  "libraries": [
+    {
+      "library": "jodit@3.3.23",
+      "destination": "wwwroot/jodit/",
+      "files": [
+        "jodit.min.js",
+        "jodit.min.css"
+      ]
+    }
+  ]
 }
