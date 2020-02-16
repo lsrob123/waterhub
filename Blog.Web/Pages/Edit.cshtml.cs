@@ -3,6 +3,7 @@ using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 
@@ -26,17 +27,23 @@ namespace Blog.Web
         [BindProperty]
         public Post PostInEdit { get; set; }
 
+        public string AllTagsInText { get; set; }
+
         public void OnGet([FromRoute]string article)
         {
             if (string.IsNullOrWhiteSpace(article))
             {
                 PostInEdit = new Post().WithValidKey();
+                return;
             }
-            else
-            {
+
+
                 var response = _blogService.GetPostByUrlFriendlyTitle(article);
                 PostInEdit = response?.Post;
-            }
+
+            AllTagsInText = JsonSerializer.Serialize(
+                response.AllTags is null ? new string[] { } : response.AllTags,
+                new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
         }
 
         //public IActionResult OnPostArticle()

@@ -18,5 +18,7 @@ namespace Blog.Web.Abstractions
         ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
 
         ProcessResult<Post> UpsertPost(Post post);
+
+        ICollection<string> ListAllTags();
     }
 }

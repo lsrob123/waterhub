@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Blog.Web.Abstractions;
+﻿using Blog.Web.Abstractions;
 using Blog.Web.Models;
+using System;
+using System.Collections.Generic;
+using WaterHub.Core;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Services
@@ -25,7 +26,8 @@ namespace Blog.Web.Services
             var result = _repository.GetPostByKey(postKey);
             var response = new GetPostResponse
             {
-                Post = result.IsOk ? result.Data : null
+                Post = result.IsOk ? result.Data : null,
+                AllTags = ListAllTags()
             };
             return response;
         }
@@ -35,9 +37,15 @@ namespace Blog.Web.Services
             var result = _repository.GetPostByUrlFriendlyTitle(urlFriendlyTitle);
             var response = new GetPostResponse
             {
-                Post = result.IsOk ? result.Data : null
+                Post = result.IsOk ? result.Data : null,
+                AllTags = ListAllTags()
             };
             return response;
+        }
+
+        public ICollection<string> ListAllTags()
+        {
+            return _repository.ListAllTags(); // TODO: Add caching
         }
 
         public ListLatestPostsResponse ListLatestPosts(int? postCount = null)
@@ -57,7 +65,7 @@ namespace Blog.Web.Services
 
         public ProcessResult<Post> UpsertPost(Post post)
         {
-            var result = _repository.UpsertPost(post);
+            var result = _repository.UpsertPost(post.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
             return result;
         }
     }

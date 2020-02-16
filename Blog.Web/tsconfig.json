@@ -7,7 +7,7 @@
     "target": "es5",
     "lib": [ "es2015", "DOM", "ES2017", "DOM.Iterable" ]
   },
-  "files": [ "wwwroot/js/site.ts" ],
+  "files": [ "wwwroot/js/app.ts" ],
   "exclude": [
     "node_modules",
     "wwwroot"

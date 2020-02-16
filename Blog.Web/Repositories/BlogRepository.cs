@@ -94,6 +94,21 @@ namespace Blog.Web.Repositories
             }
         }
 
+        public ICollection<string> ListAllTags()
+        {
+            try
+            {
+                using var store = new BlogDataStore(_settings);
+                var tags = store.Tags.FindAll().Select(x => x.Text).Distinct().ToList();
+                return tags;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return new List<string>();
+            }
+        }
+
         public ICollection<Post> ListLatestPosts(int? postCount = null)
         {
             try
@@ -186,6 +201,7 @@ namespace Blog.Web.Repositories
                     store.Tags.InsertBulk(post.Tags);
 
                 store.Posts.Insert(post);
+
                 return new ProcessResult<Post>().AsOk(data: post);
             }
             catch (Exception e)

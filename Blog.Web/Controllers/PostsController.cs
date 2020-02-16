@@ -18,9 +18,9 @@ namespace Blog.Web.Controllers
         [HttpPost]
         [HttpPut]
         //[Authorize(Roles = UserModelBase.Admin)]
-        public IActionResult UpsertPost([FromBody]Post post)
+        public IActionResult UpsertPost([FromBody]UpsertPostRequest request)
         {
-            var result = _blogService.UpsertPost(post);
+            var result = _blogService.UpsertPost(request.ToPost());
             if (result.IsOk)
                 return Ok(result.Data);
             return StatusCode((int)result.Status, result.ErrorMessage);

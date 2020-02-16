@@ -5,14 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\site.ts" />
+    <Content Remove="wwwroot\js\app.ts" />
   </ItemGroup>
 
 
 
   <ItemGroup>
+    <Folder Include="logs\" />
     <Folder Include="Services\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 

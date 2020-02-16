@@ -37,12 +37,12 @@ namespace WaterHub.Core.Models
         public string ErrorCodeInLog { get; set; }
 
         public virtual string ErrorMessage => HasErrors
-            ? new StringBuilder($"[{ErrorCodeInLog}]")
+            ? new StringBuilder($"[{ErrorCodeInLog}]{Environment.NewLine}")
                 .AppendJoin(Environment.NewLine, Errors.Select(x => x.Message)).ToString()
             : null;
 
         public ICollection<Exception> Errors { get; set; }
-        public bool HasErrors => (Errors is null) && Errors.Any();
+        public bool HasErrors => !(Errors is null) && Errors.Any();
         public bool IsOk => Status == HttpStatusCode.OK;
         public HttpStatusCode Status { get; set; }
 

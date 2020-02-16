@@ -1,10 +1,9 @@
 ﻿let postEditor;
 
 window.onload = () => {
-    const postEditorElementId = 'post-eidtor-content';
-    const postEditorElement = document.getElementById(postEditorElementId)
+    const postEditorElement = document.getElementById('post-eidtor-content')
 
-    if (!!postEditorElement)
-        //postEditor = new Jodit(`#${postEditorElementId}`);
-        postEditor = new Jodit(postEditorElement);
+    if (!!postEditorElement) {
+        postEdit.init(new Jodit(postEditorElement));
+    }
 }

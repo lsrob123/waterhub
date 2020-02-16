@@ -16,5 +16,6 @@ namespace Blog.Web.Abstractions
         ProcessResult<Post> UpsertPost(Post post);
         ProcessResult<Post> DeletePost(Guid postKey);
         ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
+        ICollection<string> ListAllTags();
     }
 }

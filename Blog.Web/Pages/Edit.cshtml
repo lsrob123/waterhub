@@ -4,13 +4,18 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Edit.PageTitle);
 }
 
-    @*<form method="post">*@
-        <div>Title <input type="text" asp-for="PostInEdit.Title" /></div>
-        <div>Content <textarea asp-for="PostInEdit.Content"></textarea></div>
-        <div>Content InEditor <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea></div>
-        <div>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></div>
-        <input type="hidden" asp-for="PostInEdit.Key" />
-        <button asp-page-handler="Article">Submit</button>
-        <button onclick="getPostEditorValue()">Get Content</button>
-    @*</form>*@
+<div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
+<div>Content InEditor</div>
+<div class="form-row">
+    <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
+</div>
+<div class="form-row">Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></div>
+<div class="form-row">
+    <button onclick="postEdit.upsertPost()">Submit</button>
+</div>
+<div id="post-submit-result" class="form-row"></div>
+<input type="hidden" asp-for="PostInEdit.Content" />
+<input type="hidden" asp-for="PostInEdit.Key" />
+<input type="hidden" asp-for="PostInEdit.TagsInText" />
+<input type="hidden" asp-for="AllTagsInText" />
 
