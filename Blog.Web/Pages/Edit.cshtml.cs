@@ -39,15 +39,15 @@ namespace Blog.Web
             }
         }
 
-        public IActionResult OnPostArticle()
-        {
-            var result = _blogService.UpsertPost(PostInEdit.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
+        //public IActionResult OnPostArticle()
+        //{
+        //    var result = _blogService.UpsertPost(PostInEdit.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
 
-            if (result.IsOk)
-                return RedirectToPage(PageDefinitions.Edit.PageName, new { article = PostInEdit.UrlFriendlyTitle });
+        //    if (result.IsOk)
+        //        return RedirectToPage(PageDefinitions.Edit.PageName, new { article = PostInEdit.UrlFriendlyTitle });
 
-            ErrorMessage = result.ErrorMessage;
-            return Page();
-        }
+        //    ErrorMessage = result.ErrorMessage;
+        //    return Page();
+        //}
     }
 }
