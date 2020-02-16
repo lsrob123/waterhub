@@ -4,67 +4,12 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Home.PageTitle);
 }
 
-@*@section PageHeader
+@if (!(Model.LatestPosts is null))
 {
-    <a class="header-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
-}*@
-
-1q abcd 正常字体
-<br />
-w
-<br />
-e
-<br />
-r
-<br />
-t
-<br />
-y
-<br />
-u
-<br />
-i
-<br />
-q
-<br />
-w
-<br />
-e
-<br />
-r
-<br />
-t
-<br />
-y
-<br />
-u
-<br />
-i
-<br />
-q
-<br />
-w
-<br />
-e
-<br />
-r
-<br />
-t
-<br />
-y
-<br />
-u
-<br />
-i
-<br />
-q
-<br />
-w
-<br />
-e
-<br />
-r
-<br />
-t
-<br />
-y
+    foreach (var post in Model.LatestPosts)
+    {
+        <div>
+            <a asp-page="@PageDefinitions.Posts.PageName" asp-route-article="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Title</a>
+        </div>
+    }
+}

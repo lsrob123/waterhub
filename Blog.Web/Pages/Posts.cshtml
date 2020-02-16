@@ -1,0 +1,17 @@
+﻿@page "{article?}"
+@model Blog.Web.PostsModel
+@{
+    ViewData[Constants.PageTitle] = Model.PageTitle; // No need to do text mapping
+}
+
+
+@if (!(Model.PostInDisplay is null))
+{
+    <div>
+        @Model.PostInDisplay.Title
+    </div>
+    <div>
+        @Html.Raw(Model.PostInDisplay.Content)
+    </div>
+}
+

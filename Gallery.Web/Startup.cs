@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Gallery.Web.Abstractions;
 using Gallery.Web.Config;
 using Gallery.Web.Repositories;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using WaterHub.Core;
 
 namespace Gallery.Web

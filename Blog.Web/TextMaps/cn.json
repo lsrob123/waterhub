@@ -10,5 +10,10 @@
   {
     "key": "Edit",
     "value": "编辑"
+  },
+  {
+    "key": "Posts",
+    "value": "摘录",
+    "context": "posts"
   }
 ]

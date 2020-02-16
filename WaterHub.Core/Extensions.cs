@@ -6,7 +6,6 @@ using Serilog;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -15,7 +14,7 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
-        private const string Dash = "-", PatternForUrlFriendlyString = @"[^A-Za-z0-9_\.~]+";
+        //private const string Dash = "-", PatternForUrlFriendlyString = @"[^A-Za-z0-9_\.~]+";
 
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
                             (this IServiceCollection services)
@@ -79,7 +78,8 @@ namespace WaterHub.Core
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentNullException(nameof(input));
-            return Regex.Replace(input, PatternForUrlFriendlyString, Dash).ToLower();
+            //return Regex.Replace(input, PatternForUrlFriendlyString, Dash).ToLower();
+            return input.Replace(" ", "-").ToLower();
         }
 
         public static TUserModel ToUserModel<TUserModel>(this ClaimsPrincipal claimsPrincipal)

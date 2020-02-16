@@ -41,8 +41,8 @@ namespace Blog.Web.Repositories
             try
             {
                 using var store = new BlogDataStore(_settings);
-                var post = store.Posts.FindById(postKey);
-                return new ProcessResult<Post>().AsOk();
+                var post = GetPostByKey(store, postKey);
+                return new ProcessResult<Post>().AsOk(post);
             }
             catch (Exception e)
             {
@@ -55,8 +55,8 @@ namespace Blog.Web.Repositories
             try
             {
                 using var store = new BlogDataStore(_settings);
-                var post = store.Posts.FindOne(x => x.UrlFriendlyTitle == urlFriendlyTitle);
-                return new ProcessResult<Post>().AsOk();
+                var post = GetPostByUrlFriendlyTitle(store, urlFriendlyTitle);
+                return new ProcessResult<Post>().AsOk(post);
             }
             catch (Exception e)
             {
@@ -166,9 +166,20 @@ namespace Blog.Web.Repositories
             try
             {
                 using var store = new BlogDataStore(_settings);
-                var existing = store.Posts.FindById(post.Key);
-                if (!(existing is null))
-                    store.Posts.Delete(post.Key);
+                var existing = GetPostByKey(store, post.Key);
+                if (existing is null)
+                {
+                    existing = GetPostByUrlFriendlyTitle(store, post.UrlFriendlyTitle);
+                    if (!(existing is null))
+                    {
+                        post.Key = existing.Key;
+                        store.Posts.Delete(existing.Key);
+                    }
+                }
+                else
+                {
+                    store.Posts.Delete(existing.Key);
+                }
 
                 store.Tags.DeleteMany(x => x.PostKey == post.Key);
                 if (!(post.Tags is null))
@@ -181,6 +192,17 @@ namespace Blog.Web.Repositories
             {
                 return InternalServerError(e);
             }
+        }
+
+        private static Post GetPostByKey(BlogDataStore store, Guid postKey)
+        {
+            var post = store.Posts.FindById(postKey);
+            return post;
+        }
+
+        private static Post GetPostByUrlFriendlyTitle(BlogDataStore store, string urlFriendlyTitle)
+        {
+            return store.Posts.FindOne(x => x.UrlFriendlyTitle == urlFriendlyTitle);
         }
 
         private ProcessResult<Post> InternalServerError(Exception e)

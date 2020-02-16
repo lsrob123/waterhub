@@ -16,7 +16,7 @@ namespace WaterHub.Core.Models
             {
                 LogEventLevel = isDevelopmentEnvironment ? LogEventLevel.Debug : LogEventLevel.Error,
                 LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt"),
-                RollingInterval = RollingInterval.Hour
+                RollingInterval = RollingInterval.Day
             };
         }
     }
