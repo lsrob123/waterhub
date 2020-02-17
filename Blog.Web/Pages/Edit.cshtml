@@ -5,6 +5,12 @@
 }
 
 <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
+<div class="form-row">
+    <input id="edit-new-tag" type="text" size="40" />
+    
+    <button onclick="postEdit.addNewTag()">Add New Tag</button>    
+    <span id="edit-tags"></span>
+</div>
 <div>Content InEditor</div>
 <div class="form-row">
     <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>

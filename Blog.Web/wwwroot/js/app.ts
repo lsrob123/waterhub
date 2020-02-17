@@ -64,18 +64,49 @@ class PostEdit {
         this.service = service;
     }
 
+    public get hasAllTags() {
+        return !!this.allTags && this.allTags.length > 0;
+    }
+
     public init = (editorInstance: any) => {
         this.editorInstance = editorInstance;
         this.editorInstance.value = (<HTMLInputElement>document.getElementById('PostInEdit_Content')).value;
 
         this.tags = JSON.parse((<HTMLInputElement>document.getElementById('PostInEdit_TagsInText')).value);
+        if (!this.tags) this.tags = [];
         console.log("Current Tags");
         console.log(this.tags);
 
         this.allTags = JSON.parse((<HTMLInputElement>document.getElementById('AllTagsInText')).value);
+        if (!this.allTags) this.allTags = [];
         console.log("All Tags");
         console.log(this.allTags);
+
+        this.renderTags();
     }
+
+    public deleteTag = (index:number) => {
+        this.tags.splice(index, 1);
+        this.renderTags();
+    };
+
+    public addNewTag = () => {
+        const value = (<HTMLInputElement>document.getElementById('PostInEdit_Key')).value;
+        if (!value || value.trim() === '') return;
+
+        const tags = value.split(/[ ,;:.]+/g);
+        if (tags.length === 0) return;
+        tags.map(x => {
+            this.tags.push(x);
+            return true;
+        });
+        this.tags = this.tags.sort((a, b) => {
+            if (a > b) return 1;
+            if (a < b) return -1;
+            return 0;
+        });
+        this.renderTags();
+    };
 
     public upsertPost = async () => {
         const response = await this.service.upsertPost(
@@ -96,6 +127,13 @@ class PostEdit {
         window.setTimeout(function () {
             document.getElementById('post-submit-result').innerHTML = '';
         }, 10000);
+    }
+
+    private renderTags() {
+        const tagsHtml = this.tags.reduce((previous, current, index) => {
+            return `${previous} <span>${current} <a href="javascript:postEdit.deleteTag(${index})">x</a></span> `;
+        });
+        document.getElementById('edit-tags').innerHTML = tagsHtml;
     }
 }
 
