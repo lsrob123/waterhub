@@ -68,21 +68,21 @@ class PostEdit {
         return !!this.allTags && this.allTags.length > 0;
     }
 
+    public get allTagsDropdown():HTMLSelectElement {
+        return <HTMLSelectElement>document.getElementById('edit-all-tags');
+    }
+
     public init = (editorInstance: any) => {
         this.editorInstance = editorInstance;
         this.editorInstance.value = (<HTMLInputElement>document.getElementById('PostInEdit_Content')).value;
 
         this.tags = JSON.parse((<HTMLInputElement>document.getElementById('PostInEdit_TagsInText')).value);
         if (!this.tags) this.tags = [];
-        console.log("Current Tags");
-        console.log(this.tags);
+        this.renderTags();
 
         this.allTags = JSON.parse((<HTMLInputElement>document.getElementById('AllTagsInText')).value);
         if (!this.allTags) this.allTags = [];
-        console.log("All Tags");
-        console.log(this.allTags);
-
-        this.renderTags();
+        this.renderAllTags();
     }
 
     public deleteTag = (index:number) => {
@@ -90,7 +90,7 @@ class PostEdit {
         this.renderTags();
     };
 
-    public addNewTag = () => {
+    public addNewTags = () => {
         const value = (<HTMLInputElement>document.getElementById('PostInEdit_Key')).value;
         if (!value || value.trim() === '') return;
 
@@ -100,13 +100,18 @@ class PostEdit {
             this.tags.push(x);
             return true;
         });
-        this.tags = this.tags.sort((a, b) => {
-            if (a > b) return 1;
-            if (a < b) return -1;
-            return 0;
-        });
         this.renderTags();
     };
+
+    public selectTag = () => {
+        const dropdown = this.allTagsDropdown;
+        const tag = (dropdown.options[dropdown.options.selectedIndex].value);
+        const existing = this.tags.findIndex(x => x === tag);
+        if (existing >= 0)
+            return;
+        this.tags.push(tag);
+        this.renderTags();
+    }
 
     public upsertPost = async () => {
         const response = await this.service.upsertPost(
@@ -130,10 +135,34 @@ class PostEdit {
     }
 
     private renderTags() {
+        this.tags = this.tags.sort((a, b) => PostEdit.tagComparitor(a, b));
+
         const tagsHtml = this.tags.reduce((previous, current, index) => {
             return `${previous} <span>${current} <a href="javascript:postEdit.deleteTag(${index})">x</a></span> `;
         });
         document.getElementById('edit-tags').innerHTML = tagsHtml;
+    }
+
+    private renderAllTags() {
+        const dropdown = this.allTagsDropdown;
+
+        dropdown.options.length = 0;
+        if (!this.allTags || this.allTags.length === 0) return;
+        
+        this.allTags = this.allTags.sort((a, b) => PostEdit.tagComparitor(a, b));
+        this.allTags.map(x => {
+            const option = new HTMLOptionElement();
+            option.textContent = x;
+            option.value = x;
+            dropdown.add(option);
+            return true;
+        });
+    }
+
+    private static tagComparitor(a: string, b: string): number {
+        if (a > b) return 1;
+        if (a < b) return -1;
+        return 0;
     }
 }
 

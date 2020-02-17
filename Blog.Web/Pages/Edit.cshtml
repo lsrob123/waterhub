@@ -1,5 +1,5 @@
 ﻿@page "{article?}"
-@model Blog.Web.EditModel
+@model EditModel
 @{
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Edit.PageTitle);
 }
@@ -7,8 +7,9 @@
 <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
 <div class="form-row">
     <input id="edit-new-tag" type="text" size="40" />
-    
-    <button onclick="postEdit.addNewTag()">Add New Tag</button>    
+    <button onclick="postEdit.addNewTags()">Add New Tags</button>
+    <select id="edit-all-tags" onchange="postEdit.selectTag()">
+    </select>
     <span id="edit-tags"></span>
 </div>
 <div>Content InEditor</div>
