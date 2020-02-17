@@ -32,9 +32,11 @@ namespace Blog.Web
             if (string.IsNullOrWhiteSpace(article))
                 return NotFound();
 
+
+
             var response = _blogService.GetPostByUrlFriendlyTitle(article);
             PostInDisplay = response?.Post;
-            if (PostInDisplay is null)
+            if (PostInDisplay is null || (!IsLoggedIn && !PostInDisplay.IsPublished))
                 return NotFound();
 
             return Page();

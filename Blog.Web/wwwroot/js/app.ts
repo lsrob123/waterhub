@@ -68,7 +68,7 @@ class PostEdit {
         return !!this.allTags && this.allTags.length > 0;
     }
 
-    public get allTagsDropdown():HTMLSelectElement {
+    public get allTagsDropdown(): HTMLSelectElement {
         return <HTMLSelectElement>document.getElementById('edit-all-tags');
     }
 
@@ -85,19 +85,21 @@ class PostEdit {
         this.renderAllTags();
     }
 
-    public deleteTag = (index:number) => {
+    public deleteTag = (index: number) => {
         this.tags.splice(index, 1);
         this.renderTags();
     };
 
     public addNewTags = () => {
-        const value = (<HTMLInputElement>document.getElementById('PostInEdit_Key')).value;
+        const value = (<HTMLInputElement>document.getElementById('edit-new-tag')).value;
         if (!value || value.trim() === '') return;
 
         const tags = value.split(/[ ,;:.]+/g);
         if (tags.length === 0) return;
-        tags.map(x => {
-            this.tags.push(x);
+        tags.map(tag => {
+            const existing = this.tags.findIndex(x => x === tag);
+            if (existing < 0)
+                this.tags.push(tag);
             return true;
         });
         this.renderTags();
@@ -105,6 +107,8 @@ class PostEdit {
 
     public selectTag = () => {
         const dropdown = this.allTagsDropdown;
+        if (dropdown.selectedIndex === 0) return;
+
         const tag = (dropdown.options[dropdown.options.selectedIndex].value);
         const existing = this.tags.findIndex(x => x === tag);
         if (existing >= 0)
@@ -138,8 +142,9 @@ class PostEdit {
         this.tags = this.tags.sort((a, b) => PostEdit.tagComparitor(a, b));
 
         const tagsHtml = this.tags.reduce((previous, current, index) => {
-            return `${previous} <span>${current} <a href="javascript:postEdit.deleteTag(${index})">x</a></span> `;
-        });
+            previous = `${previous} <div class="tag">${current} <a href="javascript:postEdit.deleteTag(${index})"><img src="/images/delete.svg" /></a></div> `;
+            return previous;
+        }, '');
         document.getElementById('edit-tags').innerHTML = tagsHtml;
     }
 
@@ -148,13 +153,11 @@ class PostEdit {
 
         dropdown.options.length = 0;
         if (!this.allTags || this.allTags.length === 0) return;
-        
+
         this.allTags = this.allTags.sort((a, b) => PostEdit.tagComparitor(a, b));
+        dropdown.add(new Option('', ''));
         this.allTags.map(x => {
-            const option = new HTMLOptionElement();
-            option.textContent = x;
-            option.value = x;
-            dropdown.add(option);
+            dropdown.add(new Option(x, x));
             return true;
         });
     }

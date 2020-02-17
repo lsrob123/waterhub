@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
@@ -30,6 +31,12 @@ namespace Blog.Web.Pages
             var response = _blogService.ListLatestPosts();
             LatestPosts = response.LatestPosts ?? new List<Post>();
             StickyPosts = response.StickyPosts ?? new List<Post>();
+
+            if (!IsLoggedIn)
+            {
+                LatestPosts = LatestPosts.Where(x => x.IsPublished).ToList();
+                StickyPosts = StickyPosts.Where(x => x.IsPublished).ToList();
+            }
         }
     }
 }

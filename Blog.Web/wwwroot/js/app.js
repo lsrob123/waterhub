@@ -104,11 +104,43 @@ var PostEdit = /** @class */ (function () {
             _this.editorInstance = editorInstance;
             _this.editorInstance.value = document.getElementById('PostInEdit_Content').value;
             _this.tags = JSON.parse(document.getElementById('PostInEdit_TagsInText').value);
-            console.log("Current Tags");
-            console.log(_this.tags);
+            if (!_this.tags)
+                _this.tags = [];
+            _this.renderTags();
             _this.allTags = JSON.parse(document.getElementById('AllTagsInText').value);
-            console.log("All Tags");
-            console.log(_this.allTags);
+            if (!_this.allTags)
+                _this.allTags = [];
+            _this.renderAllTags();
+        };
+        this.deleteTag = function (index) {
+            _this.tags.splice(index, 1);
+            _this.renderTags();
+        };
+        this.addNewTags = function () {
+            var value = document.getElementById('edit-new-tag').value;
+            if (!value || value.trim() === '')
+                return;
+            var tags = value.split(/[ ,;:.]+/g);
+            if (tags.length === 0)
+                return;
+            tags.map(function (tag) {
+                var existing = _this.tags.findIndex(function (x) { return x === tag; });
+                if (existing < 0)
+                    _this.tags.push(tag);
+                return true;
+            });
+            _this.renderTags();
+        };
+        this.selectTag = function () {
+            var dropdown = _this.allTagsDropdown;
+            if (dropdown.selectedIndex === 0)
+                return;
+            var tag = (dropdown.options[dropdown.options.selectedIndex].value);
+            var existing = _this.tags.findIndex(function (x) { return x === tag; });
+            if (existing >= 0)
+                return;
+            _this.tags.push(tag);
+            _this.renderTags();
         };
         this.upsertPost = function () { return __awaiter(_this, void 0, void 0, function () {
             var response, url;
@@ -133,6 +165,47 @@ var PostEdit = /** @class */ (function () {
         }); };
         this.service = service;
     }
+    Object.defineProperty(PostEdit.prototype, "hasAllTags", {
+        get: function () {
+            return !!this.allTags && this.allTags.length > 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PostEdit.prototype, "allTagsDropdown", {
+        get: function () {
+            return document.getElementById('edit-all-tags');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PostEdit.prototype.renderTags = function () {
+        this.tags = this.tags.sort(function (a, b) { return PostEdit.tagComparitor(a, b); });
+        var tagsHtml = this.tags.reduce(function (previous, current, index) {
+            previous = previous + " <div class=\"tag\">" + current + " <a href=\"javascript:postEdit.deleteTag(" + index + ")\"><img src=\"/images/delete.svg\" /></a></div> ";
+            return previous;
+        }, '');
+        document.getElementById('edit-tags').innerHTML = tagsHtml;
+    };
+    PostEdit.prototype.renderAllTags = function () {
+        var dropdown = this.allTagsDropdown;
+        dropdown.options.length = 0;
+        if (!this.allTags || this.allTags.length === 0)
+            return;
+        this.allTags = this.allTags.sort(function (a, b) { return PostEdit.tagComparitor(a, b); });
+        dropdown.add(new Option('', ''));
+        this.allTags.map(function (x) {
+            dropdown.add(new Option(x, x));
+            return true;
+        });
+    };
+    PostEdit.tagComparitor = function (a, b) {
+        if (a > b)
+            return 1;
+        if (a < b)
+            return -1;
+        return 0;
+    };
     return PostEdit;
 }());
 var service = new Service();

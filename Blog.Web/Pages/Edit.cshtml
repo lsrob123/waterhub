@@ -4,19 +4,31 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Edit.PageTitle);
 }
 
+<div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
 <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
 <div class="form-row">
-    <input id="edit-new-tag" type="text" size="40" />
-    <button onclick="postEdit.addNewTags()">Add New Tags</button>
-    <select id="edit-all-tags" onchange="postEdit.selectTag()">
-    </select>
-    <span id="edit-tags"></span>
+    <div class="tag-line-element">
+        <input id="edit-new-tag" type="text" size="40" />
+    </div>
+    <div class="tag-line-element">
+        <button onclick="postEdit.addNewTags()">Add New Tags</button>
+    </div>
+    <div class="tag-line-element">
+        <span style="margin-left:20px">Add from existing tags</span>
+        <select id="edit-all-tags" onchange="postEdit.selectTag()">
+        </select>
+    </div>
+    <div class="clear"></div>
 </div>
-<div>Content InEditor</div>
+<div class="form-row">
+    <div class="tag-line-element"><div id="edit-tags"></div></div>
+    <div class="clear"></div>
+</div>
+<div style="margin-bottom:3px;">Content</div>
 <div class="form-row">
     <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
 </div>
-<div class="form-row">Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></div>
+<div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
 <div class="form-row">
     <button onclick="postEdit.upsertPost()">Submit</button>
 </div>
