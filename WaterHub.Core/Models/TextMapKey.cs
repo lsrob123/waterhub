@@ -5,7 +5,7 @@ namespace WaterHub.Core.Models
 {
     public class TextMapKey : IComparable<TextMapKey>, IEquatable<TextMapKey>
     {
-        public const string UnspecifiedContext = nameof(UnspecifiedContext);
+        public const string __UnspecifiedContext = nameof(__UnspecifiedContext);
 
         public TextMapKey()
         {
@@ -18,7 +18,7 @@ namespace WaterHub.Core.Models
 
             Key = key.Trim().ToLower();
             Context = string.IsNullOrWhiteSpace(context)
-                ? UnspecifiedContext
+                ? __UnspecifiedContext
                 : context.Trim().ToLower();
         }
 
@@ -27,7 +27,7 @@ namespace WaterHub.Core.Models
         }
 
         public string Key { get; set; }
-        public string Context { get; set; } = UnspecifiedContext;
+        public string Context { get; set; } = __UnspecifiedContext;
 
         public int CompareTo([AllowNull] TextMapKey other)
         {

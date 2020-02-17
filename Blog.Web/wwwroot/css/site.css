@@ -61,15 +61,31 @@ button {
     }
 
         .header .page-links .page-link {
+            display: block;
+            float: left;
+            height: 42px;
+            background-color: rgba(200,255,200,0.3);
+            background: linear-gradient(180deg, rgba(200,255,200,0.3) 0%, rgba(200,255,200,0) 100%);
+            margin-right: 3px;
+            border-radius: 6px 6px 0 0;
+            width: 100px;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+            .header .page-links .page-link:hover {
+                background-color: rgba(200,255,200,0.3);
+            }
+
+        .header .page-links a {
             cursor: pointer;
             text-decoration: none;
             color: white;
-            margin-right: 40px;
         }
 
-        .header .page-links a:hover {
-            font-weight: bold;
-        }
+            .header .page-links a:hover {
+                color: orangered;
+            }
 
 
 @media only screen and (min-width: 940px) {
@@ -83,7 +99,11 @@ button {
     }
 
         .header .page-links .page-link {
-            margin-right: 60px;
+            height: 42px;
+            width: 150px;
+        }
+
+        .header .page-links a {
         }
 }
 
@@ -101,10 +121,16 @@ button {
         .header .page-links {
             margin-left: 150px;
             margin-top: 23px;
+            height: 37px;
         }
 
             .header .page-links .page-link {
-                margin-right: 15px;
+                height: 37px;
+                width: 80px;
+                font-size: 14px;
+            }
+
+            .header .page-links a {
             }
 }
 

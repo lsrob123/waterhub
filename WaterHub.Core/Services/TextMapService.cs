@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
@@ -19,8 +20,11 @@ namespace WaterHub.Core.Services
             if (string.IsNullOrWhiteSpace(json))
                 return;
 
-            var entries = JsonSerializer.Deserialize<List<TextMapEntry>>(json,
-               new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var entries = JsonSerializer.Deserialize<List<TextMapEntry>>
+                (json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                .OrderByDescending(x => x.Context).ThenBy(x => x.Key)
+                .ToList();
+
             foreach (var entry in entries)
             {
                 var key = new TextMapKey(entry);
@@ -35,7 +39,7 @@ namespace WaterHub.Core.Services
                 return null;
 
             var searchKey = new TextMapKey(key,
-                string.IsNullOrWhiteSpace(context) ? TextMapKey.UnspecifiedContext : context);
+                string.IsNullOrWhiteSpace(context) ? TextMapKey.__UnspecifiedContext : context);
 
             if (_maps.TryGetValue(searchKey, out var value))
                 return value;

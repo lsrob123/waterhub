@@ -16,5 +16,10 @@
         {
             public const string PageName = nameof(Posts), PageTitle = nameof(Posts), Context = nameof(Posts);
         }
+
+        public static class Sponsors
+        {
+            public const string PageName = nameof(Sponsors), PageTitle = nameof(Sponsors), Context = nameof(Sponsors);
+        }
     }
 }
