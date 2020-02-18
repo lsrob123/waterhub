@@ -7,11 +7,11 @@ using WaterHub.Core.Abstractions;
 
 namespace Blog.Web
 {
-    public class PostsModel : BlodPageModelBase<EditModel>
+    public class PostsModel : BlodPageModelBase<AdminModel>
     {
         private readonly IBlogService _blogService;
 
-        public PostsModel(ILogger<EditModel> logger, IAuthService authService, ITextMapService textMapServic, IBlogService blogService)
+        public PostsModel(ILogger<AdminModel> logger, IAuthService authService, ITextMapService textMapServic, IBlogService blogService)
             : base(logger, authService, textMapServic)
         {
             _blogService = blogService;

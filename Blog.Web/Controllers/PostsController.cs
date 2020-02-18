@@ -28,9 +28,9 @@ namespace Blog.Web.Controllers
 
         [HttpGet]
         [Route("latest")]
-        public IActionResult ListLatestPosts()
+        public IActionResult ListLatestPostsAll()
         {
-            var result = _blogService.ListLatestPosts();
+            var result = _blogService.ListLatestPosts(includeUnpublishedPosts: true);
             return Ok(result);
         }
 

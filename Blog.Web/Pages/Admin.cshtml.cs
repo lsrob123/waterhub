@@ -9,11 +9,11 @@ using WaterHub.Core.Abstractions;
 
 namespace Blog.Web
 {
-    public class EditModel : BlodPageModelBase<EditModel>
+    public class AdminModel : BlodPageModelBase<AdminModel>
     {
         private readonly IBlogService _blogService;
 
-        public EditModel(ILogger<EditModel> logger, IAuthService authService, ITextMapService textMapService,
+        public AdminModel(ILogger<AdminModel> logger, IAuthService authService, ITextMapService textMapService,
             IBlogService blogService)
           : base(logger, authService, textMapService)
         {
@@ -21,8 +21,8 @@ namespace Blog.Web
         }
 
         public string ErrorMessage { get; set; }
-        public override string PageName => PageDefinitions.Edit.PageName;
-        public override string PageTitle => PageDefinitions.Edit.PageTitle;
+        public override string PageName => PageDefinitions.Admin.PageName;
+        public override string PageTitle => PageDefinitions.Admin.PageTitle;
 
         [BindProperty]
         public Post PostInEdit { get; set; }

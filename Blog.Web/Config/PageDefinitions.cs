@@ -7,9 +7,9 @@
             public const string PageName = "Index", PageTitle = nameof(Home);
         }
 
-        public static class Edit
+        public static class Admin
         {
-            public const string PageName = nameof(Edit), PageTitle = nameof(Edit);
+            public const string PageName = nameof(Admin), PageTitle = nameof(Admin);
         }
 
         public static class Posts

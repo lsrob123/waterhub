@@ -116,8 +116,9 @@ namespace Blog.Web.Repositories
                 postCount ??= _settings.LatestPostsCount;
                 using var store = new BlogDataStore(_settings);
                 var query = store.Posts.Query();
-                if (!includeUnpublishedPosts)
-                    query = query.Where(x => x.IsPublished);
+                query = includeUnpublishedPosts
+                    ? query
+                    : query.Where(x => x.IsPublished);
 
                 var posts = query
                     .OrderByDescending(x => x.TimeCreated)

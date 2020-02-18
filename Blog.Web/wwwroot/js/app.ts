@@ -45,7 +45,7 @@ class Post {
 }
 
 class Service {
-    public upsertPost = async (key: string, title: string, content: string, isSticky: boolean, tags: string[])
+    public upsertPost = async (key: string, title: string, content: string, isSticky: boolean, isPublished: boolean, tags: string[])
         : Promise<ApiCallResult> => {
         try {
             const rawResponse = await fetch('/api/posts', {
@@ -58,6 +58,7 @@ class Service {
                     title: title,
                     content: content,
                     isSticky: !!isSticky,
+                    isPublished: !!isPublished,
                     tags: tags
                 })
             });
@@ -157,11 +158,9 @@ class PostEdit {
         this.allTags = JSON.parse((<HTMLInputElement>document.getElementById('AllTagsInText')).value);
         if (!this.allTags) this.allTags = [];
         this.renderAllTags();
-
-        this.initAsync();
     }
 
-    private initAsync = async () => {
+    public loadDataAsync = async () => {
         await this.loadLatestPosts();
     }
 
@@ -203,6 +202,7 @@ class PostEdit {
             (<HTMLInputElement>document.getElementById('PostInEdit_Title')).value,
             this.editorInstance.value,
             !!(<HTMLInputElement>document.getElementById('PostInEdit_IsSticky')).checked,
+            !!(<HTMLInputElement>document.getElementById('PostInEdit_IsPublished')).checked,
             this.tags
         );
 
@@ -218,13 +218,17 @@ class PostEdit {
         }, 10000);
     }
 
-    public async loadLatestPosts() {
+    public createPost = () => {
+        window.location.href = this.service.getUrl('');
+    }
+
+    public loadLatestPosts = async () => {
         this.postList = await this.service.listLatestPosts();
         this.isPostListFromLatest = true;
         this.renderPostList();
     }
 
-    public async loadPostsByKeywords() {
+    public loadPostsByKeywords = async () => {
         this.postList = await this.service.listPostsWithTitleContainingKeywords(this.keywords);
         this.isPostListFromLatest = false;
         this.renderPostList();
@@ -235,15 +239,15 @@ class PostEdit {
         if (!this.postList) return;
 
         let html = this.isPostListFromLatest
-            ? '<div>Latest Posts</div>'
-            : '<div>Search Results</div>';
+            ? '<div class="current-post-list-type">Latest posts loaded.</div>'
+            : '<div class="current-post-list-type">Search results loaded.</div>';
 
         if (this.postList.length === 0) {
             html += '<div>(Empty Results)</div>';
         }
         else {
             for (const post of this.postList) {
-                html += `<div><a href="$/posts/${post.urlFriendlyTitle}" target="_self">${post.title}</a></div>`;
+                html += `<div><a href="/admin/${post.urlFriendlyTitle}" target="_self">${post.title}</a></div>`;
             }
         }
         this.postListElement.innerHTML = html;

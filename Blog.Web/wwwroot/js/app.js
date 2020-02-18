@@ -73,7 +73,7 @@ var Post = /** @class */ (function () {
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
-        this.upsertPost = function (key, title, content, isSticky, tags) { return __awaiter(_this, void 0, void 0, function () {
+        this.upsertPost = function (key, title, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, data, message, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -89,6 +89,7 @@ var Service = /** @class */ (function () {
                                     title: title,
                                     content: content,
                                     isSticky: !!isSticky,
+                                    isPublished: !!isPublished,
                                     tags: tags
                                 })
                             })];
@@ -184,9 +185,8 @@ var PostEdit = /** @class */ (function () {
             if (!_this.allTags)
                 _this.allTags = [];
             _this.renderAllTags();
-            _this.initAsync();
         };
-        this.initAsync = function () { return __awaiter(_this, void 0, void 0, function () {
+        this.loadDataAsync = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.loadLatestPosts()];
@@ -230,7 +230,7 @@ var PostEdit = /** @class */ (function () {
             var response, url;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, this.tags)];
+                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags)];
                     case 1:
                         response = _a.sent();
                         if (response.ok) {
@@ -244,6 +244,39 @@ var PostEdit = /** @class */ (function () {
                         window.setTimeout(function () {
                             document.getElementById('post-submit-result').innerHTML = '';
                         }, 10000);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.createPost = function () {
+            window.location.href = _this.service.getUrl('');
+        };
+        this.loadLatestPosts = function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.service.listLatestPosts()];
+                    case 1:
+                        _a.postList = _b.sent();
+                        this.isPostListFromLatest = true;
+                        this.renderPostList();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.loadPostsByKeywords = function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.service.listPostsWithTitleContainingKeywords(this.keywords)];
+                    case 1:
+                        _a.postList = _b.sent();
+                        this.isPostListFromLatest = false;
+                        this.renderPostList();
                         return [2 /*return*/];
                 }
             });
@@ -279,54 +312,20 @@ var PostEdit = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    PostEdit.prototype.loadLatestPosts = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this;
-                        return [4 /*yield*/, this.service.listLatestPosts()];
-                    case 1:
-                        _a.postList = _b.sent();
-                        this.isPostListFromLatest = true;
-                        this.renderPostList();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    PostEdit.prototype.loadPostsByKeywords = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this;
-                        return [4 /*yield*/, this.service.listPostsWithTitleContainingKeywords(this.keywords)];
-                    case 1:
-                        _a.postList = _b.sent();
-                        this.isPostListFromLatest = false;
-                        this.renderPostList();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     PostEdit.prototype.renderPostList = function () {
         this.postListElement.innerHTML = '';
         if (!this.postList)
             return;
         var html = this.isPostListFromLatest
-            ? '<div>Latest Posts</div>'
-            : '<div>Search Results</div>';
+            ? '<div class="current-post-list-type">Latest posts loaded.</div>'
+            : '<div class="current-post-list-type">Search results loaded.</div>';
         if (this.postList.length === 0) {
             html += '<div>(Empty Results)</div>';
         }
         else {
             for (var _i = 0, _a = this.postList; _i < _a.length; _i++) {
                 var post = _a[_i];
-                html += "<div><a href=\"$/posts/" + post.urlFriendlyTitle + "\" target=\"_self\">" + post.title + "</a></div>";
+                html += "<div><a href=\"/admin/" + post.urlFriendlyTitle + "\" target=\"_self\">" + post.title + "</a></div>";
             }
         }
         this.postListElement.innerHTML = html;
