@@ -28,9 +28,8 @@ namespace Blog.Web.Pages
 
         public void OnGet()
         {
-            var response = _blogService.ListLatestPosts();
-            LatestPosts = response.LatestPosts ?? new List<Post>();
-            StickyPosts = response.StickyPosts ?? new List<Post>();
+            LatestPosts = _blogService.ListLatestPosts();
+            StickyPosts = _blogService.ListStickyPosts();
 
             if (!IsLoggedIn)
             {

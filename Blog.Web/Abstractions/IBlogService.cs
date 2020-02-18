@@ -13,12 +13,16 @@ namespace Blog.Web.Abstractions
 
         GetPostResponse GetPostByUrlFriendlyTitle(string urlFriendlyTitle);
 
-        ListLatestPostsResponse ListLatestPosts(int? postCount = null);
-
-        ICollection<Post> ListPostsByTags(IEnumerable<string> keywords);
+        ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
 
         ProcessResult<Post> UpsertPost(Post post);
 
         ICollection<string> ListAllTags();
+
+        ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
+
+        ICollection<Post> ListLatestPosts(int? postCount = null, bool includeUnpublishedPosts = false);
+
+        ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false);
     }
 }

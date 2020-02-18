@@ -29,32 +29,33 @@ namespace Blog.Web
 
         public string AllTagsInText { get; set; }
 
+        public string SubmitButtonText { get; private set; }
+
         public void OnGet([FromRoute]string article)
         {
             if (string.IsNullOrWhiteSpace(article))
             {
                 PostInEdit = new Post().WithValidKey();
+                SubmitButtonText = "Publish";
                 return;
             }
 
+            var response = _blogService.GetPostByUrlFriendlyTitle(article);
+            PostInEdit = response?.Post;
 
-                var response = _blogService.GetPostByUrlFriendlyTitle(article);
-                PostInEdit = response?.Post;
-
-            AllTagsInText = JsonSerializer.Serialize(
-                response.AllTags is null ? new string[] { } : response.AllTags,
-                new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            if (PostInEdit == null)
+            {
+                SubmitButtonText = "Publish";
+                PostInEdit = new Post().WithValidKey();
+            }
+            else
+            {
+                SubmitButtonText = "Update";
+                AllTagsInText = JsonSerializer.Serialize(
+                    response.AllTags is null ? new string[] { } : response.AllTags,
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            }
         }
 
-        //public IActionResult OnPostArticle()
-        //{
-        //    var result = _blogService.UpsertPost(PostInEdit.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
-
-        //    if (result.IsOk)
-        //        return RedirectToPage(PageDefinitions.Edit.PageName, new { article = PostInEdit.UrlFriendlyTitle });
-
-        //    ErrorMessage = result.ErrorMessage;
-        //    return Page();
-        //}
     }
 }

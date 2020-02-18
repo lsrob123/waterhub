@@ -1,40 +1,71 @@
 ﻿@page "{article?}"
 @model EditModel
 @{
+    Layout = null;
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Edit.PageTitle);
 }
 
-<div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
-<div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
-<div class="form-row">
-    <div class="tag-line-element">
-        <input id="edit-new-tag" type="text" size="40" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData[Constants.PageTitle]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/jodit/jodit.min.css" />
+    <script src="~/jodit/jodit.min.js"></script>
+    <script src="~/js/post-editor.js" asp-append-version="true"></script>
+    <script src="~/js/models.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    <script src="~/js/init.js" asp-append-version="true"></script>
+</head>
+<body>
+    <div class="form-row">
+        Keywords
+        <input type="text" size="100" id="edit-post-search-keywords" />
+        <button onclick="postEdit.loadPostsByKeywords()">Search</button>
     </div>
-    <div class="tag-line-element">
-        <button onclick="postEdit.addNewTags()">Add New Tags</button>
+    <div class="form-row">
+        <button onclick="postEdit.loadLatestPosts()">Latest Posts</button>
     </div>
-    <div class="tag-line-element">
-        <span style="margin-left:20px">Add from existing tags</span>
-        <select id="edit-all-tags" onchange="postEdit.selectTag()">
-        </select>
+    <div class="form-row" id="edit-post-list"></div>
+
+    @if (Model.PostInEdit != null)
+    {
+    <div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
+    <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
+    <div class="form-row">
+        <div class="tag-line-element">
+            <input id="edit-new-tag" type="text" size="40" />
+        </div>
+        <div class="tag-line-element">
+            <button onclick="postEdit.addNewTags()">Add New Tags</button>
+        </div>
+        <div class="tag-line-element">
+            <span style="margin-left:20px">Add from existing tags</span>
+            <select id="edit-all-tags" onchange="postEdit.selectTag()">
+            </select>
+        </div>
+        <div class="clear"></div>
     </div>
-    <div class="clear"></div>
-</div>
-<div class="form-row">
-    <div class="tag-line-element"><div id="edit-tags"></div></div>
-    <div class="clear"></div>
-</div>
-<div style="margin-bottom:3px;">Content</div>
-<div class="form-row">
-    <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
-</div>
-<div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
-<div class="form-row">
-    <button onclick="postEdit.upsertPost()">Submit</button>
-</div>
-<div id="post-submit-result" class="form-row"></div>
-<input type="hidden" asp-for="PostInEdit.Content" />
-<input type="hidden" asp-for="PostInEdit.Key" />
-<input type="hidden" asp-for="PostInEdit.TagsInText" />
-<input type="hidden" asp-for="AllTagsInText" />
+    <div class="form-row">
+        <div class="tag-line-element"><div id="edit-tags"></div></div>
+        <div class="clear"></div>
+    </div>
+    <div style="margin-bottom:3px;">Content</div>
+    <div class="form-row">
+        <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
+    </div>
+    <div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
+    <div class="form-row">
+        <button onclick="postEdit.upsertPost()">@Model.SubmitButtonText</button>
+    </div>
+    <div id="post-submit-result" class="form-row"></div>
+    <input type="hidden" asp-for="PostInEdit.Content" />
+    <input type="hidden" asp-for="PostInEdit.Key" />
+    <input type="hidden" asp-for="PostInEdit.TagsInText" />
+    <input type="hidden" asp-for="AllTagsInText" />
+    }
+</body>
+</html>
 

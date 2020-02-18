@@ -1,4 +1,4 @@
-﻿const getPostEditorValue = () => {
-    console.log(postEditor.value);
-    return postEditor.value;
-}
+﻿//const getPostEditorValue = () => {
+//    console.log(postEditor.value);
+//    return postEditor.value;
+//}

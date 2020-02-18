@@ -27,14 +27,12 @@ namespace Blog.Web
             ? string.Empty
             : $" - {PostInDisplay?.UrlFriendlyTitle.Trim()}";
 
-        public IActionResult OnGet([FromRoute]string article)
+        public IActionResult OnGet([FromRoute]string title)
         {
-            if (string.IsNullOrWhiteSpace(article))
+            if (string.IsNullOrWhiteSpace(title))
                 return NotFound();
 
-
-
-            var response = _blogService.GetPostByUrlFriendlyTitle(article);
+            var response = _blogService.GetPostByUrlFriendlyTitle(title);
             PostInDisplay = response?.Post;
             if (PostInDisplay is null || (!IsLoggedIn && !PostInDisplay.IsPublished))
                 return NotFound();

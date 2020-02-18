@@ -48,19 +48,25 @@ namespace Blog.Web.Services
             return _repository.ListAllTags(); // TODO: Add caching
         }
 
-        public ListLatestPostsResponse ListLatestPosts(int? postCount = null)
+        public ICollection<Post> ListLatestPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
-            var response = new ListLatestPostsResponse
-            {
-                LatestPosts = _repository.ListLatestPosts(postCount),
-                StickyPosts = _repository.ListStickyPosts(postCount)
-            };
-            return response;
+            return _repository.ListLatestPosts(postCount, includeUnpublishedPosts);
         }
 
-        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords)
+        public ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
-            return _repository.ListPostsByTags(keywords);
+            return _repository.ListStickyPosts(postCount, includeUnpublishedPosts);
+        }
+
+        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListPostsByTags(keywords, includeUnpublishedPosts);
+        }
+
+        public ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords,
+            bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListPostsWithTitleContainingKeywords(keywords, includeUnpublishedPosts);
         }
 
         public ProcessResult<Post> UpsertPost(Post post)

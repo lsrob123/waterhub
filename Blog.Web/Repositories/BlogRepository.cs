@@ -109,13 +109,17 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<Post> ListLatestPosts(int? postCount = null)
+        public ICollection<Post> ListLatestPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
             try
             {
                 postCount ??= _settings.LatestPostsCount;
                 using var store = new BlogDataStore(_settings);
-                var posts = store.Posts.Query()
+                var query = store.Posts.Query();
+                if (!includeUnpublishedPosts)
+                    query = query.Where(x => x.IsPublished);
+
+                var posts = query
                     .OrderByDescending(x => x.TimeCreated)
                     .Limit(postCount.Value)
                     .ToList();
@@ -128,7 +132,7 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords)
+        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
         {
             try
             {
@@ -141,8 +145,11 @@ namespace Blog.Web.Repositories
                 if (postKeys.Count == 0)
                     return new List<Post>();
 
-                var posts = store.Posts.Query()
-                    .Where(x => postKeys.Contains(x.Key))
+                var query = includeUnpublishedPosts
+                    ? store.Posts.Query().Where(x => postKeys.Contains(x.Key))
+                    : store.Posts.Query().Where(x => postKeys.Contains(x.Key) && x.IsPublished);
+
+                var posts = query
                     .OrderByDescending(x => x.TimeCreated)
                     .Limit(_settings.PostsFromSearchCount)
                     .ToList();
@@ -156,14 +163,44 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<Post> ListStickyPosts(int? postCount = null)
+        public ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords,
+            bool includeUnpublishedPosts = false)
+        {
+            try
+            {
+                var keywordList = keywords.Select(x => x.Trim().ToLower()).ToArray();
+                using var store = new BlogDataStore(_settings);
+
+                var query = includeUnpublishedPosts
+                    ? store.Posts.Query().Where(x => x.TitleContains(keywordList))
+                    : store.Posts.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
+
+                var posts = query
+                    .OrderByDescending(x => x.TimeCreated)
+                    .Limit(_settings.PostsFromSearchCount)
+                    .ToList();
+
+                return posts;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return new List<Post>();
+            }
+        }
+
+        public ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
             try
             {
                 postCount ??= _settings.LatestPostsCount;
                 using var store = new BlogDataStore(_settings);
-                var posts = store.Posts.Query()
-                    .Where(x => x.IsSticky)
+
+                var query = includeUnpublishedPosts
+                    ? store.Posts.Query().Where(x => x.IsSticky)
+                    : store.Posts.Query().Where(x => x.IsSticky && x.IsPublished);
+
+                var posts = query
                     .OrderByDescending(x => x.TimeCreated)
                     .Limit(postCount.Value)
                     .ToList();

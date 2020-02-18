@@ -52,28 +52,46 @@ var ApiCallResult = /** @class */ (function () {
         this.message = message;
         return this;
     };
+    ApiCallResult.prototype.withLocalError = function (message) {
+        this.ok = false;
+        this.data = undefined;
+        this.message = message;
+        return this;
+    };
     return ApiCallResult;
+}());
+var Tag = /** @class */ (function () {
+    function Tag() {
+    }
+    return Tag;
+}());
+var Post = /** @class */ (function () {
+    function Post() {
+    }
+    return Post;
 }());
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
         this.upsertPost = function (key, title, content, isSticky, tags) { return __awaiter(_this, void 0, void 0, function () {
-            var rawResponse, data, message;
+            var rawResponse, data, message, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch('/api/posts', {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                key: key,
-                                title: title,
-                                content: content,
-                                isSticky: !!isSticky,
-                                tags: tags
-                            })
-                        })];
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, fetch('/api/posts', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    key: key,
+                                    title: title,
+                                    content: content,
+                                    isSticky: !!isSticky,
+                                    tags: tags
+                                })
+                            })];
                     case 1:
                         rawResponse = _a.sent();
                         if (!!!rawResponse.ok) return [3 /*break*/, 3];
@@ -85,6 +103,61 @@ var Service = /** @class */ (function () {
                     case 4:
                         message = _a.sent();
                         return [2 /*return*/, new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText)];
+                    case 5:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        return [2 /*return*/, new ApiCallResult().withLocalError(e_1)];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.listLatestPosts = function () { return __awaiter(_this, void 0, void 0, function () {
+            var rawResponse, data, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, fetch('/api/posts/latest', {
+                                method: 'GET',
+                            })];
+                    case 1:
+                        rawResponse = _a.sent();
+                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, rawResponse.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
+                    case 3: return [2 /*return*/, []];
+                    case 4:
+                        e_2 = _a.sent();
+                        console.error(e_2);
+                        return [2 /*return*/, null];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.listPostsWithTitleContainingKeywords = function (keywords) { return __awaiter(_this, void 0, void 0, function () {
+            var rawResponse, data, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, fetch("/api/posts?keywords=" + keywords, {
+                                method: 'GET',
+                            })];
+                    case 1:
+                        rawResponse = _a.sent();
+                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, rawResponse.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
+                    case 3: return [2 /*return*/, []];
+                    case 4:
+                        e_3 = _a.sent();
+                        console.error(e_3);
+                        return [2 /*return*/, null];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
@@ -111,7 +184,18 @@ var PostEdit = /** @class */ (function () {
             if (!_this.allTags)
                 _this.allTags = [];
             _this.renderAllTags();
+            _this.initAsync();
         };
+        this.initAsync = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.loadLatestPosts()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
         this.deleteTag = function (index) {
             _this.tags.splice(index, 1);
             _this.renderTags();
@@ -150,7 +234,8 @@ var PostEdit = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         if (response.ok) {
-                            url = this.service.getUrl("" + response.data.urlFriendlyTitle);
+                            url = this.service.getUrl("" + response.data.urlFriendlyTitle) // TODO: Dbl-check needed
+                            ;
                             document.getElementById('post-submit-result').innerHTML = "<div style=\"color:darkgreen;margin-bottom:15px;\">Post submitted successfully.</div><div><a href=\"" + url + "\" target=\"_self\">Refresh Page</a></div>";
                         }
                         else {
@@ -179,6 +264,73 @@ var PostEdit = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(PostEdit.prototype, "postListElement", {
+        get: function () {
+            return document.getElementById('edit-post-list');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PostEdit.prototype, "keywords", {
+        get: function () {
+            var value = document.getElementById('edit-post-search-keywords').value;
+            return value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PostEdit.prototype.loadLatestPosts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.service.listLatestPosts()];
+                    case 1:
+                        _a.postList = _b.sent();
+                        this.isPostListFromLatest = true;
+                        this.renderPostList();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostEdit.prototype.loadPostsByKeywords = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, this.service.listPostsWithTitleContainingKeywords(this.keywords)];
+                    case 1:
+                        _a.postList = _b.sent();
+                        this.isPostListFromLatest = false;
+                        this.renderPostList();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    PostEdit.prototype.renderPostList = function () {
+        this.postListElement.innerHTML = '';
+        if (!this.postList)
+            return;
+        var html = this.isPostListFromLatest
+            ? '<div>Latest Posts</div>'
+            : '<div>Search Results</div>';
+        if (this.postList.length === 0) {
+            html += '<div>(Empty Results)</div>';
+        }
+        else {
+            for (var _i = 0, _a = this.postList; _i < _a.length; _i++) {
+                var post = _a[_i];
+                html += "<div><a href=\"$/posts/" + post.urlFriendlyTitle + "\" target=\"_self\">" + post.title + "</a></div>";
+            }
+        }
+        this.postListElement.innerHTML = html;
+    };
     PostEdit.prototype.renderTags = function () {
         this.tags = this.tags.sort(function (a, b) { return PostEdit.tagComparitor(a, b); });
         var tagsHtml = this.tags.reduce(function (previous, current, index) {

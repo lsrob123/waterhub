@@ -25,5 +25,25 @@ namespace Blog.Web.Controllers
                 return Ok(result.Data);
             return StatusCode((int)result.Status, result.ErrorMessage);
         }
+
+        [HttpGet]
+        [Route("latest")]
+        public IActionResult ListLatestPosts()
+        {
+            var result = _blogService.ListLatestPosts();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public IActionResult ListPostsWithTitleContainingKeywords([FromQuery]string keywords)
+        {
+            if (string.IsNullOrWhiteSpace(keywords))
+                return Ok(new Post[] { });
+
+            var keywordList = keywords.Split(new string[] { ",", " " }, System.StringSplitOptions.RemoveEmptyEntries);
+
+            var result = _blogService.ListPostsWithTitleContainingKeywords(keywordList);
+            return Ok(result);
+        }
     }
 }

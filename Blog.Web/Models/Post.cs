@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 using WaterHub.Core;
@@ -8,6 +9,7 @@ namespace Blog.Web.Models
 {
     public class Post : EntityBase
     {
+        [Required]
         public string Content { get; set; }
         public bool IsPublished { get; set; }
         public bool IsSticky { get; set; }
@@ -20,6 +22,7 @@ namespace Blog.Web.Models
                  : Tags.Select(x => x.Text),
                  new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
+        [Required]
         public string Title { get; set; }
         public string UrlFriendlyTitle { get; set; }
 

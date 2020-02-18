@@ -20,45 +20,110 @@
         this.message = message;
         return this;
     }
+
+    public withLocalError(message: string): ApiCallResult {
+        this.ok = false;
+        this.data = undefined;
+        this.message = message;
+        return this;
+    }
+}
+
+class Tag {
+    key: string;
+    text: string;
+}
+
+class Post {
+    key: string;
+    content: string
+    isPublished: boolean;
+    isSticky: boolean;
+    tags: Tag[];
+    title: string;
+    urlFriendlyTitle: string;
 }
 
 class Service {
     public upsertPost = async (key: string, title: string, content: string, isSticky: boolean, tags: string[])
         : Promise<ApiCallResult> => {
-        const rawResponse = await fetch('/api/posts', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                key: key,
-                title: title,
-                content: content,
-                isSticky: !!isSticky,
-                tags: tags
-            })
-        });
+        try {
+            const rawResponse = await fetch('/api/posts', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    key: key,
+                    title: title,
+                    content: content,
+                    isSticky: !!isSticky,
+                    tags: tags
+                })
+            });
 
-        if (!!rawResponse.ok) {
-            const data = await rawResponse.json();
-            return new ApiCallResult().withSuccess(data);
+            if (!!rawResponse.ok) {
+                const data = await rawResponse.json();
+                return new ApiCallResult().withSuccess(data);
+            }
+
+            const message = await rawResponse.text();
+            return new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText);
+        } catch (e) {
+            console.error(e);
+            return new ApiCallResult().withLocalError(e);
         }
-
-        const message = await rawResponse.text();
-        return new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText);
     }
 
     public getUrl(ralativePath: string): string {
         var rootPath = new RegExp(/^.*\//).exec(window.location.href);
         return encodeURI(`${rootPath}${ralativePath}`);
     }
+
+    public listLatestPosts = async (): Promise<Post[]> => {
+        try {
+            const rawResponse = await fetch('/api/posts/latest', {
+                method: 'GET',
+            });
+
+            if (!!rawResponse.ok) {
+                const data = await rawResponse.json();
+                return data;
+            }
+
+            return [];
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
+
+    public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
+        try {
+            const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
+                method: 'GET',
+            });
+
+            if (!!rawResponse.ok) {
+                const data = await rawResponse.json();
+                return data;
+            }
+
+            return [];
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
 }
 
 class PostEdit {
-    private readonly service: Service
+    private readonly service: Service;
     private tags: string[] = [];
     private allTags: string[] = [];
     private editorInstance: any;
+    private postList: Post[];
+    private isPostListFromLatest: boolean;
 
     constructor(service: Service) {
         this.service = service;
@@ -72,6 +137,15 @@ class PostEdit {
         return <HTMLSelectElement>document.getElementById('edit-all-tags');
     }
 
+    public get postListElement(): HTMLElement {
+        return document.getElementById('edit-post-list');
+    }
+
+    public get keywords(): string {
+        const value = (<HTMLInputElement>document.getElementById('edit-post-search-keywords')).value;
+        return value;
+    }
+
     public init = (editorInstance: any) => {
         this.editorInstance = editorInstance;
         this.editorInstance.value = (<HTMLInputElement>document.getElementById('PostInEdit_Content')).value;
@@ -83,6 +157,12 @@ class PostEdit {
         this.allTags = JSON.parse((<HTMLInputElement>document.getElementById('AllTagsInText')).value);
         if (!this.allTags) this.allTags = [];
         this.renderAllTags();
+
+        this.initAsync();
+    }
+
+    private initAsync = async () => {
+        await this.loadLatestPosts();
     }
 
     public deleteTag = (index: number) => {
@@ -127,7 +207,7 @@ class PostEdit {
         );
 
         if (response.ok) {
-            const url = this.service.getUrl(`${response.data.urlFriendlyTitle}`)
+            const url = this.service.getUrl(`${response.data.urlFriendlyTitle}`) // TODO: Dbl-check needed
             document.getElementById('post-submit-result').innerHTML = `<div style="color:darkgreen;margin-bottom:15px;">Post submitted successfully.</div><div><a href="${url}" target="_self">Refresh Page</a></div>`;
         } else {
             document.getElementById('post-submit-result').innerHTML = `<span style="color:darkred;">${response.status} ${response.statusText}<br />${response.message}<span>`;
@@ -136,6 +216,37 @@ class PostEdit {
         window.setTimeout(function () {
             document.getElementById('post-submit-result').innerHTML = '';
         }, 10000);
+    }
+
+    public async loadLatestPosts() {
+        this.postList = await this.service.listLatestPosts();
+        this.isPostListFromLatest = true;
+        this.renderPostList();
+    }
+
+    public async loadPostsByKeywords() {
+        this.postList = await this.service.listPostsWithTitleContainingKeywords(this.keywords);
+        this.isPostListFromLatest = false;
+        this.renderPostList();
+    }
+
+    private renderPostList() {
+        this.postListElement.innerHTML = '';
+        if (!this.postList) return;
+
+        let html = this.isPostListFromLatest
+            ? '<div>Latest Posts</div>'
+            : '<div>Search Results</div>';
+
+        if (this.postList.length === 0) {
+            html += '<div>(Empty Results)</div>';
+        }
+        else {
+            for (const post of this.postList) {
+                html += `<div><a href="$/posts/${post.urlFriendlyTitle}" target="_self">${post.title}</a></div>`;
+            }
+        }
+        this.postListElement.innerHTML = html;
     }
 
     private renderTags() {
