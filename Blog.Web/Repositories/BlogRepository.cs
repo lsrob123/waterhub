@@ -109,6 +109,30 @@ namespace Blog.Web.Repositories
             }
         }
 
+        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
+        {
+            try
+            {
+                postCount ??= _settings.LatestPostsCount;
+                using var store = new BlogDataStore(_settings);
+                var query = store.PostInfoEntries.Query();
+                query = includeUnpublishedPosts
+                    ? query
+                    : query.Where(x => x.IsPublished);
+
+                var posts = query
+                    .OrderByDescending(x => x.TimeCreated)
+                    .Limit(postCount.Value)
+                    .ToList();
+                return posts;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return new List<PostInfoEntry>();
+            }
+        }
+
         public ICollection<Post> ListLatestPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
             try
@@ -133,32 +157,34 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords,
+            bool includeUnpublishedPosts = false)
         {
             try
             {
-                postCount ??= _settings.LatestPostsCount;
+                var keywordList = keywords.Select(x => x.Trim().ToLower()).ToArray();
                 using var store = new BlogDataStore(_settings);
-                var query = store.PostInfoEntries.Query();
-                query = includeUnpublishedPosts
-                    ? query
-                    : query.Where(x => x.IsPublished);
 
-                var posts = query
+                var query = includeUnpublishedPosts
+                    ? store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList))
+                    : store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
+
+                var entries = query
                     .OrderByDescending(x => x.TimeCreated)
-                    .Limit(postCount.Value)
+                    .Limit(_settings.PostsFromSearchCount)
                     .ToList();
-                return posts;
+
+                return entries;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return new List<Post>();
+                return new List<PostInfoEntry>();
             }
         }
 
         public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords,
-            bool includeUnpublishedPosts = false)
+                    bool includeUnpublishedPosts = false)
         {
             try
             {
@@ -178,32 +204,6 @@ namespace Blog.Web.Repositories
                 var entries = query
                     .OrderByDescending(x => x.TimeCreated)
                     .Limit(1000)
-                    .ToList();
-
-                return entries;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, e.Message);
-                return new List<PostInfoEntry>();
-            }
-        }
-
-        public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords,
-            bool includeUnpublishedPosts = false)
-        {
-            try
-            {
-                var keywordList = keywords.Select(x => x.Trim().ToLower()).ToArray();
-                using var store = new BlogDataStore(_settings);
-
-                var query = includeUnpublishedPosts
-                    ? store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList))
-                    : store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
-
-                var entries = query
-                    .OrderByDescending(x => x.TimeCreated)
-                    .Limit(_settings.PostsFromSearchCount)
                     .ToList();
 
                 return entries;

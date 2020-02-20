@@ -15,15 +15,20 @@ namespace Blog.Web.Controllers
             _blogService = blogService;
         }
 
-        [HttpPost]
-        [HttpPut]
-        //[Authorize(Roles = UserModelBase.Admin)]
-        public IActionResult UpsertPost([FromBody]UpsertPostRequest request)
+        [HttpGet]
+        [Route("latest/published")]
+        public IActionResult ListLatestPostInfoEntries()
         {
-            var result = _blogService.UpsertPost(request.ToPost());
-            if (result.IsOk)
-                return Ok(result.Data);
-            return StatusCode((int)result.Status, result.ErrorMessage);
+            var result = _blogService.ListLatestPostInfoEntries();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("latest/info")]
+        public IActionResult ListLatestPostInfoEntriesIncludingUnPublished()
+        {
+            var result = _blogService.ListLatestPostInfoEntries(includeUnpublishedPosts: true);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -44,6 +49,17 @@ namespace Blog.Web.Controllers
 
             var result = _blogService.ListPostInfoEntriesByKeywordsInTitle(keywordList);
             return Ok(result);
+        }
+
+        [HttpPost]
+        [HttpPut]
+        //[Authorize(Roles = UserModelBase.Admin)]
+        public IActionResult UpsertPost([FromBody]UpsertPostRequest request)
+        {
+            var result = _blogService.UpsertPost(request.ToPost());
+            if (result.IsOk)
+                return Ok(result.Data);
+            return StatusCode((int)result.Status, result.ErrorMessage);
         }
     }
 }

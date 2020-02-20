@@ -5,8 +5,8 @@ window.onload = () => {
         adminScreen.loadDataAsync();
     }
 
-    const adminScreenorElement = document.getElementById('post-eidtor-content')
-    if (!!adminScreenorElement) {
-        adminScreen.init(new Jodit(adminScreenorElement));
+    const adminScreenEditorElement = document.getElementById('post-eidtor-content')
+    if (!!adminScreenEditorElement) {
+        adminScreen.init(new Jodit(adminScreenEditorElement));
     }
 }

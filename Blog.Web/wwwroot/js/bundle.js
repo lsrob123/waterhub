@@ -34,6 +34,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var ApiCallResult = /** @class */ (function () {
+    function ApiCallResult() {
+    }
+    ApiCallResult.prototype.withSuccess = function (data, status) {
+        if (status === void 0) { status = 200; }
+        this.ok = true;
+        this.status = 200;
+        this.data = data;
+        return this;
+    };
+    ApiCallResult.prototype.withError = function (message, status, statusText) {
+        this.ok = false;
+        this.status = status;
+        this.statusText = statusText;
+        this.data = undefined;
+        this.message = message;
+        return this;
+    };
+    ApiCallResult.prototype.withLocalError = function (message) {
+        this.ok = false;
+        this.data = undefined;
+        this.message = message;
+        return this;
+    };
+    return ApiCallResult;
+}());
+var Tag = /** @class */ (function () {
+    function Tag() {
+    }
+    return Tag;
+}());
+var Post = /** @class */ (function () {
+    function Post() {
+    }
+    return Post;
+}());
+var PostInfoEntry = /** @class */ (function () {
+    function PostInfoEntry() {
+    }
+    return PostInfoEntry;
+}());
+/// <reference path="models.ts"/>
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
@@ -101,13 +143,13 @@ var Service = /** @class */ (function () {
                 }
             });
         }); };
-        this.listPostsWithTitleContainingKeywords = function (keywords) { return __awaiter(_this, void 0, void 0, function () {
+        this.listLatestPostInfoEntries = function () { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, data, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, fetch("/api/posts?keywords=" + keywords, {
+                        return [4 /*yield*/, fetch('/api/posts/latest/info', {
                                 method: 'GET',
                             })];
                     case 1:
@@ -126,12 +168,81 @@ var Service = /** @class */ (function () {
                 }
             });
         }); };
+        this.listPostsWithTitleContainingKeywords = function (keywords) { return __awaiter(_this, void 0, void 0, function () {
+            var rawResponse, data, e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, fetch("/api/posts?keywords=" + keywords, {
+                                method: 'GET',
+                            })];
+                    case 1:
+                        rawResponse = _a.sent();
+                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, rawResponse.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data];
+                    case 3: return [2 /*return*/, []];
+                    case 4:
+                        e_4 = _a.sent();
+                        console.error(e_4);
+                        return [2 /*return*/, null];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); };
     }
     Service.prototype.getUrl = function (ralativePath) {
         var rootPath = new RegExp(/^.*\//).exec(window.location.href);
         return encodeURI("" + rootPath + ralativePath);
     };
     return Service;
+}());
+var HomeScreen = /** @class */ (function () {
+    function HomeScreen(service) {
+        var _this = this;
+        this.startSearch = function () { return __awaiter(_this, void 0, void 0, function () {
+            var keywords;
+            return __generator(this, function (_a) {
+                keywords = this.searchBox.value;
+                return [2 /*return*/];
+            });
+        }); };
+        this.searchBoxDebounceId = null;
+        this.isSearchBoxFocused = false;
+        this.onSearchBoxUpdated = function () {
+            if (!!_this.searchBoxDebounceId) {
+                clearTimeout(_this.searchBoxDebounceId);
+                _this.searchBoxDebounceId = null;
+            }
+            if (!_this.isSearchBoxFocused) {
+                return;
+            }
+            _this.searchBoxDebounceId = window.setTimeout(function () {
+                if (!!this.isSearchBoxFocused) {
+                    this.startSearch();
+                }
+            }, 500);
+        };
+        this.onSearchBoxFocused = function () {
+            _this.isSearchBoxFocused = true;
+        };
+        this.onSearchBoxBlurred = function () {
+            _this.isSearchBoxFocused = false;
+            _this.startSearch();
+        };
+        this.service = service;
+    }
+    Object.defineProperty(HomeScreen.prototype, "searchBox", {
+        get: function () {
+            return document.getElementById('home-search-box');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return HomeScreen;
 }());
 var AdminScreen = /** @class */ (function () {
     function AdminScreen(service) {
@@ -153,7 +264,7 @@ var AdminScreen = /** @class */ (function () {
         this.loadDataAsync = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadLatestPosts()];
+                    case 0: return [4 /*yield*/, this.loadLatestPostInfoEntries()];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -215,7 +326,7 @@ var AdminScreen = /** @class */ (function () {
         this.createPost = function () {
             window.location.href = _this.service.getUrl('');
         };
-        this.loadLatestPosts = function () { return __awaiter(_this, void 0, void 0, function () {
+        this.loadLatestPostInfoEntries = function () { return __awaiter(_this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -323,6 +434,10 @@ var AdminScreen = /** @class */ (function () {
     };
     return AdminScreen;
 }());
+/// <reference path="service.ts"/>
+/// <reference path="home-screen.ts"/>
+/// <reference path="admin-screen.ts"/>
 var service = new Service();
+var homeScreen = new HomeScreen(service);
 var adminScreen = new AdminScreen(service);
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=bundle.js.map

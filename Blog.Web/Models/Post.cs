@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Blog.Web.Abstractions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
@@ -7,7 +8,7 @@ using WaterHub.Core.Models;
 
 namespace Blog.Web.Models
 {
-    public class Post : EntityBase
+    public class Post : EntityBase, IPostInfo
     {
         [Required]
         public string Content { get; set; }

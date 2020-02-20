@@ -74,5 +74,10 @@ namespace Blog.Web.Services
             var result = _repository.UpsertPost(post.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
             return result;
         }
+
+        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListLatestPostInfoEntries(postCount, includeUnpublishedPosts);
+        }
     }
 }

@@ -5,11 +5,12 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",
-    "lib": [ "es2015", "DOM", "ES2017", "DOM.Iterable" ]
+    "lib": [ "es2015", "DOM", "ES2017", "DOM.Iterable" ],
+    "outFile": "wwwroot/js/bundle.js"
   },
-  "files": [ "wwwroot/js/models.ts", "wwwroot/js/app.ts" ],
+  "compileOnSave": true,
+  "files": [ "wwwroot/js/models.ts", "wwwroot/js/service.ts", "wwwroot/js/home-screen.ts", "wwwroot/js/admin-screen.ts", "wwwroot/js/app.ts" ],
   "exclude": [
-    "node_modules",
-    "wwwroot"
+    "node_modules"
   ]
 }

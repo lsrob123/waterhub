@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Blog.Web.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Models
 {
-    public class PostInfoEntry : EntityBase
+    public class PostInfoEntry : EntityBase, IPostInfo
     {
         public PostInfoEntry()
         {

@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Blog.Web.Abstractions;
+using System.Collections.Generic;
 using System.Linq;
-using Blog.Web.Models;
 
 namespace Blog.Web
 {
     public static class Extensions
     {
-        public static bool TitleContains(this Post x, ICollection<string> keywordList)
+        public static bool TitleContains<TPost>(this TPost x, ICollection<string> keywordList)
+            where TPost : IPostInfo
         {
             var title = x?.Title?.Trim()?.ToLower();
             if (string.IsNullOrEmpty(title))

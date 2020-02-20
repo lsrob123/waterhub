@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\admin-screen.ts" />
     <Content Remove="wwwroot\js\app.ts" />
+    <Content Remove="wwwroot\js\home-screen.ts" />
+    <Content Remove="wwwroot\js\service.ts" />
   </ItemGroup>
 
 
