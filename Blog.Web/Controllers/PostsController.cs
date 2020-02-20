@@ -35,14 +35,14 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListPostsWithTitleContainingKeywords([FromQuery]string keywords)
+        public IActionResult ListPostInfoEntriesByKeywordsInTitle([FromQuery]string keywords)
         {
             if (string.IsNullOrWhiteSpace(keywords))
                 return Ok(new Post[] { });
 
             var keywordList = keywords.Split(new string[] { ",", " " }, System.StringSplitOptions.RemoveEmptyEntries);
 
-            var result = _blogService.ListPostsWithTitleContainingKeywords(keywordList);
+            var result = _blogService.ListPostInfoEntriesByKeywordsInTitle(keywordList);
             return Ok(result);
         }
     }

@@ -58,15 +58,15 @@ namespace Blog.Web.Services
             return _repository.ListStickyPosts(postCount, includeUnpublishedPosts);
         }
 
-        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
         {
-            return _repository.ListPostsByTags(keywords, includeUnpublishedPosts);
+            return _repository.ListPostInfoEntriesByTags(keywords, includeUnpublishedPosts);
         }
 
-        public ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords,
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords,
             bool includeUnpublishedPosts = false)
         {
-            return _repository.ListPostsWithTitleContainingKeywords(keywords, includeUnpublishedPosts);
+            return _repository.ListPostInfoEntriesByKeywordsInTitle(keywords, includeUnpublishedPosts);
         }
 
         public ProcessResult<Post> UpsertPost(Post post)

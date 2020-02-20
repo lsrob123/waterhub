@@ -1,12 +1,12 @@
-﻿let postEditor;
+﻿let adminScreenor;
 
 window.onload = () => {
     if (!!document.getElementById('edit-post-search-keywords')) {
-        postEdit.loadDataAsync();
+        adminScreen.loadDataAsync();
     }
 
-    const postEditorElement = document.getElementById('post-eidtor-content')
-    if (!!postEditorElement) {
-        postEdit.init(new Jodit(postEditorElement));
+    const adminScreenorElement = document.getElementById('post-eidtor-content')
+    if (!!adminScreenorElement) {
+        adminScreen.init(new Jodit(adminScreenorElement));
     }
 }

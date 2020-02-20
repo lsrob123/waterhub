@@ -1,4 +1,4 @@
-﻿//const getPostEditorValue = () => {
-//    console.log(postEditor.value);
-//    return postEditor.value;
+﻿//const getAdminScreenorValue = () => {
+//    console.log(adminScreenor.value);
+//    return adminScreenor.value;
 //}

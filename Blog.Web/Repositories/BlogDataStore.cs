@@ -23,10 +23,18 @@ namespace Blog.Web.Repositories
             Tags = Database.GetCollection<Tag>(nameof(Tags));
             Tags.EnsureIndex(x => x.Text);
             Tags.EnsureIndex(x => x.PostKey);
+
+            BsonMapper.Global.Entity<PostInfoEntry>().Id(x => x.Key);
+            PostInfoEntries = Database.GetCollection<PostInfoEntry>(nameof(PostInfoEntries));
+            PostInfoEntries.EnsureIndex(x => x.Title, true);
+            PostInfoEntries.EnsureIndex(x => x.UrlFriendlyTitle, true);
+            PostInfoEntries.EnsureIndex(x => x.TimeCreated);
+            PostInfoEntries.EnsureIndex(x => x.PostKey, true);
         }
 
         public ILiteCollection<Post> Posts { get; }
         public ILiteCollection<Tag> Tags { get; }
         public ILiteCollection<UserModel> Users { get; }
+        public ILiteCollection<PostInfoEntry> PostInfoEntries { get; }
     }
 }

@@ -118,7 +118,46 @@ class Service {
     }
 }
 
-class PostEdit {
+class HomeScreen {
+
+    private get searchBox(): HTMLInputElement {
+        return <HTMLInputElement>document.getElementById('home-search-box');
+    }
+
+    private startSearch = async () => {
+        const keywords = this.searchBox.value;
+
+    }
+
+    private searchBoxDebounceId: number = null;
+    private isSearchBoxFocused: boolean = false;
+    public onSearchBoxUpdated = () => {
+        if (!!this.searchBoxDebounceId) {
+            clearTimeout(this.searchBoxDebounceId);
+            this.searchBoxDebounceId = null;
+        }
+
+        if (!this.isSearchBoxFocused) {
+            return;
+        }
+
+        this.searchBoxDebounceId = window.setTimeout(function () {
+            if (!!this.isSearchBoxFocused) {
+                this.startSearch();
+            }
+        }, 500);
+    }
+    public onSearchBoxFocused = () => {
+        this.isSearchBoxFocused = true;
+    }
+    public onSearchBoxBlurred = () => {
+        this.isSearchBoxFocused = false;
+        this.startSearch();
+    }
+
+}
+
+class AdminScreen {
     private readonly service: Service;
     private tags: string[] = [];
     private allTags: string[] = [];
@@ -254,10 +293,10 @@ class PostEdit {
     }
 
     private renderTags() {
-        this.tags = this.tags.sort((a, b) => PostEdit.tagComparitor(a, b));
+        this.tags = this.tags.sort((a, b) => AdminScreen.tagComparitor(a, b));
 
         const tagsHtml = this.tags.reduce((previous, current, index) => {
-            previous = `${previous} <div class="tag">${current} <a href="javascript:postEdit.deleteTag(${index})"><img src="/images/delete.svg" /></a></div> `;
+            previous = `${previous} <div class="tag">${current} <a href="javascript:adminScreen.deleteTag(${index})"><img src="/images/delete.svg" /></a></div> `;
             return previous;
         }, '');
         document.getElementById('edit-tags').innerHTML = tagsHtml;
@@ -269,7 +308,7 @@ class PostEdit {
         dropdown.options.length = 0;
         if (!this.allTags || this.allTags.length === 0) return;
 
-        this.allTags = this.allTags.sort((a, b) => PostEdit.tagComparitor(a, b));
+        this.allTags = this.allTags.sort((a, b) => AdminScreen.tagComparitor(a, b));
         dropdown.add(new Option('', ''));
         this.allTags.map(x => {
             dropdown.add(new Option(x, x));
@@ -285,4 +324,4 @@ class PostEdit {
 }
 
 const service = new Service();
-const postEdit = new PostEdit(service);
+const adminScreen = new AdminScreen(service);

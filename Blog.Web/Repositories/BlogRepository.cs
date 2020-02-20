@@ -133,7 +133,32 @@ namespace Blog.Web.Repositories
             }
         }
 
-        public ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
+        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
+        {
+            try
+            {
+                postCount ??= _settings.LatestPostsCount;
+                using var store = new BlogDataStore(_settings);
+                var query = store.PostInfoEntries.Query();
+                query = includeUnpublishedPosts
+                    ? query
+                    : query.Where(x => x.IsPublished);
+
+                var posts = query
+                    .OrderByDescending(x => x.TimeCreated)
+                    .Limit(postCount.Value)
+                    .ToList();
+                return posts;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return new List<Post>();
+            }
+        }
+
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords,
+            bool includeUnpublishedPosts = false)
         {
             try
             {
@@ -144,27 +169,27 @@ namespace Blog.Web.Repositories
                     .Distinct()
                     .ToList();
                 if (postKeys.Count == 0)
-                    return new List<Post>();
+                    return new List<PostInfoEntry>();
 
                 var query = includeUnpublishedPosts
-                    ? store.Posts.Query().Where(x => postKeys.Contains(x.Key))
-                    : store.Posts.Query().Where(x => postKeys.Contains(x.Key) && x.IsPublished);
+                    ? store.PostInfoEntries.Query().Where(x => postKeys.Contains(x.Key))
+                    : store.PostInfoEntries.Query().Where(x => postKeys.Contains(x.Key) && x.IsPublished);
 
-                var posts = query
+                var entries = query
                     .OrderByDescending(x => x.TimeCreated)
-                    .Limit(_settings.PostsFromSearchCount)
+                    .Limit(1000)
                     .ToList();
 
-                return posts;
+                return entries;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return new List<Post>();
+                return new List<PostInfoEntry>();
             }
         }
 
-        public ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords,
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords,
             bool includeUnpublishedPosts = false)
         {
             try
@@ -173,20 +198,20 @@ namespace Blog.Web.Repositories
                 using var store = new BlogDataStore(_settings);
 
                 var query = includeUnpublishedPosts
-                    ? store.Posts.Query().Where(x => x.TitleContains(keywordList))
-                    : store.Posts.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
+                    ? store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList))
+                    : store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
 
-                var posts = query
+                var entries = query
                     .OrderByDescending(x => x.TimeCreated)
                     .Limit(_settings.PostsFromSearchCount)
                     .ToList();
 
-                return posts;
+                return entries;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return new List<Post>();
+                return new List<PostInfoEntry>();
             }
         }
 
@@ -237,6 +262,10 @@ namespace Blog.Web.Repositories
                 store.Tags.DeleteMany(x => x.PostKey == post.Key);
                 if (!(post.Tags is null))
                     store.Tags.InsertBulk(post.Tags);
+
+                store.PostInfoEntries.DeleteMany(x => x.PostKey == post.Key);
+                var postInfoEntry = new PostInfoEntry(post);
+                store.PostInfoEntries.Insert(postInfoEntry);
 
                 store.Posts.Insert(post);
 

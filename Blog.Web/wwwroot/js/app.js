@@ -34,42 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var ApiCallResult = /** @class */ (function () {
-    function ApiCallResult() {
-    }
-    ApiCallResult.prototype.withSuccess = function (data, status) {
-        if (status === void 0) { status = 200; }
-        this.ok = true;
-        this.status = 200;
-        this.data = data;
-        return this;
-    };
-    ApiCallResult.prototype.withError = function (message, status, statusText) {
-        this.ok = false;
-        this.status = status;
-        this.statusText = statusText;
-        this.data = undefined;
-        this.message = message;
-        return this;
-    };
-    ApiCallResult.prototype.withLocalError = function (message) {
-        this.ok = false;
-        this.data = undefined;
-        this.message = message;
-        return this;
-    };
-    return ApiCallResult;
-}());
-var Tag = /** @class */ (function () {
-    function Tag() {
-    }
-    return Tag;
-}());
-var Post = /** @class */ (function () {
-    function Post() {
-    }
-    return Post;
-}());
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
@@ -169,8 +133,8 @@ var Service = /** @class */ (function () {
     };
     return Service;
 }());
-var PostEdit = /** @class */ (function () {
-    function PostEdit(service) {
+var AdminScreen = /** @class */ (function () {
+    function AdminScreen(service) {
         var _this = this;
         this.tags = [];
         this.allTags = [];
@@ -283,28 +247,28 @@ var PostEdit = /** @class */ (function () {
         }); };
         this.service = service;
     }
-    Object.defineProperty(PostEdit.prototype, "hasAllTags", {
+    Object.defineProperty(AdminScreen.prototype, "hasAllTags", {
         get: function () {
             return !!this.allTags && this.allTags.length > 0;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PostEdit.prototype, "allTagsDropdown", {
+    Object.defineProperty(AdminScreen.prototype, "allTagsDropdown", {
         get: function () {
             return document.getElementById('edit-all-tags');
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PostEdit.prototype, "postListElement", {
+    Object.defineProperty(AdminScreen.prototype, "postListElement", {
         get: function () {
             return document.getElementById('edit-post-list');
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PostEdit.prototype, "keywords", {
+    Object.defineProperty(AdminScreen.prototype, "keywords", {
         get: function () {
             var value = document.getElementById('edit-post-search-keywords').value;
             return value;
@@ -312,7 +276,7 @@ var PostEdit = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    PostEdit.prototype.renderPostList = function () {
+    AdminScreen.prototype.renderPostList = function () {
         this.postListElement.innerHTML = '';
         if (!this.postList)
             return;
@@ -330,35 +294,35 @@ var PostEdit = /** @class */ (function () {
         }
         this.postListElement.innerHTML = html;
     };
-    PostEdit.prototype.renderTags = function () {
-        this.tags = this.tags.sort(function (a, b) { return PostEdit.tagComparitor(a, b); });
+    AdminScreen.prototype.renderTags = function () {
+        this.tags = this.tags.sort(function (a, b) { return AdminScreen.tagComparitor(a, b); });
         var tagsHtml = this.tags.reduce(function (previous, current, index) {
-            previous = previous + " <div class=\"tag\">" + current + " <a href=\"javascript:postEdit.deleteTag(" + index + ")\"><img src=\"/images/delete.svg\" /></a></div> ";
+            previous = previous + " <div class=\"tag\">" + current + " <a href=\"javascript:adminScreen.deleteTag(" + index + ")\"><img src=\"/images/delete.svg\" /></a></div> ";
             return previous;
         }, '');
         document.getElementById('edit-tags').innerHTML = tagsHtml;
     };
-    PostEdit.prototype.renderAllTags = function () {
+    AdminScreen.prototype.renderAllTags = function () {
         var dropdown = this.allTagsDropdown;
         dropdown.options.length = 0;
         if (!this.allTags || this.allTags.length === 0)
             return;
-        this.allTags = this.allTags.sort(function (a, b) { return PostEdit.tagComparitor(a, b); });
+        this.allTags = this.allTags.sort(function (a, b) { return AdminScreen.tagComparitor(a, b); });
         dropdown.add(new Option('', ''));
         this.allTags.map(function (x) {
             dropdown.add(new Option(x, x));
             return true;
         });
     };
-    PostEdit.tagComparitor = function (a, b) {
+    AdminScreen.tagComparitor = function (a, b) {
         if (a > b)
             return 1;
         if (a < b)
             return -1;
         return 0;
     };
-    return PostEdit;
+    return AdminScreen;
 }());
 var service = new Service();
-var postEdit = new PostEdit(service);
+var adminScreen = new AdminScreen(service);
 //# sourceMappingURL=app.js.map

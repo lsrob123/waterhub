@@ -15,8 +15,8 @@ namespace Blog.Web.Abstractions
         ProcessResult<Post> GetPostByUrlFriendlyTitle(string urlFriendlyTitle);
         ProcessResult<Post> UpsertPost(Post post);
         ProcessResult<Post> DeletePost(Guid postKey);
-        ICollection<Post> ListPostsByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
+        ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
         ICollection<string> ListAllTags();
-        ICollection<Post> ListPostsWithTitleContainingKeywords(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
+        ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
     }
 }
