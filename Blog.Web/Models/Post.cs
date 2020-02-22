@@ -12,20 +12,35 @@ namespace Blog.Web.Models
     {
         [Required]
         public string Content { get; set; }
-        public bool IsPublished { get; set; }
-        public bool IsSticky { get; set; }
-        public ICollection<Tag> Tags { get; set; }
 
-        public string TagsInText =>
-             JsonSerializer.Serialize(
-                 (Tags is null)
-                 ? new string[] { }
-                 : Tags.Select(x => x.Text),
-                 new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        public bool IsPublished { get; set; } = true;
+        public bool IsSticky { get; set; }
+        public ICollection<string> Tags { get; set; }
+
+        public string TagsInText => JsonSerializer.Serialize(
+            (Tags is null) ? new string[] { } : Tags,
+            new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
         [Required]
         public string Title { get; set; }
+
         public string UrlFriendlyTitle { get; set; }
+
+        public PostInfoEntry AsPostInfoEntry()
+        {
+            return new PostInfoEntry(this);
+        }
+
+        public ICollection<Tag> AsTagEntities()
+        {
+            var tags = Tags?.Select(x => new Tag
+            {
+                PostKey = Key,
+                Text = x
+            }.EnsureValidKey())?.ToList()
+            ?? new List<Tag>();
+            return tags;
+        }
 
         public Post BuildUrlFriendlyTitle()
         {

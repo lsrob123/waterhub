@@ -35,7 +35,7 @@ namespace Blog.Web
         {
             if (string.IsNullOrWhiteSpace(article))
             {
-                PostInEdit = new Post().WithValidKey();
+                PostInEdit = new Post().EnsureValidKey();
                 SubmitButtonText = "Publish";
                 return;
             }
@@ -46,7 +46,7 @@ namespace Blog.Web
             if (PostInEdit == null)
             {
                 SubmitButtonText = "Publish";
-                PostInEdit = new Post().WithValidKey();
+                PostInEdit = new Post().EnsureValidKey();
             }
             else
             {

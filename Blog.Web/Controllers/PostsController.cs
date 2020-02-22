@@ -1,6 +1,7 @@
 ﻿using Blog.Web.Abstractions;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using WaterHub.Core.Models;
 
 namespace Blog.Web.Controllers
 {
@@ -16,15 +17,16 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet]
-        [Route("latest/published")]
+        [Route("/info/latest")]
         public IActionResult ListLatestPostInfoEntries()
         {
             var result = _blogService.ListLatestPostInfoEntries();
             return Ok(result);
         }
 
+        //[Authorize(Roles = UserModelBase.Admin)]
         [HttpGet]
-        [Route("latest/info")]
+        [Route("info/latest/all")]
         public IActionResult ListLatestPostInfoEntriesIncludingUnPublished()
         {
             var result = _blogService.ListLatestPostInfoEntries(includeUnpublishedPosts: true);
@@ -40,20 +42,35 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListPostInfoEntriesByKeywordsInTitle([FromQuery]string keywords)
+        [Route("info")]
+        public IActionResult ListPostInfoEntriesByKeywords([FromQuery]string keywords)
         {
             if (string.IsNullOrWhiteSpace(keywords))
                 return Ok(new Post[] { });
 
             var keywordList = keywords.Split(new string[] { ",", " " }, System.StringSplitOptions.RemoveEmptyEntries);
 
-            var result = _blogService.ListPostInfoEntriesByKeywordsInTitle(keywordList);
+            var result = _blogService.ListPostInfoEntriesByKeywords(keywordList);
             return Ok(result);
         }
 
+        //[Authorize(Roles = UserModelBase.Admin)]
+        [HttpGet]
+        [Route("info/all")]
+        public IActionResult ListPostInfoEntriesByKeywordsIncludingUnPublished([FromQuery]string keywords)
+        {
+            if (string.IsNullOrWhiteSpace(keywords))
+                return Ok(new Post[] { });
+
+            var keywordList = keywords.Split(new string[] { ",", " " }, System.StringSplitOptions.RemoveEmptyEntries);
+
+            var result = _blogService.ListPostInfoEntriesByKeywords(keywordList, includeUnpublishedPosts: true);
+            return Ok(result);
+        }
+
+        //[Authorize(Roles = UserModelBase.Admin)]
         [HttpPost]
         [HttpPut]
-        //[Authorize(Roles = UserModelBase.Admin)]
         public IActionResult UpsertPost([FromBody]UpsertPostRequest request)
         {
             var result = _blogService.UpsertPost(request.ToPost());

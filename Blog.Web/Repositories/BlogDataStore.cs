@@ -15,8 +15,8 @@ namespace Blog.Web.Repositories
 
             BsonMapper.Global.Entity<Post>().Id(x => x.Key);
             Posts = Database.GetCollection<Post>(nameof(Posts));
-            Posts.EnsureIndex(x => x.Title, true);
-            Posts.EnsureIndex(x => x.UrlFriendlyTitle, true);
+            Posts.EnsureIndex(x => x.Title);
+            Posts.EnsureIndex(x => x.UrlFriendlyTitle);
             Posts.EnsureIndex(x => x.TimeCreated);
 
             BsonMapper.Global.Entity<Tag>().Id(x => x.Key);
@@ -26,10 +26,9 @@ namespace Blog.Web.Repositories
 
             BsonMapper.Global.Entity<PostInfoEntry>().Id(x => x.Key);
             PostInfoEntries = Database.GetCollection<PostInfoEntry>(nameof(PostInfoEntries));
-            PostInfoEntries.EnsureIndex(x => x.Title, true);
-            PostInfoEntries.EnsureIndex(x => x.UrlFriendlyTitle, true);
+            PostInfoEntries.EnsureIndex(x => x.Title);
+            PostInfoEntries.EnsureIndex(x => x.UrlFriendlyTitle);
             PostInfoEntries.EnsureIndex(x => x.TimeCreated);
-            PostInfoEntries.EnsureIndex(x => x.PostKey, true);
         }
 
         public ILiteCollection<Post> Posts { get; }

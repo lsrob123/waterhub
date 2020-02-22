@@ -3,7 +3,7 @@
     private tags: string[] = [];
     private allTags: string[] = [];
     private editorInstance: any;
-    private postList: Post[];
+    private postInfoEntries: PostInfoEntry[];
     private isPostListFromLatest: boolean;
 
     constructor(service: Service) {
@@ -18,7 +18,7 @@
         return <HTMLSelectElement>document.getElementById('edit-all-tags');
     }
 
-    public get postListElement(): HTMLElement {
+    public get postInfoEntriesElement(): HTMLElement {
         return document.getElementById('edit-post-list');
     }
 
@@ -87,8 +87,12 @@
         );
 
         if (response.ok) {
-            const url = this.service.getUrl(`${response.data.urlFriendlyTitle}`) // TODO: Dbl-check needed
+            //const url = this.service.getUrl(`${response.data.urlFriendlyTitle}`) // TODO: Dbl-check needed
+            const url = `/admin/${response.data.urlFriendlyTitle}`;
             document.getElementById('post-submit-result').innerHTML = `<div style="color:darkgreen;margin-bottom:15px;">Post submitted successfully.</div><div><a href="${url}" target="_self">Refresh Page</a></div>`;
+            window.setTimeout(function () {
+                window.location.href = url;
+            }, 1000);
         } else {
             document.getElementById('post-submit-result').innerHTML = `<span style="color:darkred;">${response.status} ${response.statusText}<br />${response.message}<span>`;
         }
@@ -103,34 +107,34 @@
     }
 
     public loadLatestPostInfoEntries = async () => {
-        this.postList = await this.service.listLatestPosts();
+        this.postInfoEntries = await this.service.listLatestPostInfoEntries(true);
         this.isPostListFromLatest = true;
         this.renderPostList();
     }
 
-    public loadPostsByKeywords = async () => {
-        this.postList = await this.service.listPostsWithTitleContainingKeywords(this.keywords);
+    public loadPostInfoEntriesByKeywords = async () => {
+        this.postInfoEntries = await this.service.listPostInfoEntriesByKeywords(this.keywords, true);
         this.isPostListFromLatest = false;
         this.renderPostList();
     }
 
     private renderPostList() {
-        this.postListElement.innerHTML = '';
-        if (!this.postList) return;
+        this.postInfoEntriesElement.innerHTML = '';
+        if (!this.postInfoEntries) return;
 
         let html = this.isPostListFromLatest
             ? '<div class="current-post-list-type">Latest posts loaded.</div>'
             : '<div class="current-post-list-type">Search results loaded.</div>';
 
-        if (this.postList.length === 0) {
+        if (this.postInfoEntries.length === 0) {
             html += '<div>(Empty Results)</div>';
         }
         else {
-            for (const post of this.postList) {
+            for (const post of this.postInfoEntries) {
                 html += `<div><a href="/admin/${post.urlFriendlyTitle}" target="_self">${post.title}</a></div>`;
             }
         }
-        this.postListElement.innerHTML = html;
+        this.postInfoEntriesElement.innerHTML = html;
     }
 
     private renderTags() {

@@ -22,7 +22,7 @@ namespace Blog.Web.Abstractions
         ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
 
         ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
-        ICollection<PostInfoEntry> ListPostInfoEntriesByKeywords();
+        ICollection<PostInfoEntry> ListPostInfoEntriesByKeywords(IEnumerable<string> keywords, bool includeUnpublishedPosts = false);
 
         ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false);
 

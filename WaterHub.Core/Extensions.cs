@@ -14,8 +14,6 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
-        //private const string Dash = "-", PatternForUrlFriendlyString = @"[^A-Za-z0-9_\.~]+";
-
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
                             (this IServiceCollection services)
             where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
@@ -78,8 +76,7 @@ namespace WaterHub.Core
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentNullException(nameof(input));
-            //return Regex.Replace(input, PatternForUrlFriendlyString, Dash).ToLower();
-            return input.Replace(" ", "-").ToLower();
+            return input.Trim().Replace(" ", "-").ToLower();
         }
 
         public static TUserModel ToUserModel<TUserModel>(this ClaimsPrincipal claimsPrincipal)
@@ -106,7 +103,7 @@ namespace WaterHub.Core
             return entity;
         }
 
-        public static T WithValidKey<T>(this T entity, Guid? key = null) where T : EntityBase
+        public static T EnsureValidKey<T>(this T entity, Guid? key = null) where T : EntityBase
         {
             key = key.HasValue && key.Value != default ? key : Guid.NewGuid();
 

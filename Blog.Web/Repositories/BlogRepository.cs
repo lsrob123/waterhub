@@ -1,5 +1,6 @@
 ﻿using Blog.Web.Abstractions;
 using Blog.Web.Models;
+using LiteDB;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Blog.Web.Repositories
 {
     public class BlogRepository : IBlogRepository
     {
+        private const string Title = nameof(PostInfoEntry.Title), Text = nameof(Tag.Text), Key = nameof(PostInfoEntry.Key);
         private readonly ILogger<BlogRepository> _logger;
         private readonly ISettings _settings;
 
@@ -162,16 +164,18 @@ namespace Blog.Web.Repositories
         {
             try
             {
-                var keywordList = keywords.Select(x => x.Trim().ToLower()).ToArray();
+                if (keywords == null || !keywords.Any())
+                    return new List<PostInfoEntry>();
+
+                var keywordList = keywords.ToList();
+
                 using var store = new BlogDataStore(_settings);
 
-                var query = includeUnpublishedPosts
-                    ? store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList))
-                    : store.PostInfoEntries.Query().Where(x => x.TitleContains(keywordList) && x.IsPublished);
+                var expression = keywordList.ContainedBy(Title).IncludeUnpublishedPosts(includeUnpublishedPosts);
 
-                var entries = query
+                var entries = store.PostInfoEntries.Find(expression,
+                        limit: _settings.PostsFromSearchCount)
                     .OrderByDescending(x => x.TimeCreated)
-                    .Limit(_settings.PostsFromSearchCount)
                     .ToList();
 
                 return entries;
@@ -188,22 +192,26 @@ namespace Blog.Web.Repositories
         {
             try
             {
-                var keywordList = keywords.Select(x => x.Trim().ToLower()).ToArray();
+                var keywordList = keywords.ToList();
+
                 using var store = new BlogDataStore(_settings);
-                var postKeys = store.Tags.Find(x => keywordList.Contains(x.Text))
-                    .Select(x => x.PostKey)
-                    .Distinct()
-                    .ToList();
+                var expression = keywordList.ContainedBy(Text);
+
+                var postKeys = store.Tags.Find(expression)
+                                    .Select(x => x.PostKey)
+                                    .Distinct()
+                                    .ToList();
                 if (postKeys.Count == 0)
                     return new List<PostInfoEntry>();
 
-                var query = includeUnpublishedPosts
-                    ? store.PostInfoEntries.Query().Where(x => postKeys.Contains(x.Key))
-                    : store.PostInfoEntries.Query().Where(x => postKeys.Contains(x.Key) && x.IsPublished);
+                var firstKey = postKeys.First();
+                expression = (postKeys.Count == 1
+                        ? Query.EQ(Key, firstKey)
+                        : Query.Or(postKeys.Select(x => Query.EQ(Key, x)).ToArray()));
 
-                var entries = query
+                var entries = store.PostInfoEntries
+                    .Find(expression, limit: 1000)
                     .OrderByDescending(x => x.TimeCreated)
-                    .Limit(1000)
                     .ToList();
 
                 return entries;
@@ -244,29 +252,19 @@ namespace Blog.Web.Repositories
             try
             {
                 using var store = new BlogDataStore(_settings);
-                var existing = GetPostByKey(store, post.Key);
-                if (existing is null)
-                {
-                    existing = GetPostByUrlFriendlyTitle(store, post.UrlFriendlyTitle);
-                    if (!(existing is null))
-                    {
-                        post.Key = existing.Key;
-                        store.Posts.Delete(existing.Key);
-                    }
-                }
-                else
-                {
-                    store.Posts.Delete(existing.Key);
-                }
+                store.Posts.DeleteMany(x => x.Key == post.Key);
+                store.Posts.DeleteMany(x => x.Title == post.Title);
+                store.Posts.DeleteMany(x => x.UrlFriendlyTitle == post.UrlFriendlyTitle);
+
+                store.PostInfoEntries.DeleteMany(x => x.Key == post.Key);
+                store.PostInfoEntries.DeleteMany(x => x.Title == post.Title);
+                store.PostInfoEntries.DeleteMany(x => x.UrlFriendlyTitle == post.UrlFriendlyTitle);
 
                 store.Tags.DeleteMany(x => x.PostKey == post.Key);
-                if (!(post.Tags is null))
-                    store.Tags.InsertBulk(post.Tags);
 
-                store.PostInfoEntries.DeleteMany(x => x.PostKey == post.Key);
-                var postInfoEntry = new PostInfoEntry(post);
-                store.PostInfoEntries.Insert(postInfoEntry);
-
+                post.Key = Guid.NewGuid();
+                store.Tags.InsertBulk(post.AsTagEntities());
+                store.PostInfoEntries.Insert(post.AsPostInfoEntry());
                 store.Posts.Insert(post);
 
                 return new ProcessResult<Post>().AsOk(data: post);

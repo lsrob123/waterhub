@@ -14,17 +14,16 @@ namespace Blog.Web.Models
 
         public PostInfoEntry(Post post)
         {
-            PostKey = post.Key;
+            Key = post.Key;
             IsPublished = post.IsPublished;
             IsSticky = post.IsSticky;
             Title = post.Title;
             UrlFriendlyTitle = post.UrlFriendlyTitle;
             TimeCreated = post.TimeCreated;
             TimeUpdated = post.TimeUpdated;
-            Tags = post.Tags.Select(x => x.Text).ToList();
+            Tags = post.Tags;
         }
 
-        public Guid PostKey { get; set; }
         public bool IsPublished { get; set; }
         public bool IsSticky { get; set; }
         public ICollection<string> Tags { get; set; }

@@ -143,56 +143,79 @@ var Service = /** @class */ (function () {
                 }
             });
         }); };
-        this.listLatestPostInfoEntries = function () { return __awaiter(_this, void 0, void 0, function () {
-            var rawResponse, data, e_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, fetch('/api/posts/latest/info', {
-                                method: 'GET',
-                            })];
-                    case 1:
-                        rawResponse = _a.sent();
-                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, rawResponse.json()];
-                    case 2:
-                        data = _a.sent();
-                        return [2 /*return*/, data];
-                    case 3: return [2 /*return*/, []];
-                    case 4:
-                        e_3 = _a.sent();
-                        console.error(e_3);
-                        return [2 /*return*/, null];
-                    case 5: return [2 /*return*/];
-                }
+        this.listLatestPostInfoEntries = function (includeAllPosts) {
+            if (includeAllPosts === void 0) { includeAllPosts = false; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var path, rawResponse, data, e_3;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 4, , 5]);
+                            path = includeAllPosts ? '/api/posts/info/latest/all' : '/api/posts/info/latest';
+                            return [4 /*yield*/, fetch(path, {
+                                    method: 'GET',
+                                })];
+                        case 1:
+                            rawResponse = _a.sent();
+                            if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                            return [4 /*yield*/, rawResponse.json()];
+                        case 2:
+                            data = _a.sent();
+                            return [2 /*return*/, data];
+                        case 3: return [2 /*return*/, []];
+                        case 4:
+                            e_3 = _a.sent();
+                            console.error(e_3);
+                            return [2 /*return*/, null];
+                        case 5: return [2 /*return*/];
+                    }
+                });
             });
-        }); };
-        this.listPostsWithTitleContainingKeywords = function (keywords) { return __awaiter(_this, void 0, void 0, function () {
-            var rawResponse, data, e_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, fetch("/api/posts?keywords=" + keywords, {
-                                method: 'GET',
-                            })];
-                    case 1:
-                        rawResponse = _a.sent();
-                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, rawResponse.json()];
-                    case 2:
-                        data = _a.sent();
-                        return [2 /*return*/, data];
-                    case 3: return [2 /*return*/, []];
-                    case 4:
-                        e_4 = _a.sent();
-                        console.error(e_4);
-                        return [2 /*return*/, null];
-                    case 5: return [2 /*return*/];
-                }
+        };
+        this.listPostInfoEntriesByKeywords = function (keywords, includeAllPosts) {
+            if (includeAllPosts === void 0) { includeAllPosts = false; }
+            return __awaiter(_this, void 0, void 0, function () {
+                var path, rawResponse, data, e_4;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 4, , 5]);
+                            path = includeAllPosts ? '/api/posts/info/all' : '/api/posts/info';
+                            return [4 /*yield*/, fetch(path + "?keywords=" + keywords, {
+                                    method: 'GET',
+                                })];
+                        case 1:
+                            rawResponse = _a.sent();
+                            if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                            return [4 /*yield*/, rawResponse.json()];
+                        case 2:
+                            data = _a.sent();
+                            return [2 /*return*/, data];
+                        case 3: return [2 /*return*/, []];
+                        case 4:
+                            e_4 = _a.sent();
+                            console.error(e_4);
+                            return [2 /*return*/, null];
+                        case 5: return [2 /*return*/];
+                    }
+                });
             });
-        }); };
+        };
+        //public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
+        //    try {
+        //        const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
+        //            method: 'GET',
+        //        });
+        //        if (!!rawResponse.ok) {
+        //            const data = await rawResponse.json();
+        //            return data;
+        //        }
+        //        return [];
+        //    } catch (e) {
+        //        console.error(e);
+        //        return null;
+        //    }
+        //}
     }
     Service.prototype.getUrl = function (ralativePath) {
         var rootPath = new RegExp(/^.*\//).exec(window.location.href);
@@ -302,16 +325,18 @@ var AdminScreen = /** @class */ (function () {
             _this.renderTags();
         };
         this.upsertPost = function () { return __awaiter(_this, void 0, void 0, function () {
-            var response, url;
+            var response, url_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags)];
                     case 1:
                         response = _a.sent();
                         if (response.ok) {
-                            url = this.service.getUrl("" + response.data.urlFriendlyTitle) // TODO: Dbl-check needed
-                            ;
-                            document.getElementById('post-submit-result').innerHTML = "<div style=\"color:darkgreen;margin-bottom:15px;\">Post submitted successfully.</div><div><a href=\"" + url + "\" target=\"_self\">Refresh Page</a></div>";
+                            url_1 = "/admin/" + response.data.urlFriendlyTitle;
+                            document.getElementById('post-submit-result').innerHTML = "<div style=\"color:darkgreen;margin-bottom:15px;\">Post submitted successfully.</div><div><a href=\"" + url_1 + "\" target=\"_self\">Refresh Page</a></div>";
+                            window.setTimeout(function () {
+                                window.location.href = url_1;
+                            }, 1000);
                         }
                         else {
                             document.getElementById('post-submit-result').innerHTML = "<span style=\"color:darkred;\">" + response.status + " " + response.statusText + "<br />" + response.message + "<span>";
@@ -332,24 +357,24 @@ var AdminScreen = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _a = this;
-                        return [4 /*yield*/, this.service.listLatestPosts()];
+                        return [4 /*yield*/, this.service.listLatestPostInfoEntries(true)];
                     case 1:
-                        _a.postList = _b.sent();
+                        _a.postInfoEntries = _b.sent();
                         this.isPostListFromLatest = true;
                         this.renderPostList();
                         return [2 /*return*/];
                 }
             });
         }); };
-        this.loadPostsByKeywords = function () { return __awaiter(_this, void 0, void 0, function () {
+        this.loadPostInfoEntriesByKeywords = function () { return __awaiter(_this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = this;
-                        return [4 /*yield*/, this.service.listPostsWithTitleContainingKeywords(this.keywords)];
+                        return [4 /*yield*/, this.service.listPostInfoEntriesByKeywords(this.keywords, true)];
                     case 1:
-                        _a.postList = _b.sent();
+                        _a.postInfoEntries = _b.sent();
                         this.isPostListFromLatest = false;
                         this.renderPostList();
                         return [2 /*return*/];
@@ -372,7 +397,7 @@ var AdminScreen = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(AdminScreen.prototype, "postListElement", {
+    Object.defineProperty(AdminScreen.prototype, "postInfoEntriesElement", {
         get: function () {
             return document.getElementById('edit-post-list');
         },
@@ -388,22 +413,22 @@ var AdminScreen = /** @class */ (function () {
         configurable: true
     });
     AdminScreen.prototype.renderPostList = function () {
-        this.postListElement.innerHTML = '';
-        if (!this.postList)
+        this.postInfoEntriesElement.innerHTML = '';
+        if (!this.postInfoEntries)
             return;
         var html = this.isPostListFromLatest
             ? '<div class="current-post-list-type">Latest posts loaded.</div>'
             : '<div class="current-post-list-type">Search results loaded.</div>';
-        if (this.postList.length === 0) {
+        if (this.postInfoEntries.length === 0) {
             html += '<div>(Empty Results)</div>';
         }
         else {
-            for (var _i = 0, _a = this.postList; _i < _a.length; _i++) {
+            for (var _i = 0, _a = this.postInfoEntries; _i < _a.length; _i++) {
                 var post = _a[_i];
                 html += "<div><a href=\"/admin/" + post.urlFriendlyTitle + "\" target=\"_self\">" + post.title + "</a></div>";
             }
         }
-        this.postListElement.innerHTML = html;
+        this.postInfoEntriesElement.innerHTML = html;
     };
     AdminScreen.prototype.renderTags = function () {
         this.tags = this.tags.sort(function (a, b) { return AdminScreen.tagComparitor(a, b); });

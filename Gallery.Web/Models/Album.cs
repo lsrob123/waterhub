@@ -15,7 +15,7 @@ namespace Gallery.Web.Models
 
         public Album(string name, string description, string defaultThumbnailUriPath, int dayOffset)
         {
-            this.WithValidKey();
+            this.EnsureValidKey();
 
             Name = name;
             WithAlbumInfo(description, Visibility.Public);

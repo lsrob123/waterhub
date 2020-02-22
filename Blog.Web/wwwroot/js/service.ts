@@ -55,9 +55,10 @@ class Service {
         }
     }
 
-    public listLatestPostInfoEntries = async (): Promise<PostInfoEntry[]> => {
+    public listLatestPostInfoEntries = async (includeAllPosts: boolean = false): Promise<PostInfoEntry[]> => {
         try {
-            const rawResponse = await fetch('/api/posts/latest/info', {
+            const path = includeAllPosts ? '/api/posts/info/latest/all' : '/api/posts/info/latest';
+            const rawResponse = await fetch(path, {
                 method: 'GET',
             });
 
@@ -73,9 +74,10 @@ class Service {
         }
     }
 
-    public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
+    public listPostInfoEntriesByKeywords = async (keywords: string, includeAllPosts: boolean = false): Promise<PostInfoEntry[]> => {
         try {
-            const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
+            const path = includeAllPosts ? '/api/posts/info/all' : '/api/posts/info';
+            const rawResponse = await fetch(`${path}?keywords=${keywords}`, {
                 method: 'GET',
             });
 
@@ -90,4 +92,22 @@ class Service {
             return null;
         }
     }
+
+    //public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
+    //    try {
+    //        const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
+    //            method: 'GET',
+    //        });
+
+    //        if (!!rawResponse.ok) {
+    //            const data = await rawResponse.json();
+    //            return data;
+    //        }
+
+    //        return [];
+    //    } catch (e) {
+    //        console.error(e);
+    //        return null;
+    //    }
+    //}
 }

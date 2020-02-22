@@ -48,19 +48,22 @@ namespace Blog.Web.Services
             return _repository.ListAllTags(); // TODO: Add caching
         }
 
+        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListLatestPostInfoEntries(postCount, includeUnpublishedPosts);
+        }
+
         public ICollection<Post> ListLatestPosts(int? postCount = null, bool includeUnpublishedPosts = false)
         {
             return _repository.ListLatestPosts(postCount, includeUnpublishedPosts);
         }
 
-        public ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false)
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywords(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
         {
-            return _repository.ListStickyPosts(postCount, includeUnpublishedPosts);
-        }
-
-        public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
-        {
-            return _repository.ListPostInfoEntriesByTags(keywords, includeUnpublishedPosts);
+            var entries = new Dictionary<Guid, PostInfoEntry>()
+                .AddRange(_repository.ListPostInfoEntriesByKeywordsInTitle(keywords, includeUnpublishedPosts))
+                .AddRange(_repository.ListPostInfoEntriesByTags(keywords, includeUnpublishedPosts));
+            return entries.Values;
         }
 
         public ICollection<PostInfoEntry> ListPostInfoEntriesByKeywordsInTitle(IEnumerable<string> keywords,
@@ -69,15 +72,20 @@ namespace Blog.Web.Services
             return _repository.ListPostInfoEntriesByKeywordsInTitle(keywords, includeUnpublishedPosts);
         }
 
+        public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords, bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListPostInfoEntriesByTags(keywords, includeUnpublishedPosts);
+        }
+
+        public ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false)
+        {
+            return _repository.ListStickyPosts(postCount, includeUnpublishedPosts);
+        }
+
         public ProcessResult<Post> UpsertPost(Post post)
         {
             var result = _repository.UpsertPost(post.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
             return result;
-        }
-
-        public ICollection<PostInfoEntry> ListLatestPostInfoEntries(int? postCount = null, bool includeUnpublishedPosts = false)
-        {
-            return _repository.ListLatestPostInfoEntries(postCount, includeUnpublishedPosts);
         }
     }
 }
