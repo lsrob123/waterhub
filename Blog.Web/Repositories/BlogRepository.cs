@@ -13,7 +13,7 @@ namespace Blog.Web.Repositories
 {
     public class BlogRepository : IBlogRepository
     {
-        private const string Title = nameof(PostInfoEntry.Title), Text = nameof(Tag.Text), Key = nameof(PostInfoEntry.Key);
+        private const string Title = nameof(PostInfoEntry.Title), Text = nameof(Tag.Text), Id = "_id";
         private readonly ILogger<BlogRepository> _logger;
         private readonly ISettings _settings;
 
@@ -188,7 +188,7 @@ namespace Blog.Web.Repositories
         }
 
         public ICollection<PostInfoEntry> ListPostInfoEntriesByTags(IEnumerable<string> keywords,
-                    bool includeUnpublishedPosts = false)
+            bool includeUnpublishedPosts = false)
         {
             try
             {
@@ -205,13 +205,15 @@ namespace Blog.Web.Repositories
                     return new List<PostInfoEntry>();
 
                 var firstKey = postKeys.First();
-                expression = (postKeys.Count == 1
-                        ? Query.EQ(Key, firstKey)
-                        : Query.Or(postKeys.Select(x => Query.EQ(Key, x)).ToArray()));
+                expression = postKeys.Count == 1
+                        ? Query.EQ(Id, firstKey)
+                        : Query.Or(postKeys.Select(x => Query.EQ(Id, x)).ToArray());
+
+                //expression = expression.IncludeUnpublishedPosts(includeUnpublishedPosts);
 
                 var entries = store.PostInfoEntries
                     .Find(expression, limit: 1000)
-                    .OrderByDescending(x => x.TimeCreated)
+                    //.OrderByDescending(x => x.TimeCreated)
                     .ToList();
 
                 return entries;
