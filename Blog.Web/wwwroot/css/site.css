@@ -1,12 +1,30 @@
 ﻿body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif,, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
+    font-family: Arial, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif,, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
     background-color: #105030;
+    font-size: 14px;
 }
 
 button {
+    display: inline-block;
     cursor: pointer;
+    border: 1px solid #2d8659;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 0 10px;
+    height: 26px;
+    background-color: #2d8659;
+    background: linear-gradient(180deg, #2d8659 0%, #339966 30%, #2d8659 90%, #26734d 100%);
+    color: white;
+}
+
+input {
+    display: inline-block;
+    border: 1px solid #ccddcc;
+    border-radius: 3px;
+    font-size: 14px;
+    height: 23px;
 }
 
 .column-container {
@@ -57,7 +75,7 @@ button {
     .header .page-links {
         position: absolute;
         margin-left: 230px;
-        margin-top: 38px;
+        margin-top: 30px;
     }
 
         .header .page-links .page-link {
@@ -70,7 +88,8 @@ button {
             border-radius: 6px 6px 0 0;
             width: 100px;
             text-align: center;
-            padding-top: 10px;
+            padding-top: 15px;
+            font-size: 16px;
         }
 
             .header .page-links .page-link:hover {
@@ -96,11 +115,14 @@ button {
 
     .header .page-links {
         margin-left: 250px;
+        margin-top: 23px;
     }
 
         .header .page-links .page-link {
             height: 42px;
             width: 150px;
+            padding-top: 16px;
+            font-size: 20px;
         }
 
         .header .page-links a {
@@ -120,17 +142,26 @@ button {
 
         .header .page-links {
             margin-left: 150px;
-            margin-top: 23px;
+            margin-top: 2px;
             height: 37px;
         }
 
             .header .page-links .page-link {
-                height: 37px;
-                width: 80px;
+                height: 50px;
+                width: 60px;
                 font-size: 14px;
+                border-radius: 0;
+                margin-right: 1px;
+                background: linear-gradient(30deg, rgba(200,255,200,0.3) 0%, rgba(200,255,200,0) 100%);
             }
 
             .header .page-links a {
+                display: block;
+                transform: rotate(-30deg);
+                font-weight: normal;
+                font-size: 12px;
+                position: relative;
+                top: 5px;
             }
 }
 
@@ -150,6 +181,10 @@ button {
 
 .form-row {
     margin-bottom: 10px;
+}
+
+.new-line-label {
+    margin-bottom: 3px;
 }
 
 .tag-line-element {
@@ -226,4 +261,174 @@ button {
         overflow: auto;
         padding: 10px 10px 10px 20px;
         border-radius: 4px;
+    }
+
+.post-info-entry-card {
+    border: 1px solid #ccddcc;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: flex-start;
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card {
+        flex-direction: column;
+    }
+}
+
+.post-info-entry-card .date-area {
+    background-color: #26734d;
+    color: white;
+    font-size: 20px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+    .post-info-entry-card .date-area .day {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .post-info-entry-card .date-area .month {
+        font-size: 12px;
+    }
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card .date-area {
+        background-color: #26734d;
+        color: white;
+        font-size: 20px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        align-items: center;
+        align-content: start;
+        width: 100%;
+        background: linear-gradient(178deg, #26734d 0%, #339966 100%);
+        padding: 5px 0;
+    }
+
+        .post-info-entry-card .date-area .day {
+            font-size: 16px;
+            margin-bottom: 0;
+            margin: 0 5px;
+        }
+
+        .post-info-entry-card .date-area .month {
+            font-size: 10px;
+            margin-left: 10px;
+            position: relative;
+            top: 1px;
+        }
+}
+
+
+.post-info-entry-card .post-info-area {
+    flex-basis: 100%;
+}
+
+    .post-info-entry-card .post-info-area .post-title {
+        display: block;
+        text-decoration: none;
+        color: #666666;
+        margin: 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .post-info-entry-card .post-info-area .post-abstract {
+        display: block;
+        text-decoration: none;
+        color: black;
+        margin: 0 20px 10px 20px;
+    }
+
+
+    .post-info-entry-card .post-info-area .post-content-collapse {
+        max-height: 70px;
+        overflow: hidden;
+        display: block;
+        background-color: #dddddd;
+        background: linear-gradient(180deg, #dddddd 0%, white 100%);
+        margin: 0 20px 15px 20px;
+        font-size: 10px;
+        opacity: 0.5;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card .post-info-area .post-title {
+        padding-top:5px;
+        font-size: 16px;
+    }
+
+    .post-info-entry-card .post-info-area .post-abstract {
+        font-size: 12px;
+    }
+
+    .post-info-entry-card .post-info-area .post-content-collapse {
+        font-size: 9px;
+        max-height: 50px;
+    }
+}
+
+.post-info-entry-card .post-info-area .post-content-expanded {
+    display: block;
+}
+
+.post-info-entry-card .post-info-area .post-tags {
+    display: flex;
+    margin: 10px 20px;
+}
+
+    .post-info-entry-card .post-info-area .post-tags .post-tag-label {
+        margin-bottom: 5px;
+        margin-right: 12px;
+        position: relative;
+        top: 2px;
+    }
+
+    .post-info-entry-card .post-info-area .post-tags .post-tag {
+        display: block;
+        padding: 2px 10px;
+        background-color: #dd6633;
+        margin-bottom: 5px;
+        margin-right: 12px;
+        border-radius: 2px;
+        /*box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.3);*/
+        color: white;
+    }
+
+        .post-info-entry-card .post-info-area .post-tags .post-tag a {
+            text-decoration: none;
+            color: white;
+        }
+
+
+
+
+
+.search-box {
+    margin: 10px 0 20px 0;
+    padding: 10px;
+    border: 1px solid #ccddcc;
+    border-radius: 4px;
+    background-color: #ddffdd;
+    display: flex;
+}
+
+    .search-box input {
+        flex: 1;
+        margin-right: 10px;
     }

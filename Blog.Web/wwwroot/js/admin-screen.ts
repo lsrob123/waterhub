@@ -80,6 +80,7 @@
         const response = await this.service.upsertPost(
             (<HTMLInputElement>document.getElementById('PostInEdit_Key')).value,
             (<HTMLInputElement>document.getElementById('PostInEdit_Title')).value,
+            (<HTMLInputElement>document.getElementById('PostInEdit_Abstract')).value,
             this.editorInstance.value,
             !!(<HTMLInputElement>document.getElementById('PostInEdit_IsSticky')).checked,
             !!(<HTMLInputElement>document.getElementById('PostInEdit_IsPublished')).checked,

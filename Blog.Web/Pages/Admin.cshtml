@@ -21,13 +21,12 @@
 <body class="admin-body">
     <div class="admin-left">
         <div class="form-row">
-            <button onclick="adminScreen.loadLatestPostInfoEntries()">Load Latest Posts</button>
-            <button onclick="adminScreen.createPost()">Create New Post</button>
-        </div>
-        <div class="form-row">
             Keywords
             <input type="text" id="edit-post-search-keywords" />
             <button onclick="adminScreen.loadPostInfoEntriesByKeywords()">Search</button>
+        </div>
+        <div class="form-row">
+            <button onclick="adminScreen.loadLatestPostInfoEntries()">Load Latest Posts</button>
         </div>
         <div class="form-row" id="edit-post-list"></div>
     </div>
@@ -36,6 +35,9 @@
 
         @if (Model.PostInEdit != null)
         {
+            <div class="form-row">
+                <button onclick="adminScreen.createPost()">Create New Post</button>
+            </div>
             <div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
             <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
             <div class="form-row">
@@ -56,7 +58,15 @@
                 <div class="tag-line-element"><div id="edit-tags"></div></div>
                 <div class="clear"></div>
             </div>
-            <div style="margin-bottom:3px;">Content</div>
+            <div class="new-line-label">
+                Abstract
+            </div>
+            <div class="form-row">
+                <textarea cols="80" rols="3" asp-for="PostInEdit.Abstract"></textarea>
+            </div>
+            <div class="new-line-label">
+                Content
+            </div>
             <div class="form-row">
                 <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
             </div>

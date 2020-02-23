@@ -79,7 +79,7 @@ var PostInfoEntry = /** @class */ (function () {
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
-        this.upsertPost = function (key, title, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
+        this.upsertPost = function (key, title, abstract, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, data, message, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -93,6 +93,7 @@ var Service = /** @class */ (function () {
                                 body: JSON.stringify({
                                     key: key,
                                     title: title,
+                                    abstract: abstract,
                                     content: content,
                                     isSticky: !!isSticky,
                                     isPublished: !!isPublished,
@@ -201,21 +202,6 @@ var Service = /** @class */ (function () {
                 });
             });
         };
-        //public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
-        //    try {
-        //        const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
-        //            method: 'GET',
-        //        });
-        //        if (!!rawResponse.ok) {
-        //            const data = await rawResponse.json();
-        //            return data;
-        //        }
-        //        return [];
-        //    } catch (e) {
-        //        console.error(e);
-        //        return null;
-        //    }
-        //}
     }
     Service.prototype.getUrl = function (ralativePath) {
         var rootPath = new RegExp(/^.*\//).exec(window.location.href);
@@ -328,7 +314,7 @@ var AdminScreen = /** @class */ (function () {
             var response, url_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags)];
+                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, document.getElementById('PostInEdit_Abstract').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags)];
                     case 1:
                         response = _a.sent();
                         if (response.ok) {

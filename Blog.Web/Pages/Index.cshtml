@@ -4,12 +4,42 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Home.PageTitle);
 }
 
+<div class="search-box">
+    <input type="text" id="search-box-text" /> <button>@T.GetMap("Search")</button>
+</div>
+
 @if (!(Model.LatestPosts is null))
 {
     foreach (var post in Model.LatestPosts)
     {
-        <div>
-            <a asp-page="@PageDefinitions.Posts.PageName" asp-route-article="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Title</a>
+        <div class="post-info-entry-card">
+            <div class="date-area">
+                <div class="day">@post.DayCreated</div>
+                <div class="month">@post.MonthCreated</div>
+            </div>
+            <div class="post-info-area">
+
+                <a class="post-title" asp-page="@PageDefinitions.Posts.PageName" asp-route-title="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Title</a>
+
+                <a class="post-abstract" asp-page="@PageDefinitions.Posts.PageName" asp-route-title="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Abstract</a>
+
+                <div class="post-content-collapse" title="@T.GetMap("Click to read full article", "home")" onclick="adminScreen.displayFullContent('@post.UrlFriendlyTitle')">
+                    @Html.Raw(post.Content)
+                </div>
+
+                @if (post.HasTags)
+                {
+                    <div class="post-tags">
+                        <div class="post-tag-label">@T.GetMap("Tags")</div>
+                        @foreach (var tag in post.Tags)
+                        {
+                            <div class="post-tag">
+                                <a href="javascript:adminScreen.searchByTag('@tag')">@tag</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
         </div>
     }
 }

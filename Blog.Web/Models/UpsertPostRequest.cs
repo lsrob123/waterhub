@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Blog.Web.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using WaterHub.Core;
 
 namespace Blog.Web.Models
 {
-    public class UpsertPostRequest
+    public class UpsertPostRequest : IPostInfo
     {
+        public string Abstract { get; set; }
+
         [Required]
         public string Content { get; set; }
 
@@ -18,6 +21,8 @@ namespace Blog.Web.Models
         [Required]
         public string Title { get; set; }
 
+        public string UrlFriendlyTitle { get; set; }
+
         public Post ToPost()
         {
             var post = new Post().EnsureValidKey(Key);
@@ -26,6 +31,7 @@ namespace Blog.Web.Models
             post.Title = Title;
             post.IsSticky = IsSticky;
             post.Tags = Tags;
+            post.Abstract = Abstract;
             return post;
         }
     }

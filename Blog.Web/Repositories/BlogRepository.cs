@@ -207,13 +207,13 @@ namespace Blog.Web.Repositories
                 var firstKey = postKeys.First();
                 expression = postKeys.Count == 1
                         ? Query.EQ(Id, firstKey)
-                        : Query.Or(postKeys.Select(x => Query.EQ(Id, x)).ToArray());
+                        : Query.In(Id, postKeys.Select(x => new BsonValue(x)));
 
-                //expression = expression.IncludeUnpublishedPosts(includeUnpublishedPosts);
+                expression = expression.IncludeUnpublishedPosts(includeUnpublishedPosts);
 
                 var entries = store.PostInfoEntries
                     .Find(expression, limit: 1000)
-                    //.OrderByDescending(x => x.TimeCreated)
+                    .OrderByDescending(x => x.TimeCreated)
                     .ToList();
 
                 return entries;

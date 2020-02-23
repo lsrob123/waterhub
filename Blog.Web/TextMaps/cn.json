@@ -4,6 +4,29 @@
     "value": "主页"
   },
   {
+    "key": "Search",
+    "value": "搜索"
+  },
+  {
+    "key": "Tags",
+    "value": "标签"
+  },
+  {
+    "key": "Click to read full article",
+    "value": "点击阅读全文",
+    "context": "home"
+  },
+  {
+    "key": "Read full article",
+    "value": "阅读全文",
+    "context": "home"
+  },
+  {
+    "key": "Open article in new window",
+    "value": "打开全文视窗",
+    "context": "home"
+  },
+  {
     "key": "Health Note",
     "value": "健康笔记"
   },

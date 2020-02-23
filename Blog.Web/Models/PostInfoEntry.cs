@@ -1,7 +1,6 @@
 ﻿using Blog.Web.Abstractions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Models
@@ -22,12 +21,18 @@ namespace Blog.Web.Models
             TimeCreated = post.TimeCreated;
             TimeUpdated = post.TimeUpdated;
             Tags = post.Tags;
+            Abstract = post.Abstract;
         }
+
+        public string Abstract { get; set; }
 
         public bool IsPublished { get; set; }
         public bool IsSticky { get; set; }
         public ICollection<string> Tags { get; set; }
+
+        [Required]
         public string Title { get; set; }
+
         public string UrlFriendlyTitle { get; set; }
     }
 }

@@ -1,7 +1,8 @@
 ﻿/// <reference path="models.ts"/>
 
 class Service {
-    public upsertPost = async (key: string, title: string, content: string, isSticky: boolean, isPublished: boolean, tags: string[])
+    public upsertPost = async (key: string, title: string, abstract: string, content: string, isSticky: boolean, isPublished: boolean,
+        tags: string[])
         : Promise<ApiCallResult> => {
         try {
             const rawResponse = await fetch('/api/posts', {
@@ -12,6 +13,7 @@ class Service {
                 body: JSON.stringify({
                     key: key,
                     title: title,
+                    abstract: abstract,
                     content: content,
                     isSticky: !!isSticky,
                     isPublished: !!isPublished,
@@ -93,21 +95,4 @@ class Service {
         }
     }
 
-    //public listPostsWithTitleContainingKeywords = async (keywords: string): Promise<Post[]> => {
-    //    try {
-    //        const rawResponse = await fetch(`/api/posts?keywords=${keywords}`, {
-    //            method: 'GET',
-    //        });
-
-    //        if (!!rawResponse.ok) {
-    //            const data = await rawResponse.json();
-    //            return data;
-    //        }
-
-    //        return [];
-    //    } catch (e) {
-    //        console.error(e);
-    //        return null;
-    //    }
-    //}
 }

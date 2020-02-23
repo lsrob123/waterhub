@@ -49,6 +49,16 @@ namespace WaterHub.Core
             return $"[{code}]{exception.Message}";
         }
 
+        public static T EnsureValidKey<T>(this T entity, Guid? key = null, bool enforceValueFromArgument = false) 
+            where T : EntityBase
+        {
+            key = key.HasValue && key.Value != default ? key : Guid.NewGuid();
+
+            if (entity.Key == default || enforceValueFromArgument)
+                entity.Key = key.Value;
+            return entity;
+        }
+
         public static bool IsAdmin(this ClaimsPrincipal claimsPrincipal)
         {
             var userModel = claimsPrincipal.ToUserModel<UserModelBase>();
@@ -100,15 +110,6 @@ namespace WaterHub.Core
           where T : EntityBase
         {
             entity.TimeUpdated = DateTimeOffset.UtcNow;
-            return entity;
-        }
-
-        public static T EnsureValidKey<T>(this T entity, Guid? key = null) where T : EntityBase
-        {
-            key = key.HasValue && key.Value != default ? key : Guid.NewGuid();
-
-            if (entity.Key == default)
-                entity.Key = key.Value;
             return entity;
         }
     }
