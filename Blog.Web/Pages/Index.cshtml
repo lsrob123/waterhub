@@ -23,7 +23,13 @@
 
                 <a class="post-abstract" asp-page="@PageDefinitions.Posts.PageName" asp-route-title="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Abstract</a>
 
-                <div class="post-content-collapse" title="@T.GetMap("Click to read full article", "home")" onclick="adminScreen.displayFullContent('@post.UrlFriendlyTitle')">
+                <div class="open-links">
+                    <a href="javascript:adminScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')" title="@T.GetMap("Click to read full article", "home")">@T.GetMap("Read full article", "home")</a>
+                    <a href="~/posts/@post.UrlFriendlyTitle" title="@T.GetMap("Open article in new window", "home")" target="@post.UrlFriendlyTitle">@T.GetMap("Open article in new window", "home")</a>
+                </div>
+
+                <div id="div-@post.UrlFriendlyTitle" class="post-content-collapse" title="@T.GetMap("Click to read full article", "home")"
+                     onclick="adminScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')">
                     @Html.Raw(post.Content)
                 </div>
 
@@ -43,3 +49,17 @@
         </div>
     }
 }
+
+<div id="modal-full-article" class="modal-mask">
+    <div class="modal">
+        <div class="modal-header">
+            <div id="modal-post-title" class="modal-title">
+            </div>
+            <img class="modal-close" src="~/images/delete.svg" title="@T.GetMap("Close","home")" onclick="adminScreen.collapseFullContent()" />
+        </div>
+        <div class="modal-content">
+            <div id="modal-post-content" class="modal-content-body">
+            </div>
+        </div>
+    </div>
+</div>

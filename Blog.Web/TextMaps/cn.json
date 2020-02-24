@@ -1,5 +1,9 @@
 ﻿[
   {
+    "key": "Health Note",
+    "value": "健康笔记"
+  },
+  {
     "key": "Home",
     "value": "主页"
   },
@@ -23,12 +27,13 @@
   },
   {
     "key": "Open article in new window",
-    "value": "打开全文视窗",
+    "value": "新窗口中打开",
     "context": "home"
   },
   {
-    "key": "Health Note",
-    "value": "健康笔记"
+    "key": "Close",
+    "value": "关闭",
+    "context": "home"
   },
   {
     "key": "Edit",

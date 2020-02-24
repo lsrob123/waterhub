@@ -367,6 +367,18 @@ var AdminScreen = /** @class */ (function () {
                 }
             });
         }); };
+        this.displayFullContent = function (title, urlFriendlyTitle) {
+            _this.modalFullArticle.style.display = 'flex';
+            _this.columnContainer.style.overflow = 'hidden';
+            _this.modalPostTitle.innerHTML = title;
+            _this.modalPostContent.innerHTML = document.getElementById("div-" + urlFriendlyTitle).innerHTML;
+        };
+        this.collapseFullContent = function () {
+            _this.modalFullArticle.style.display = 'none';
+            _this.columnContainer.style.overflow = 'auto';
+            _this.modalPostTitle.innerHTML = null;
+            _this.modalPostContent.innerHTML = null;
+        };
         this.service = service;
     }
     Object.defineProperty(AdminScreen.prototype, "hasAllTags", {
@@ -394,6 +406,34 @@ var AdminScreen = /** @class */ (function () {
         get: function () {
             var value = document.getElementById('edit-post-search-keywords').value;
             return value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AdminScreen.prototype, "columnContainer", {
+        get: function () {
+            return document.getElementById('column-container');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AdminScreen.prototype, "modalFullArticle", {
+        get: function () {
+            return document.getElementById('modal-full-article');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AdminScreen.prototype, "modalPostTitle", {
+        get: function () {
+            return document.getElementById('modal-post-title');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AdminScreen.prototype, "modalPostContent", {
+        get: function () {
+            return document.getElementById('modal-post-content');
         },
         enumerable: true,
         configurable: true
