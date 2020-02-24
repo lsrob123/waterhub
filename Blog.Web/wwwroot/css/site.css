@@ -476,8 +476,7 @@ input {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        margin: 0;
-        border: 1px solid #444444;
+        margin: 10px;
     }
 
         .modal-mask .modal .modal-header {
