@@ -34,6 +34,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var Settings = /** @class */ (function () {
+    function Settings() {
+        this.uriBase = '';
+    }
+    return Settings;
+}());
+var ApiCallResult = /** @class */ (function () {
+    function ApiCallResult() {
+    }
+    ApiCallResult.prototype.withSuccess = function (data, status) {
+        if (status === void 0) { status = 200; }
+        this.ok = true;
+        this.status = 200;
+        this.data = data;
+        return this;
+    };
+    ApiCallResult.prototype.withError = function (message, status) {
+        this.ok = false;
+        this.status = status;
+        this.data = undefined;
+        this.message = message;
+        return this;
+    };
+    return ApiCallResult;
+}());
+var Service = /** @class */ (function () {
+    function Service(settings) {
+        var _this = this;
+        this.updateUploadImageDisplayOrderAsync = function (albumName, processedFileName, value) { return __awaiter(_this, void 0, void 0, function () {
+            var request, uri, rawResponse, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        request = {
+                            displayOrder: parseInt(value)
+                        };
+                        processedFileName = processedFileName.toLowerCase();
+                        uri = "/api/album/" + albumName + "/image/" + processedFileName;
+                        return [4 /*yield*/, fetch(uri, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(request)
+                            })];
+                    case 1:
+                        rawResponse = _a.sent();
+                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, rawResponse.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, new ApiCallResult().withSuccess(data)];
+                    case 3: return [2 /*return*/, new ApiCallResult().withError(rawResponse.statusText, rawResponse.status)];
+                }
+            });
+        }); };
+        this.settings = settings;
+    }
+    Service.prototype.getUrl = function (ralativePath) {
+        var rootPath = new RegExp(/^.*\//).exec(window.location.href);
+        return "" + rootPath + ralativePath;
+    };
+    return Service;
+}());
 var Album = /** @class */ (function () {
     function Album(settings, service) {
         this.settings = settings;
@@ -147,4 +211,7 @@ var Album = /** @class */ (function () {
     };
     return Album;
 }());
-//# sourceMappingURL=album.js.map
+var settings = new Settings();
+var service = new Service(settings);
+var album = new Album(settings, service);
+//# sourceMappingURL=bundle.js.map
