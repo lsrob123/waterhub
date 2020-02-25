@@ -51,5 +51,8 @@ class PostInfoEntry {
     tags: string[];
     title: string;
     urlFriendlyTitle: string;
+    textClickToReadFullArticle: string;
+    textReadFullArticle: string;
+    textOpenArticleInNewWindow: string;
 }
 

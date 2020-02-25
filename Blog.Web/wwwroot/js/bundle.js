@@ -213,10 +213,29 @@ var HomeScreen = /** @class */ (function () {
     function HomeScreen(service) {
         var _this = this;
         this.startSearch = function () { return __awaiter(_this, void 0, void 0, function () {
-            var keywords;
+            var keywords, entries, _i, entries_1, entry;
             return __generator(this, function (_a) {
-                keywords = this.searchBox.value;
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        keywords = this.searchBox.value;
+                        if (!keywords)
+                            return [2 /*return*/];
+                        return [4 /*yield*/, this.service.listPostInfoEntriesByKeywords(keywords)];
+                    case 1:
+                        entries = _a.sent();
+                        this.searchDropDown.innerHTML = '';
+                        if (!entries || entries.length === 0)
+                            return [2 /*return*/];
+                        this.searchDropDown.innerHTML = entries.reduce(function (prior, current) {
+                            var linkToJsOpen = "<a href=\"javascript:homeScreen.displayFullContent('" + current.title + "','" + current.urlFriendlyTitle + "')\" title=\"" + current.textClickToReadFullArticle + "\">" + current.textReadFullArticle + "</a>";
+                            var linkToNewWindow = "<a href=\"~/posts/" + current.urlFriendlyTitle + "\" title=\"" + current.textOpenArticleInNewWindow + "\" target=\"" + current.urlFriendlyTitle + "\">" + current.textOpenArticleInNewWindow + "</a>";
+                            return prior + "<div>" + linkToJsOpen + " " + linkToNewWindow + "</div>";
+                        }, '');
+                        for (_i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
+                            entry = entries_1[_i];
+                        }
+                        return [2 /*return*/];
+                }
             });
         }); };
         this.searchBoxDebounceId = null;
@@ -230,6 +249,7 @@ var HomeScreen = /** @class */ (function () {
                 return;
             }
             _this.searchBoxDebounceId = window.setTimeout(function () {
+                this.showSearchDropDown();
                 if (!!this.isSearchBoxFocused) {
                     this.startSearch();
                 }
@@ -237,10 +257,15 @@ var HomeScreen = /** @class */ (function () {
         };
         this.onSearchBoxFocused = function () {
             _this.isSearchBoxFocused = true;
+            _this.showSearchDropDown();
         };
         this.onSearchBoxBlurred = function () {
             _this.isSearchBoxFocused = false;
-            _this.startSearch();
+        };
+        this.clearSearch = function () {
+            _this.searchBox.value = null;
+            _this.searchDropDown.innerHTML = '';
+            _this.hideSearchdropDown();
         };
         this.service = service;
     }
@@ -251,6 +276,19 @@ var HomeScreen = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(HomeScreen.prototype, "searchDropDown", {
+        get: function () {
+            return document.getElementById('home-search-dropdown');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    HomeScreen.prototype.hideSearchdropDown = function () {
+        this.searchDropDown.style.display = "none";
+    };
+    HomeScreen.prototype.showSearchDropDown = function () {
+        this.searchDropDown.style.display = "block";
+    };
     return HomeScreen;
 }());
 var AdminScreen = /** @class */ (function () {

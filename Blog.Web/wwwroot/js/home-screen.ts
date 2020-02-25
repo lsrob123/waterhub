@@ -10,9 +10,27 @@
         return <HTMLInputElement>document.getElementById('home-search-box');
     }
 
-    private startSearch = async () => {
-        const keywords = this.searchBox.value;
+    private get searchDropDown(): HTMLElement {
+        return <HTMLElement>document.getElementById('home-search-dropdown');
+    }
 
+    public startSearch = async () => {
+        const keywords = this.searchBox.value;
+        if (!keywords) return;
+
+        const entries= await this.service.listPostInfoEntriesByKeywords(keywords);
+        this.searchDropDown.innerHTML='';
+        if (!entries||entries.length===0) return;
+
+        this.searchDropDown.innerHTML=entries.reduce((prior, current)=>{
+            const linkToJsOpen = `<a href="javascript:homeScreen.displayFullContent(\'${current.title}\',\'${current.urlFriendlyTitle}\')" title="${current.textClickToReadFullArticle}">${current.textReadFullArticle}</a>`;
+            const linkToNewWindow =`<a href="~/posts/${current.urlFriendlyTitle}" title="${current.textOpenArticleInNewWindow}" target="${current.urlFriendlyTitle}">${current.textOpenArticleInNewWindow}</a>`;
+            return `${prior}<div>${linkToJsOpen} ${linkToNewWindow}</div>`;
+        }, '');
+
+        for (const entry of entries){
+
+        }
     }
 
     private searchBoxDebounceId: number = null;
@@ -28,6 +46,7 @@
         }
 
         this.searchBoxDebounceId = window.setTimeout(function () {
+            this.showSearchDropDown();
             if (!!this.isSearchBoxFocused) {
                 this.startSearch();
             }
@@ -35,10 +54,20 @@
     }
     public onSearchBoxFocused = () => {
         this.isSearchBoxFocused = true;
-    }
-    public onSearchBoxBlurred = () => {
+        this.showSearchDropDown();
+   }
+    public onSearchBoxBlurred =  () => {
         this.isSearchBoxFocused = false;
-        this.startSearch();
     }
-
+    public clearSearch = () => {
+        this.searchBox.value=null;
+        this.searchDropDown.innerHTML='';
+        this.hideSearchdropDown();
+    }
+    private hideSearchdropDown() {
+        this.searchDropDown.style.display = "none";
+    }
+    private showSearchDropDown() {
+        this.searchDropDown.style.display = "block";
+    }
 }

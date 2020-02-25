@@ -34,5 +34,9 @@ namespace Blog.Web.Models
         public string Title { get; set; }
 
         public string UrlFriendlyTitle { get; set; }
+
+        public string   TextClickToReadFullArticle{ get; set; }
+        public string  TextReadFullArticle{ get; set; }
+        public string  TextOpenArticleInNewWindow{ get; set; }
     }
 }

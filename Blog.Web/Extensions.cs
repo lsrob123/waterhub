@@ -4,6 +4,7 @@ using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WaterHub.Core.Abstractions;
 
 namespace Blog.Web
 {
@@ -44,6 +45,18 @@ namespace Blog.Web
             if (!includeUnpublishedPosts)
                 expression = Query.And(expression, Query.EQ("IsPublished", true));
             return expression;
+        }
+
+        public static IEnumerable<PostInfoEntry> WithFrontEndTexts(this IEnumerable<PostInfoEntry> entries, ITextMapService t, string context,string textClickToReadFullArticle, string textReadFullArticle, string textOpenArticleInNewWindow)        
+        {
+            if (entries!=null)
+            foreach(var entry in entries){
+                entry.TextClickToReadFullArticle=t.GetMap( textClickToReadFullArticle, context);
+                entry.TextOpenArticleInNewWindow=t.GetMap(textOpenArticleInNewWindow, context);
+                entry.TextReadFullArticle=t.GetMap(textOpenArticleInNewWindow, context);
+            }
+
+            return entries;
         }
     }
 }

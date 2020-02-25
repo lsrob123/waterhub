@@ -5,7 +5,12 @@
 }
 
 <div class="search-box">
-    <input type="text" id="search-box-text" /> <button>@T.GetMap("Search")</button>
+    <input type="text" id="home-search-box" 
+        onkeyup="homeScreen.onSearchBoxUpdated()"
+        onfocus="homeScreen.onSearchBoxFocused()"
+        onblur="homeScreen.onSearchBoxBlurred()"
+         /> 
+    <button onclick="homeScreen.startSearch()">@T.GetMap("Search")</button>
 </div>
 
 @if (!(Model.LatestPosts is null))
@@ -24,12 +29,12 @@
                 <a class="post-abstract" asp-page="@PageDefinitions.Posts.PageName" asp-route-title="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Abstract</a>
 
                 <div class="open-links">
-                    <a href="javascript:adminScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')" title="@T.GetMap("Click to read full article", "home")">@T.GetMap("Read full article", "home")</a>
+                    <a href="javascript:homeScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')" title="@T.GetMap("Click to read full article", "home")">@T.GetMap("Read full article", "home")</a>
                     <a href="~/posts/@post.UrlFriendlyTitle" title="@T.GetMap("Open article in new window", "home")" target="@post.UrlFriendlyTitle">@T.GetMap("Open article in new window", "home")</a>
                 </div>
 
                 <div id="div-@post.UrlFriendlyTitle" class="post-content-collapse" title="@T.GetMap("Click to read full article", "home")"
-                     onclick="adminScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')">
+                     onclick="homeScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')">
                     @Html.Raw(post.Content)
                 </div>
 
@@ -40,7 +45,7 @@
                         @foreach (var tag in post.Tags)
                         {
                             <div class="post-tag">
-                                <a href="javascript:adminScreen.searchByTag('@tag')">@tag</a>
+                                <a href="javascript:homeScreen.searchByTag('@tag')">@tag</a>
                             </div>
                         }
                     </div>
@@ -55,11 +60,15 @@
         <div class="modal-header">
             <div id="modal-post-title" class="modal-title">
             </div>
-            <img class="modal-close" src="~/images/delete.svg" title="@T.GetMap("Close","home")" onclick="adminScreen.collapseFullContent()" />
+            <img class="modal-close" src="~/images/delete.svg" title="@T.GetMap("Close","home")" onclick="homeScreen.collapseFullContent()" />
         </div>
         <div class="modal-content">
             <div id="modal-post-content" class="modal-content-body">
             </div>
         </div>
     </div>
+</div>
+
+<div id="home-search-dropdown" class="search-dropdown ">
+
 </div>

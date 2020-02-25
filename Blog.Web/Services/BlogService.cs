@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WaterHub.Core;
 using WaterHub.Core.Models;
+using WaterHub.Core.Abstractions;
 
 namespace Blog.Web.Services
 {
@@ -86,6 +87,10 @@ namespace Blog.Web.Services
         {
             var result = _repository.UpsertPost(post.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
             return result;
+        }
+
+        private IEnumerable<PostInfoEntry> SetFrontEndTexts(IEnumerable<PostInfoEntry> entries){
+            return 
         }
     }
 }
