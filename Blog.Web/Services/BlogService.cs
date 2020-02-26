@@ -1,10 +1,9 @@
-﻿using Blog.Web.Abstractions;
-using Blog.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Blog.Web.Abstractions;
+using Blog.Web.Models;
 using WaterHub.Core;
 using WaterHub.Core.Models;
-using WaterHub.Core.Abstractions;
 
 namespace Blog.Web.Services
 {
@@ -89,8 +88,5 @@ namespace Blog.Web.Services
             return result;
         }
 
-        private IEnumerable<PostInfoEntry> SetFrontEndTexts(IEnumerable<PostInfoEntry> entries){
-            return 
-        }
     }
 }

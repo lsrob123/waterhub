@@ -47,14 +47,15 @@ namespace Blog.Web
             return expression;
         }
 
-        public static IEnumerable<PostInfoEntry> WithFrontEndTexts(this IEnumerable<PostInfoEntry> entries, ITextMapService t, string context,string textClickToReadFullArticle, string textReadFullArticle, string textOpenArticleInNewWindow)        
+        public static ICollection<PostInfoEntry> SetFrontEndTexts(this ITextMapService t, ICollection<PostInfoEntry> entries, string context, string textClickToReadFullArticle, string textReadFullArticle, string textOpenArticleInNewWindow)
         {
-            if (entries!=null)
-            foreach(var entry in entries){
-                entry.TextClickToReadFullArticle=t.GetMap( textClickToReadFullArticle, context);
-                entry.TextOpenArticleInNewWindow=t.GetMap(textOpenArticleInNewWindow, context);
-                entry.TextReadFullArticle=t.GetMap(textOpenArticleInNewWindow, context);
-            }
+            if (entries != null)
+                foreach (var entry in entries)
+                {
+                    entry.TextClickToReadFullArticle = t.GetMap(textClickToReadFullArticle, context);
+                    entry.TextOpenArticleInNewWindow = t.GetMap(textOpenArticleInNewWindow, context);
+                    entry.TextReadFullArticle = t.GetMap(textOpenArticleInNewWindow, context);
+                }
 
             return entries;
         }

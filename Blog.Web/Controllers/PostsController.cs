@@ -1,6 +1,8 @@
 ﻿using Blog.Web.Abstractions;
+using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Controllers
@@ -10,10 +12,12 @@ namespace Blog.Web.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IBlogService _blogService;
+        private readonly ITextMapService _textMapService;
 
-        public PostsController(IBlogService blogService)
+        public PostsController(IBlogService blogService, ITextMapService textMapService)
         {
             _blogService = blogService;
+            _textMapService = textMapService;
         }
 
         [HttpGet]
@@ -49,8 +53,14 @@ namespace Blog.Web.Controllers
                 return Ok(new Post[] { });
 
             var keywordList = keywords.Split(new string[] { ",", " " }, System.StringSplitOptions.RemoveEmptyEntries);
-
             var result = _blogService.ListPostInfoEntriesByKeywords(keywordList);
+
+            if (result != null)
+            {
+                result = _textMapService.SetFrontEndTexts(result, PageDefinitions.Home.PageName,
+                    "Click to read full article", "Read full article", "Open article in new window");
+            }
+
             return Ok(result);
         }
 
