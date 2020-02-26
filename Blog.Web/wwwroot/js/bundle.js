@@ -211,65 +211,13 @@ var Service = /** @class */ (function () {
 }());
 var HomeScreen = /** @class */ (function () {
     function HomeScreen(service) {
-        var _this = this;
-        this.startSearch = function () { return __awaiter(_this, void 0, void 0, function () {
-            var keywords, entries, _i, entries_1, entry;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        keywords = this.searchBox.value;
-                        if (!keywords)
-                            return [2 /*return*/];
-                        return [4 /*yield*/, this.service.listPostInfoEntriesByKeywords(keywords)];
-                    case 1:
-                        entries = _a.sent();
-                        this.searchDropDown.innerHTML = '';
-                        if (!entries || entries.length === 0)
-                            return [2 /*return*/];
-                        this.searchDropDown.innerHTML = entries.reduce(function (prior, current) {
-                            var linkToJsOpen = "<a href=\"javascript:homeScreen.displayFullContent('" + current.title + "','" + current.urlFriendlyTitle + "')\" title=\"" + current.textClickToReadFullArticle + "\">" + current.textReadFullArticle + "</a>";
-                            var linkToNewWindow = "<a href=\"~/posts/" + current.urlFriendlyTitle + "\" title=\"" + current.textOpenArticleInNewWindow + "\" target=\"" + current.urlFriendlyTitle + "\">" + current.textOpenArticleInNewWindow + "</a>";
-                            return prior + "<div>" + linkToJsOpen + " " + linkToNewWindow + "</div>";
-                        }, '');
-                        for (_i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
-                            entry = entries_1[_i];
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        }); };
+        this.me = this;
         this.searchBoxDebounceId = null;
         this.isSearchBoxFocused = false;
-        this.onSearchBoxUpdated = function () {
-            if (!!_this.searchBoxDebounceId) {
-                clearTimeout(_this.searchBoxDebounceId);
-                _this.searchBoxDebounceId = null;
-            }
-            if (!_this.isSearchBoxFocused) {
-                return;
-            }
-            _this.searchBoxDebounceId = window.setTimeout(function () {
-                this.showSearchDropDown();
-                if (!!this.isSearchBoxFocused) {
-                    this.startSearch();
-                }
-            }, 500);
-        };
-        this.onSearchBoxFocused = function () {
-            _this.isSearchBoxFocused = true;
-            _this.showSearchDropDown();
-        };
-        this.onSearchBoxBlurred = function () {
-            _this.isSearchBoxFocused = false;
-        };
-        this.clearSearch = function () {
-            _this.searchBox.value = null;
-            _this.searchDropDown.innerHTML = '';
-            _this.hideSearchdropDown();
-        };
         this.service = service;
     }
     Object.defineProperty(HomeScreen.prototype, "searchBox", {
+        // Search
         get: function () {
             return document.getElementById('home-search-box');
         },
@@ -283,11 +231,136 @@ var HomeScreen = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(HomeScreen.prototype, "searchDropDownContent", {
+        get: function () {
+            return document.getElementById('home-search-dropdown-content');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    HomeScreen.prototype.startSearch = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var keywords, entries;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.isSearchBoxFocused) {
+                            this.stopSearchDebounceTimer();
+                            return [2 /*return*/];
+                        }
+                        keywords = this.searchBox.value;
+                        if (!keywords || keywords.trim() === '') {
+                            this.hideSearchdropDown();
+                            return [2 /*return*/];
+                        }
+                        this.showSearchDropDown();
+                        return [4 /*yield*/, this.service.listPostInfoEntriesByKeywords(keywords.trim())];
+                    case 1:
+                        entries = _a.sent();
+                        this.searchDropDownContent.innerHTML = '';
+                        if (!entries || entries.length === 0) {
+                            this.searchDropDownContent.innerHTML = '<div>No Results</div>'; //TODO: Add text map
+                            return [2 /*return*/];
+                        }
+                        this.searchDropDownContent.innerHTML = entries.reduce(function (prior, current) {
+                            var titleWithJsOpen = "<a class=\"title\" href=\"javascript:homeScreen.displayFullContent('" + current.title + "','" + current.urlFriendlyTitle + "')\" title=\"" + current.textClickToReadFullArticle + "\">" + current.title + "</a>";
+                            var linkToNewWindow = "<a class=\"new-window-link\" href=\"/posts/" + current.urlFriendlyTitle + "\" title=\"" + current.textOpenArticleInNewWindow + "\" target=\"" + current.urlFriendlyTitle + "\">" + current.textOpenArticleInNewWindow + "</a>";
+                            return prior + "<div class=\"post\">" + titleWithJsOpen + " " + linkToNewWindow + "</div>";
+                        }, '');
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HomeScreen.prototype.onSearchBoxUpdated = function () {
+        this.stopSearchDebounceTimer();
+        this.searchBoxDebounceId = window.setTimeout(function () {
+            this.startSearch();
+        }.bind(this), 500);
+    };
+    HomeScreen.prototype.stopSearchDebounceTimer = function () {
+        if (!!this.searchBoxDebounceId) {
+            clearTimeout(this.searchBoxDebounceId);
+            this.searchBoxDebounceId = null;
+        }
+    };
+    HomeScreen.prototype.onSearchBoxFocused = function () {
+        this.isSearchBoxFocused = true;
+    };
+    HomeScreen.prototype.onSearchBoxBlurred = function () {
+        this.isSearchBoxFocused = false;
+    };
+    HomeScreen.prototype.clearSearch = function () {
+        this.searchBox.value = null;
+        this.searchDropDown.innerHTML = '';
+        this.hideSearchdropDown();
+    };
     HomeScreen.prototype.hideSearchdropDown = function () {
         this.searchDropDown.style.display = "none";
+        this.columnContainer.style.overflow = 'auto';
+        this.searchBoxDebounceId = null;
     };
     HomeScreen.prototype.showSearchDropDown = function () {
+        var searchDropDown = this.searchDropDown;
+        var viewportOffset = this.searchBox.getBoundingClientRect();
+        var top = viewportOffset.bottom + 3;
+        searchDropDown.style.top = top + "px";
+        var left = viewportOffset.left + 7;
+        searchDropDown.style.left = left + "px";
+        searchDropDown.style.width = viewportOffset.width + "px";
+        var searchDropDownContent = this.searchDropDownContent;
+        searchDropDownContent.style.top = top + 65 + "px";
+        searchDropDownContent.style.left = left + "px";
+        searchDropDownContent.style.width = viewportOffset.width - 50 + "px";
         this.searchDropDown.style.display = "block";
+        this.columnContainer.style.overflow = 'hidden';
+    };
+    HomeScreen.prototype.searchByTag = function (tag) {
+        if (!tag)
+            return;
+        this.searchBox.value = tag;
+        this.startSearch();
+    };
+    Object.defineProperty(HomeScreen.prototype, "columnContainer", {
+        // Show post
+        get: function () {
+            return document.getElementById('column-container');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HomeScreen.prototype, "modalFullArticle", {
+        get: function () {
+            return document.getElementById('modal-full-article');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HomeScreen.prototype, "modalPostTitle", {
+        get: function () {
+            return document.getElementById('modal-post-title');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HomeScreen.prototype, "modalPostContent", {
+        get: function () {
+            return document.getElementById('modal-post-content');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    HomeScreen.prototype.displayFullContent = function (title, urlFriendlyTitle) {
+        this.modalFullArticle.style.display = 'flex';
+        this.columnContainer.style.overflow = 'hidden';
+        this.modalPostTitle.innerHTML = title;
+        this.modalPostContent.innerHTML = document.getElementById("div-" + urlFriendlyTitle).innerHTML;
+    };
+    HomeScreen.prototype.collapseFullContent = function () {
+        this.modalFullArticle.style.display = 'none';
+        this.columnContainer.style.overflow = 'auto';
+        this.modalPostTitle.innerHTML = null;
+        this.modalPostContent.innerHTML = null;
     };
     return HomeScreen;
 }());
@@ -405,18 +478,6 @@ var AdminScreen = /** @class */ (function () {
                 }
             });
         }); };
-        this.displayFullContent = function (title, urlFriendlyTitle) {
-            _this.modalFullArticle.style.display = 'flex';
-            _this.columnContainer.style.overflow = 'hidden';
-            _this.modalPostTitle.innerHTML = title;
-            _this.modalPostContent.innerHTML = document.getElementById("div-" + urlFriendlyTitle).innerHTML;
-        };
-        this.collapseFullContent = function () {
-            _this.modalFullArticle.style.display = 'none';
-            _this.columnContainer.style.overflow = 'auto';
-            _this.modalPostTitle.innerHTML = null;
-            _this.modalPostContent.innerHTML = null;
-        };
         this.service = service;
     }
     Object.defineProperty(AdminScreen.prototype, "hasAllTags", {
@@ -444,34 +505,6 @@ var AdminScreen = /** @class */ (function () {
         get: function () {
             var value = document.getElementById('edit-post-search-keywords').value;
             return value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdminScreen.prototype, "columnContainer", {
-        get: function () {
-            return document.getElementById('column-container');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdminScreen.prototype, "modalFullArticle", {
-        get: function () {
-            return document.getElementById('modal-full-article');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdminScreen.prototype, "modalPostTitle", {
-        get: function () {
-            return document.getElementById('modal-post-title');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(AdminScreen.prototype, "modalPostContent", {
-        get: function () {
-            return document.getElementById('modal-post-content');
         },
         enumerable: true,
         configurable: true

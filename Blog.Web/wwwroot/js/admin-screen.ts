@@ -119,31 +119,6 @@
         this.renderPostList();
     }
 
-    private get columnContainer(): HTMLElement {
-        return document.getElementById('column-container');
-    }
-    private get modalFullArticle(): HTMLElement {
-        return document.getElementById('modal-full-article');
-    }
-    private get modalPostTitle(): HTMLElement {
-        return document.getElementById('modal-post-title');
-    }
-    private get modalPostContent(): HTMLElement {
-        return document.getElementById('modal-post-content');
-    }
-    public displayFullContent = (title:string, urlFriendlyTitle: string) => {
-        this.modalFullArticle.style.display = 'flex';
-        this.columnContainer.style.overflow = 'hidden';
-        this.modalPostTitle.innerHTML = title;
-        this.modalPostContent.innerHTML = document.getElementById(`div-${urlFriendlyTitle}`).innerHTML;
-    }
-    public collapseFullContent = () => {
-        this.modalFullArticle.style.display = 'none';
-        this.columnContainer.style.overflow = 'auto';
-        this.modalPostTitle.innerHTML = null;
-        this.modalPostContent.innerHTML = null;
-  }
-
     private renderPostList() {
         this.postInfoEntriesElement.innerHTML = '';
         if (!this.postInfoEntries) return;

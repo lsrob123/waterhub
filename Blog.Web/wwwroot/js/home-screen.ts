@@ -1,82 +1,133 @@
 ﻿class HomeScreen {
     private readonly service: Service;
+    private readonly me = this;
 
     constructor(service: Service) {
         this.service = service;
     }
 
-    private get searchBox(): HTMLInputElement {
+    // Search
+    public get searchBox(): HTMLInputElement {
         return <HTMLInputElement>document.getElementById('home-search-box');
     }
 
-    private get searchDropDown(): HTMLElement {
+    public get searchDropDown(): HTMLElement {
         return <HTMLElement>document.getElementById('home-search-dropdown');
     }
 
-    private get searchDropDownContent(): HTMLElement {
+    public get searchDropDownContent(): HTMLElement {
         return <HTMLElement>document.getElementById('home-search-dropdown-content');
     }
 
-    public startSearch = async () => {
+    public async startSearch() {
+        if (!this.isSearchBoxFocused) {
+            this.stopSearchDebounceTimer();
+            return;
+        }
+
         const keywords = this.searchBox.value;
-        if (!keywords) return;
+        if (!keywords || keywords.trim() === '') {
+            this.hideSearchdropDown();
+            return;
+        }
 
-        const entries= await this.service.listPostInfoEntriesByKeywords(keywords);
-        this.searchDropDown.innerHTML='';
-        if (!entries||entries.length===0) return;
+        this.showSearchDropDown();
+        const entries = await this.service.listPostInfoEntriesByKeywords(keywords.trim());
+        this.searchDropDownContent.innerHTML = '';
+        if (!entries || entries.length === 0) {
+            this.searchDropDownContent.innerHTML = '<div>No Results</div>'; //TODO: Add text map
+            return;
+        }
 
-        this.searchDropDownContent.innerHTML=entries.reduce((prior, current)=>{
-            const linkToJsOpen = `<a href="javascript:homeScreen.displayFullContent(\'${current.title}\',\'${current.urlFriendlyTitle}\')" title="${current.textClickToReadFullArticle}">${current.textReadFullArticle}</a>`;
-            const linkToNewWindow =`<a href="~/posts/${current.urlFriendlyTitle}" title="${current.textOpenArticleInNewWindow}" target="${current.urlFriendlyTitle}">${current.textOpenArticleInNewWindow}</a>`;
-            return `${prior}<div>${linkToJsOpen} ${linkToNewWindow}</div>`;
+        this.searchDropDownContent.innerHTML = entries.reduce((prior, current) => {
+            const titleWithJsOpen = `<a class="title" href="javascript:homeScreen.displayFullContent(\'${current.title}\',\'${current.urlFriendlyTitle}\')" title="${current.textClickToReadFullArticle}">${current.title}</a>`;
+            const linkToNewWindow = `<a class="new-window-link" href="/posts/${current.urlFriendlyTitle}" title="${current.textOpenArticleInNewWindow}" target="${current.urlFriendlyTitle}">${current.textOpenArticleInNewWindow}</a>`;
+            return `${prior}<div class="post">${titleWithJsOpen} ${linkToNewWindow}</div>`;
         }, '');
     }
 
     private searchBoxDebounceId: number = null;
     private isSearchBoxFocused: boolean = false;
-    public onSearchBoxUpdated = () => {
+    public onSearchBoxUpdated() {
+        this.stopSearchDebounceTimer();
+
+        this.searchBoxDebounceId = window.setTimeout(function () {
+            this.startSearch();
+        }.bind(this), 500);
+    }
+
+    private stopSearchDebounceTimer() {
         if (!!this.searchBoxDebounceId) {
             clearTimeout(this.searchBoxDebounceId);
             this.searchBoxDebounceId = null;
         }
-
-        if (!this.isSearchBoxFocused) {
-            return;
-        }
-
-        this.searchBoxDebounceId = window.setTimeout(function () {
-            this.showSearchDropDown();
-            if (!!this.isSearchBoxFocused) {
-                this.startSearch();
-            }
-        }, 500);
     }
-    public onSearchBoxFocused = () => {
+
+    public onSearchBoxFocused() {
         this.isSearchBoxFocused = true;
-        this.showSearchDropDown();
-   }
-    public onSearchBoxBlurred =  () => {
+    }
+    public onSearchBoxBlurred() {
         this.isSearchBoxFocused = false;
     }
-    public clearSearch = () => {
-        this.searchBox.value=null;
-        this.searchDropDown.innerHTML='';
+    public clearSearch() {
+        this.searchBox.value = null;
+        this.searchDropDown.innerHTML = '';
         this.hideSearchdropDown();
     }
-    private hideSearchdropDown() {
+    public hideSearchdropDown() {
         this.searchDropDown.style.display = "none";
+        this.columnContainer.style.overflow = 'auto';
+        this.searchBoxDebounceId = null;
     }
-    private showSearchDropDown() {
+    public showSearchDropDown() {
         const searchDropDown = this.searchDropDown;
         const viewportOffset = this.searchBox.getBoundingClientRect();
-        const top = viewportOffset.bottom + 5;
+        const top = viewportOffset.bottom + 3;
         searchDropDown.style.top = `${top}px`;
-        searchDropDown.style.left = `${viewportOffset.left-5}px`;
+        const left = viewportOffset.left + 7;
+        searchDropDown.style.left = `${left}px`;
         searchDropDown.style.width = `${viewportOffset.width}px`;
 
-        const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        searchDropDown.style.height = `${viewportHeight-top-20}px`;
+        const searchDropDownContent = this.searchDropDownContent;
+        searchDropDownContent.style.top = `${top + 65}px`;
+        searchDropDownContent.style.left = `${left}px`;
+        searchDropDownContent.style.width = `${viewportOffset.width - 50}px`;
 
         this.searchDropDown.style.display = "block";
+        this.columnContainer.style.overflow = 'hidden';
     }
+
+    public searchByTag(tag: string) {
+        if (!tag) return;
+
+        this.searchBox.value = tag;
+        this.startSearch();
+    }
+
+    // Show post
+    private get columnContainer(): HTMLElement {
+        return document.getElementById('column-container');
+    }
+    private get modalFullArticle(): HTMLElement {
+        return document.getElementById('modal-full-article');
+    }
+    private get modalPostTitle(): HTMLElement {
+        return document.getElementById('modal-post-title');
+    }
+    private get modalPostContent(): HTMLElement {
+        return document.getElementById('modal-post-content');
+    }
+    public displayFullContent(title: string, urlFriendlyTitle: string) {
+        this.modalFullArticle.style.display = 'flex';
+        this.columnContainer.style.overflow = 'hidden';
+        this.modalPostTitle.innerHTML = title;
+        this.modalPostContent.innerHTML = document.getElementById(`div-${urlFriendlyTitle}`).innerHTML;
+    }
+    public collapseFullContent() {
+        this.modalFullArticle.style.display = 'none';
+        this.columnContainer.style.overflow = 'auto';
+        this.modalPostTitle.innerHTML = null;
+        this.modalPostContent.innerHTML = null;
+    }
+
 }

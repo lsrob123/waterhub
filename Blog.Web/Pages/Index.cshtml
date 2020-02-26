@@ -5,11 +5,12 @@
 }
 
 <div class="search-box">
-    <input type="text" id="home-search-box" 
-        onkeyup="homeScreen.onSearchBoxUpdated()"
-        onfocus="homeScreen.onSearchBoxFocused()"
-        onblur="homeScreen.onSearchBoxBlurred()"
-         /> 
+    <input type="text" id="home-search-box"
+           onkeyup="homeScreen.onSearchBoxUpdated()"
+           onfocus="homeScreen.onSearchBoxFocused()"
+           onblur="homeScreen.onSearchBoxBlurred()"
+           oncompositionend="homeScreen.onSearchBoxUpdated()"
+           oninput="homeScreen.onSearchBoxUpdated()"/>
     <button onclick="homeScreen.startSearch()">@T.GetMap("Search")</button>
 </div>
 
@@ -55,6 +56,17 @@
     }
 }
 
+<div id="home-search-dropdown" class="search-dropdown">
+    <div class="search-dropdown-header">
+        <div class="title">
+            @T.GetMap("Search Result")
+        </div>
+        <img class="close" src="~/images/delete.svg" title="@T.GetMap("Close","home")" onclick="homeScreen.hideSearchdropDown()" />
+    </div>
+    <div id="home-search-dropdown-content" class="search-dropdown-content">
+    </div>
+</div>
+
 <div id="modal-full-article" class="modal-mask">
     <div class="modal">
         <div class="modal-header">
@@ -69,10 +81,3 @@
     </div>
 </div>
 
-<div id="home-search-dropdown" class="search-dropdown">
-    <div id="home-search-dropdown-content" class="search-dropdown-content">
-    </div>
-    <div id="home-search-dropdown-buttons" class="search-dropdown-buttons">
-        <button onclick="homeScreen.hideSearchdropDown()">Close</button>
-    </div>
-</div>
