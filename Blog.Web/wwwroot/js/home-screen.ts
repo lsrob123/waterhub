@@ -5,13 +5,16 @@
         this.service = service;
     }
 
-
     private get searchBox(): HTMLInputElement {
         return <HTMLInputElement>document.getElementById('home-search-box');
     }
 
     private get searchDropDown(): HTMLElement {
         return <HTMLElement>document.getElementById('home-search-dropdown');
+    }
+
+    private get searchDropDownContent(): HTMLElement {
+        return <HTMLElement>document.getElementById('home-search-dropdown-content');
     }
 
     public startSearch = async () => {
@@ -22,15 +25,11 @@
         this.searchDropDown.innerHTML='';
         if (!entries||entries.length===0) return;
 
-        this.searchDropDown.innerHTML=entries.reduce((prior, current)=>{
+        this.searchDropDownContent.innerHTML=entries.reduce((prior, current)=>{
             const linkToJsOpen = `<a href="javascript:homeScreen.displayFullContent(\'${current.title}\',\'${current.urlFriendlyTitle}\')" title="${current.textClickToReadFullArticle}">${current.textReadFullArticle}</a>`;
             const linkToNewWindow =`<a href="~/posts/${current.urlFriendlyTitle}" title="${current.textOpenArticleInNewWindow}" target="${current.urlFriendlyTitle}">${current.textOpenArticleInNewWindow}</a>`;
             return `${prior}<div>${linkToJsOpen} ${linkToNewWindow}</div>`;
         }, '');
-
-        for (const entry of entries){
-
-        }
     }
 
     private searchBoxDebounceId: number = null;
@@ -68,6 +67,16 @@
         this.searchDropDown.style.display = "none";
     }
     private showSearchDropDown() {
+        const searchDropDown = this.searchDropDown;
+        const viewportOffset = this.searchBox.getBoundingClientRect();
+        const top = viewportOffset.bottom + 5;
+        searchDropDown.style.top = `${top}px`;
+        searchDropDown.style.left = `${viewportOffset.left-5}px`;
+        searchDropDown.style.width = `${viewportOffset.width}px`;
+
+        const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        searchDropDown.style.height = `${viewportHeight-top-20}px`;
+
         this.searchDropDown.style.display = "block";
     }
 }

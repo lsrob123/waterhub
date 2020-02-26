@@ -1,7 +1,7 @@
 ﻿body {
   margin: 0;
   padding: 0;
-  font-family: Arial, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif, 
+  font-family: Arial, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif,
     "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Heiti SC",
     "Microsoft YaHei", "WenQuanYi Micro Hei";
   background-color: #105030;
@@ -454,6 +454,18 @@ input {
 }
 
 .search-dropdown {
+  display: none;
+  position: absolute;
+  padding: 10px;
+}
+
+.search-dropdown .search-dropdown-content {
+  margin-bottom: 10px;
+  overflow: auto;
+}
+
+.search-dropdown .search-dropdown-buttons {
+  margin-bottom: 0;
 }
 
 .search-box {

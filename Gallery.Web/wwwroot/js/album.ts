@@ -68,7 +68,7 @@
         selection.removeAllRanges();
 
         const associatedElement = document.getElementById(associatedElementId);
-        var viewportOffset = associatedElement.getBoundingClientRect();
+        const viewportOffset = associatedElement.getBoundingClientRect();
 
         const tooltip = document.getElementById('tooltip');
         tooltip.style.top = `${viewportOffset.top + 20}px`;
