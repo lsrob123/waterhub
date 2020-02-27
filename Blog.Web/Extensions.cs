@@ -1,9 +1,12 @@
 ﻿using Blog.Web.Abstractions;
 using Blog.Web.Models;
 using LiteDB;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WaterHub.Core.Abstractions;
 
 namespace Blog.Web
@@ -58,6 +61,22 @@ namespace Blog.Web
                 }
 
             return entries;
+        }
+
+        public static IActionResult ImageFrom(this ControllerBase controller, string filePath)
+        {
+            var image = File.OpenRead(filePath);
+            var extension = Path.GetExtension(filePath)?.Trim().ToLower();
+            if (extension == null)
+                return controller.NotFound();
+
+            var contentType = extension switch
+            {
+                ".gif" => "image/gif",
+                ".png" => "image/png",
+                _ => "image/jpg",
+            };
+            return controller.File(image, contentType);
         }
     }
 }

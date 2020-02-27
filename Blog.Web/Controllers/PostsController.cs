@@ -3,7 +3,6 @@ using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using WaterHub.Core.Abstractions;
-using WaterHub.Core.Models;
 
 namespace Blog.Web.Controllers
 {

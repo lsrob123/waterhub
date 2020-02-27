@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Blog.Web.Abstractions;
 using Blog.Web.Models;
+using Microsoft.AspNetCore.Hosting;
 using WaterHub.Core;
 using WaterHub.Core.Models;
 
@@ -10,10 +12,20 @@ namespace Blog.Web.Services
     public class BlogService : IBlogService
     {
         private readonly IBlogRepository _repository;
+        private readonly string _uploadImageRootPath;
 
-        public BlogService(IBlogRepository repository)
+        public BlogService(IBlogRepository repository, ISettings settings, IWebHostEnvironment env)
         {
             _repository = repository;
+            _uploadImageRootPath = Path.Combine(env.WebRootPath, settings.UploadImageRootPath);
+        }
+
+        private string CreateImageFilePath(string folderName, string fileName)
+        {
+            var path= Path.Combine(_uploadImageRootPath, folderName, fileName);
+            if (File.Exists(path))
+                return null;
+            return path;
         }
 
         public ProcessResult<Post> DeletePost(Guid postKey)

@@ -1,4 +1,5 @@
 ﻿using Blog.Web.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,6 +31,36 @@ namespace Blog.Web.Models
         public string Title { get; set; }
 
         public string UrlFriendlyTitle { get; set; }
+
+        public IDictionary<Guid, PostImage> Images { get; set; } = new Dictionary<Guid, PostImage>();
+
+        public Post WithPostImages(IEnumerable<PostImage> postImages)
+        {
+            var maxInternalId = Images?.Max(x => x.Value.InternalId) ?? 0;
+            foreach (var image in postImages)
+            {
+                if (Images.ContainsKey(image.Key))
+                    continue;
+
+                image.InternalId = ++maxInternalId;
+                Images.Add(image.Key, image);
+            }
+            return this;
+        }
+
+        public Post DeletePostImage(Guid imageKey)
+        {
+            if (Images.ContainsKey(imageKey))
+                Images.Remove(imageKey);
+            return this;
+        }
+
+        public Post UpdatePostImageName(Guid imageKey, string name)
+        {
+            if (Images.TryGetValue(imageKey, out var value))
+                value.Name = name;
+            return this;
+        }
 
         public PostInfoEntry AsPostInfoEntry()
         {

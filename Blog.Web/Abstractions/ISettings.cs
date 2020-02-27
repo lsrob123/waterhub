@@ -7,5 +7,6 @@ namespace Blog.Web.Abstractions
         string AdminHashedPassword { get; }
         int LatestPostsCount { get; }
         int PostsFromSearchCount { get; }
+        string UploadImageRootPath { get; }
     }
 }
