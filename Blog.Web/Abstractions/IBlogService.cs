@@ -1,6 +1,8 @@
-﻿using Blog.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Blog.Web.Models;
+using Microsoft.AspNetCore.Http;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Abstractions
@@ -27,5 +29,7 @@ namespace Blog.Web.Abstractions
         ICollection<Post> ListStickyPosts(int? postCount = null, bool includeUnpublishedPosts = false);
 
         ProcessResult<Post> UpsertPost(Post post);
+
+        Task<ProcessResult<Post>> SaveUploadImagesAsync(Guid postKey, ICollection<IFormFile> files);
     }
 }

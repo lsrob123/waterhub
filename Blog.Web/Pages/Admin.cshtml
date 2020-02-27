@@ -1,4 +1,4 @@
-﻿@page "{article?}"
+﻿@page "{title?}"
 @model AdminModel
 @{
     Layout = null;
@@ -79,6 +79,26 @@
             <input type="hidden" asp-for="PostInEdit.Key" />
             <input type="hidden" asp-for="PostInEdit.TagsInText" />
             <input type="hidden" asp-for="AllTagsInText" />
+
+            @if (Model.IsExistingPost)
+            {
+                <div>
+                     <form method="post" enctype="multipart/form-data">
+                        <input type="file" required="required" name="files" multiple="multiple" accept="image/*" />
+                        <button asp-page-handler="UploadImages">Upload Images</button>
+                    </form>
+                </div>
+
+                @if (Model.PostInEdit.Images != null)
+                {
+                <div>
+                    @foreach (var postImage in Model.PostInEdit.Images)
+                    {
+
+                    }
+                </div>
+                    }
+                }
         }
 
     </div>

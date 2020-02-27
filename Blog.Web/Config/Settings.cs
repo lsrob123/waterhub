@@ -29,5 +29,7 @@ namespace Blog.Web.Config
         public int PostsFromSearchCount => _configuration.GetValue<int>(nameof(PostsFromSearchCount));
 
         public string UploadImageRootPath => _configuration.GetValue<string>(nameof(UploadImageRootPath));
+
+        public int ThumbHeight => _configuration.GetValue<int>(nameof(ThumbHeight));
     }
 }

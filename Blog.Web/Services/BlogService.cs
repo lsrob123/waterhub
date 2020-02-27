@@ -1,31 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Blog.Web.Abstractions;
+using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using WaterHub.Core;
+using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Services
 {
     public class BlogService : IBlogService
     {
+        
         private readonly IBlogRepository _repository;
+        private readonly IImageProcessService _imageProcessService;
         private readonly string _uploadImageRootPath;
+        private readonly ISettings _settings;
 
-        public BlogService(IBlogRepository repository, ISettings settings, IWebHostEnvironment env)
+        public BlogService(IBlogRepository repository, ISettings settings, IWebHostEnvironment env,
+            IImageProcessService imageProcessService)
         {
+            _settings = settings;
             _repository = repository;
-            _uploadImageRootPath = Path.Combine(env.WebRootPath, settings.UploadImageRootPath);
+            _imageProcessService = imageProcessService;
+
+            _uploadImageRootPath = Path.Combine(env.WebRootPath, _settings.UploadImageRootPath);
+            if (!Directory.Exists(_uploadImageRootPath))
+                Directory.CreateDirectory(_uploadImageRootPath);
+
+            var thumbRootPath = Path.Combine(env.WebRootPath, _settings.UploadImageRootPath, Constants.Thumbs);
+            if (!Directory.Exists(thumbRootPath))
+                Directory.CreateDirectory(thumbRootPath);
         }
 
-        private string CreateImageFilePath(string folderName, string fileName)
+        public async Task<ProcessResult<Post>> SaveUploadImagesAsync(Guid postKey, ICollection<IFormFile> files)
         {
-            var path= Path.Combine(_uploadImageRootPath, folderName, fileName);
-            if (File.Exists(path))
-                return null;
-            return path;
+            var processResult = _repository.GetPostByKey(postKey);
+            if (!processResult.IsOk)
+            {
+                return processResult;
+            }
+
+            var post = processResult.Data;
+            var postImages = new List<PostImage>();
+            foreach (var file in files)
+            {
+                var postImage = new PostImage
+                {
+                    Extension = Path.GetExtension(file.FileName)
+                }.EnsureValidKey();
+
+                var filePath = Path.Combine(_uploadImageRootPath, postImage.FilePath);
+                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+                var thumbPath = Path.Combine(_uploadImageRootPath, postImage.ThumbPath);
+                await _imageProcessService.ResizeByHeightAsync(filePath, thumbPath, _settings.ThumbHeight);
+
+                postImages.Add(postImage);
+            }
+
+            post.WithPostImages(postImages);
+            return processResult;
         }
 
         public ProcessResult<Post> DeletePost(Guid postKey)

@@ -8,5 +8,6 @@ namespace Blog.Web.Abstractions
         int LatestPostsCount { get; }
         int PostsFromSearchCount { get; }
         string UploadImageRootPath { get; }
+        int ThumbHeight { get; }
     }
 }
