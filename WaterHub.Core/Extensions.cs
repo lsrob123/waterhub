@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
@@ -15,7 +17,7 @@ namespace WaterHub.Core
     public static class Extensions
     {
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
-                            (this IServiceCollection services)
+            (this IServiceCollection services)
             where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
             where THashedPasswordQuery : IUserQuery
         {
@@ -43,13 +45,74 @@ namespace WaterHub.Core
             return services;
         }
 
+        public static TProcessResult AsError<TProcessResult, TData>(this TProcessResult result, HttpStatusCode status,
+            TData data = default, string message = null, string errorCodeInLog = null)
+            where TProcessResult : ProcessResult<TData>
+        {
+            result.AsError(new Exception(message), errorCodeInLog, status, data);
+            return result;
+        }
+
+        public static TProcessResult AsError<TProcessResult, TData>(this TProcessResult result, Exception exception,
+            string errorCodeInLog, HttpStatusCode status, TData data = default)
+            where TProcessResult : ProcessResult<TData>
+        {
+            result.Data = data;
+            result.Status = status;
+            result.Errors = new List<Exception> { exception };
+            result.ErrorCodeInLog = errorCodeInLog;
+            return result;
+        }
+
+        public static ProcessResult<TData> AsError<TData>(this ProcessResult<TData> result, HttpStatusCode status,
+          TData data = default, string message = null, string errorCodeInLog = null)
+        {
+            return result.AsError<ProcessResult<TData>, TData>(new Exception(message), errorCodeInLog, status, data);
+        }
+
+        public static ProcessResult<TData> AsError<TData>(this ProcessResult<TData> result, Exception exception,
+            string errorCodeInLog, HttpStatusCode status, TData data = default)
+        {
+            return result.AsError<ProcessResult<TData>, TData>(exception, errorCodeInLog, status, data);
+        }
+
+        public static TProcessResult AsErrors<TProcessResult, TData>(this TProcessResult result,
+                            IEnumerable<Exception> exceptions, string errorCodeInLog, HttpStatusCode status, TData data = default)
+            where TProcessResult : ProcessResult<TData>
+        {
+            result.Data = data;
+            result.Status = status;
+            result.Errors = exceptions.ToList();
+            result.ErrorCodeInLog = errorCodeInLog;
+            return result;
+        }
+
+        public static ProcessResult<TData> AsErrors<TData>(this ProcessResult<TData> result,
+            IEnumerable<Exception> exceptions, string errorCodeInLog, HttpStatusCode status, TData data = default)
+        {
+            return result.AsErrors<ProcessResult<TData>, TData>(exceptions, errorCodeInLog, status, data);
+        }
+
+        public static TProcessResult AsOk<TProcessResult, TData>(this TProcessResult result, TData data = default)
+                    where TProcessResult : ProcessResult<TData>
+        {
+            result.Data = data;
+            result.Status = HttpStatusCode.OK;
+            return result;
+        }
+
+        public static ProcessResult<TData> AsOk<TData>(this ProcessResult<TData> result, TData data = default)
+        {
+            return result.AsOk<ProcessResult<TData>, TData>(data);
+        }
+
         public static string CodedErrorMessage(this Exception exception, Guid? code = null)
         {
             code ??= Guid.NewGuid();
             return $"[{code}]{exception.Message}";
         }
 
-        public static T EnsureValidKey<T>(this T entity, Guid? key = null, bool enforceValueFromArgument = false) 
+        public static T EnsureValidKey<T>(this T entity, Guid? key = null, bool enforceValueFromArgument = false)
             where T : EntityBase
         {
             key = key.HasValue && key.Value != default ? key : Guid.NewGuid();

@@ -32,37 +32,37 @@ namespace Blog.Web.Models
 
         public string UrlFriendlyTitle { get; set; }
 
-        public IDictionary<Guid, PostImage> Images { get; set; } = new Dictionary<Guid, PostImage>();
+        public ICollection<PostImage> Images { get; set; } = new List<PostImage>();
 
         public Post WithPostImages(IEnumerable<PostImage> postImages)
         {
-            var maxInternalId = 1;
-            if (Images != null && Images.Count > 0)
-            {
-                maxInternalId = Images.Max(x => x.Value.InternalId) + 1;
-            }
+            Images ??= new List<PostImage>();
+            var maxInternalId = Images.Count == 0 
+                ? 1
+                : Images.Max(x => x.InternalId) + 1;
+
             foreach (var image in postImages)
             {
-                if (Images.ContainsKey(image.Key))
+                if (Images.Any(x=>x.Key==image.Key))
                     continue;
 
                 image.InternalId = maxInternalId++;
-                Images.Add(image.Key, image);
+                Images.Add(image);
             }
             return this;
         }
 
         public Post DeletePostImage(Guid imageKey)
         {
-            if (Images.ContainsKey(imageKey))
-                Images.Remove(imageKey);
+            Images = Images?.Where(x => x.Key != imageKey).ToList();
             return this;
         }
 
         public Post UpdatePostImageName(Guid imageKey, string name)
         {
-            if (Images.TryGetValue(imageKey, out var value))
-                value.Name = name;
+            var image = Images.FirstOrDefault(x => x.Key == imageKey);
+            if (image != null)
+                image.Name = name;
             return this;
         }
 

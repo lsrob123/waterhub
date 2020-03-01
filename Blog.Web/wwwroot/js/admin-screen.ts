@@ -31,12 +31,22 @@
         this.editorInstance = editorInstance;
         this.editorInstance.value = (<HTMLInputElement>document.getElementById('PostInEdit_Content')).value;
 
-        this.tags = JSON.parse((<HTMLInputElement>document.getElementById('PostInEdit_TagsInText')).value);
-        if (!this.tags) this.tags = [];
+        const tagsInText = (<HTMLInputElement>document.getElementById('PostInEdit_TagsInText')).value;
+        if (!!tagsInText) {
+            this.tags = JSON.parse(tagsInText);
+            if (!this.tags) this.tags = [];
+        } else {
+            this.tags = [];
+        }
         this.renderTags();
 
-        this.allTags = JSON.parse((<HTMLInputElement>document.getElementById('AllTagsInText')).value);
-        if (!this.allTags) this.allTags = [];
+        const allTagsInText = (<HTMLInputElement>document.getElementById('AllTagsInText')).value;
+        if (!!allTagsInText) {
+            this.allTags = JSON.parse(allTagsInText);
+            if (!this.allTags) this.allTags = [];
+        } else {
+            this.allTags = [];
+        }
         this.renderAllTags();
     }
 

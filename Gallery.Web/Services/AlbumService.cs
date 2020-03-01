@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 

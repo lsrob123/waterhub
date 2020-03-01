@@ -372,13 +372,25 @@ var AdminScreen = /** @class */ (function () {
         this.init = function (editorInstance) {
             _this.editorInstance = editorInstance;
             _this.editorInstance.value = document.getElementById('PostInEdit_Content').value;
-            _this.tags = JSON.parse(document.getElementById('PostInEdit_TagsInText').value);
-            if (!_this.tags)
+            var tagsInText = document.getElementById('PostInEdit_TagsInText').value;
+            if (!!tagsInText) {
+                _this.tags = JSON.parse(tagsInText);
+                if (!_this.tags)
+                    _this.tags = [];
+            }
+            else {
                 _this.tags = [];
+            }
             _this.renderTags();
-            _this.allTags = JSON.parse(document.getElementById('AllTagsInText').value);
-            if (!_this.allTags)
+            var allTagsInText = document.getElementById('AllTagsInText').value;
+            if (!!allTagsInText) {
+                _this.allTags = JSON.parse(allTagsInText);
+                if (!_this.allTags)
+                    _this.allTags = [];
+            }
+            else {
                 _this.allTags = [];
+            }
             _this.renderAllTags();
         };
         this.loadDataAsync = function () { return __awaiter(_this, void 0, void 0, function () {

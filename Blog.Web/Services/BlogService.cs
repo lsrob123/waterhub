@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Blog.Web.Abstractions;
+﻿using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
@@ -15,11 +17,10 @@ namespace Blog.Web.Services
 {
     public class BlogService : IBlogService
     {
-        
-        private readonly IBlogRepository _repository;
         private readonly IImageProcessService _imageProcessService;
-        private readonly string _uploadImageRootPath;
+        private readonly IBlogRepository _repository;
         private readonly ISettings _settings;
+        private readonly string _uploadImageRootPath;
 
         public BlogService(IBlogRepository repository, ISettings settings, IWebHostEnvironment env,
             IImageProcessService imageProcessService)
@@ -35,38 +36,6 @@ namespace Blog.Web.Services
             var thumbRootPath = Path.Combine(env.WebRootPath, _settings.UploadImageRootPath, Constants.Thumbs);
             if (!Directory.Exists(thumbRootPath))
                 Directory.CreateDirectory(thumbRootPath);
-        }
-
-        public async Task<ProcessResult<Post>> SaveUploadImagesAsync(Guid postKey, ICollection<IFormFile> files)
-        {
-            var processResult = _repository.GetPostByKey(postKey);
-            if (!processResult.IsOk)
-            {
-                return processResult;
-            }
-
-            var post = processResult.Data;
-            var postImages = new List<PostImage>();
-            foreach (var file in files)
-            {
-                var postImage = new PostImage
-                {
-                    Extension = Path.GetExtension(file.FileName)
-                }.EnsureValidKey();
-
-                var filePath = Path.Combine(_uploadImageRootPath, postImage.FilePath);
-                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
-                var thumbPath = Path.Combine(_uploadImageRootPath, postImage.ThumbPath);
-                await _imageProcessService.ResizeByHeightAsync(filePath, thumbPath, _settings.ThumbHeight);
-
-                postImages.Add(postImage);
-            }
-
-            post.WithPostImages(postImages);
-            return processResult;
         }
 
         public ProcessResult<Post> DeletePost(Guid postKey)
@@ -94,6 +63,34 @@ namespace Blog.Web.Services
                 AllTags = ListAllTags()
             };
             return response;
+        }
+
+        public GetPostImagePathResult GetPostImagePaths(string urlFriendlyTitle, string imageName)
+        {
+            imageName = Path.GetFileNameWithoutExtension(imageName.Trim());
+            var postResult = GetPostByUrlFriendlyTitle(urlFriendlyTitle);
+            if (postResult.Post == null)
+                return new GetPostImagePathResult()
+                    .AsError(HttpStatusCode.NotFound, "No post found");
+
+            var postImage = postResult.Post.Images.SingleOrDefault(x => x.AppliedName == imageName);
+            if (postImage == null)
+                return new GetPostImagePathResult()
+                    .AsError(HttpStatusCode.NotFound, "No image found in the post");
+
+            string filePath = GetPostImagePath(postImage.FilePath);
+            if (!File.Exists(filePath))
+                return new GetPostImagePathResult()
+                    .AsError(HttpStatusCode.NotFound, "No image file found");
+
+            var thumbnailPath = GetPostImageThumbnailPath(postImage.FilePath);
+
+            return new GetPostImagePathResult().AsOk(filePath, thumbnailPath);
+        }
+
+        public string GetPostImageVirtualUrl(Post post, PostImage postImage)
+        {
+            return $"/posts/{post.UrlFriendlyTitle}/images/${postImage.Name}{postImage.Extension}";
         }
 
         public ICollection<string> ListAllTags()
@@ -135,11 +132,53 @@ namespace Blog.Web.Services
             return _repository.ListStickyPosts(postCount, includeUnpublishedPosts);
         }
 
+        public async Task<ProcessResult<Post>> SaveUploadImagesAsync(Guid postKey, ICollection<IFormFile> files)
+        {
+            var processResult = _repository.GetPostByKey(postKey);
+            if (!processResult.IsOk)
+            {
+                return processResult;
+            }
+
+            var post = processResult.Data;
+            var postImages = new List<PostImage>();
+            foreach (var file in files)
+            {
+                var postImage = new PostImage
+                {
+                    Extension = Path.GetExtension(file.FileName)
+                }.EnsureValidKey();
+
+                var filePath = GetPostImagePath(postImage.FilePath);
+                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+                var thumbPath = GetPostImageThumbnailPath(postImage.ThumbPath);
+                await _imageProcessService.ResizeByHeightAsync(filePath, thumbPath, _settings.ThumbHeight);
+
+                postImages.Add(postImage);
+            }
+
+            post.WithPostImages(postImages);
+            processResult = _repository.UpsertPost(post);
+            return processResult;
+        }
+
         public ProcessResult<Post> UpsertPost(Post post)
         {
             var result = _repository.UpsertPost(post.BuildUrlFriendlyTitle().WithUpdateOnTimeUpdated());
             return result;
         }
 
+        private string GetPostImagePath(string filePath)
+        {
+            return Path.Combine(_uploadImageRootPath, filePath);
+        }
+
+        private string GetPostImageThumbnailPath(string filePath)
+        {
+            return Path.Combine(_uploadImageRootPath, Constants.Thumbs, filePath);
+        }
     }
 }
