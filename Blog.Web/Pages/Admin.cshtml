@@ -11,7 +11,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData[Constants.PageTitle]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/layout.css" />
+        <link rel="stylesheet" href="~/css/admin.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/admin.min.css" asp-append-version="true" />
+    </environment>
+
+
     <link rel="stylesheet" href="~/jodit/jodit.min.css" />
     <script src="~/jodit/jodit.min.js"></script>
     <script src="~/js/post-editor.js" asp-append-version="true"></script>
@@ -23,83 +32,88 @@
         <div class="form-row">
             Keywords
             <input type="text" id="edit-post-search-keywords" />
-            <button onclick="adminScreen.loadPostInfoEntriesByKeywords()">Search</button>
         </div>
         <div class="form-row">
+            <button onclick="adminScreen.loadPostInfoEntriesByKeywords()">Search</button>
             <button onclick="adminScreen.loadLatestPostInfoEntries()">Load Latest Posts</button>
         </div>
         <div class="form-row" id="edit-post-list"></div>
     </div>
 
     <div class="admin-main">
+        <div class="admin-forms">
 
-        @if (Model.PostInEdit != null)
-        {
-            <div class="form-row">
-                <button onclick="adminScreen.createPost()">Create New Post</button>
-            </div>
-            <div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
-            <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
-            <div class="form-row">
-                <div class="tag-line-element">
-                    <input id="edit-new-tag" type="text" size="40" />
-                </div>
-                <div class="tag-line-element">
-                    <button onclick="adminScreen.addNewTags()">Add New Tags</button>
-                </div>
-                <div class="tag-line-element">
-                    <span style="margin-left:20px">Add from existing tags</span>
-                    <select id="edit-all-tags" onchange="adminScreen.selectTag()">
-                    </select>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="form-row">
-                <div class="tag-line-element"><div id="edit-tags"></div></div>
-                <div class="clear"></div>
-            </div>
-            <div class="new-line-label">
-                Abstract
-            </div>
-            <div class="form-row">
-                <textarea cols="80" rols="3" asp-for="PostInEdit.Abstract"></textarea>
-            </div>
-            <div class="new-line-label">
-                Content
-            </div>
-            <div class="form-row">
-                <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
-            </div>
-            <div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
-            <div class="form-row">
-                <button onclick="adminScreen.upsertPost()">@Model.SubmitButtonText</button>
-            </div>
-            <div id="post-submit-result" class="form-row"></div>
-            <input type="hidden" asp-for="PostInEdit.Content" />
-            <input type="hidden" asp-for="PostInEdit.Key" />
-            <input type="hidden" asp-for="PostInEdit.TagsInText" />
-            <input type="hidden" asp-for="AllTagsInText" />
-
-            @if (Model.IsExistingPost)
+            @if (Model.PostInEdit != null)
             {
-                <div>
-                     <form method="post" enctype="multipart/form-data">
-                        <input type="file" required="required" name="files" multiple="multiple" accept="image/*" />
-                        <button asp-page-handler="UploadImages">Upload Images</button>
-                    </form>
+                <div class="form-row">
+                    <button onclick="adminScreen.createPost()">Create New Post</button>
                 </div>
+                <div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
+                <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
+                <div class="form-row">
+                    <div class="tag-line-element">
+                        <input id="edit-new-tag" type="text" size="40" />
+                    </div>
+                    <div class="tag-line-element">
+                        <button onclick="adminScreen.addNewTags()">Add New Tags</button>
+                    </div>
+                    <div class="tag-line-element">
+                        <span style="margin-left:20px">Add from existing tags</span>
+                        <select id="edit-all-tags" onchange="adminScreen.selectTag()">
+                        </select>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="form-row">
+                    <div class="tag-line-element"><div id="edit-tags"></div></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="new-line-label">
+                    Abstract
+                </div>
+                <div class="form-row">
+                    <textarea cols="80" rols="3" asp-for="PostInEdit.Abstract"></textarea>
+                </div>
+                <div class="new-line-label">
+                    Content
+                </div>
+                <div class="form-row black">
+                    <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
+                </div>
+                <div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
+                <div class="form-row">
+                    <button onclick="adminScreen.upsertPost()">@Model.SubmitButtonText</button>
+                </div>
+                <div id="post-submit-result" class="form-row"></div>
+                <input type="hidden" asp-for="PostInEdit.Content" />
+                <input type="hidden" asp-for="PostInEdit.Key" />
+                <input type="hidden" asp-for="PostInEdit.TagsInText" />
+                <input type="hidden" asp-for="AllTagsInText" />
 
-                @if (Model.PostInEdit.Images != null)
+                @if (Model.IsExistingPost)
                 {
-                <div>
-                    @foreach (var postImage in Model.PostInEdit.Images)
-                    {
+                    <div>
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="file" required="required" name="files" multiple="multiple" accept="image/*" />
+                            <input type="hidden" asp-for="ExistingPostKey" />
+                            <input type="hidden" asp-for="ExistingPostUrlFriendlyTitle" />
+                            <button asp-page-handler="UploadImages">Upload Images</button>
+                        </form>
+                    </div>
 
-                    }
-                </div>
+                    @if (Model.PostInEdit.Images != null)
+                    {
+                        <div>
+                            @foreach (var postImage in Model.PostInEdit.Images)
+                            {
+
+                            }
+                        </div>
                     }
                 }
-        }
+            }
+
+        </div>
 
     </div>
 

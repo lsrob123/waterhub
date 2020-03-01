@@ -5,17 +5,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
     <Content Remove="wwwroot\js\admin-screen.ts" />
     <Content Remove="wwwroot\js\app.ts" />
     <Content Remove="wwwroot\js\home-screen.ts" />
     <Content Remove="wwwroot\js\service.ts" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="bundleconfig.json" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
-    <Folder Include="logs\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
   </ItemGroup>
 
 

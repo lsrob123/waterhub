@@ -1,0 +1,246 @@
+﻿
+.post-info-entry-card {
+    border: 1px solid #ccddcc;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: flex-start;
+    margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card {
+        flex-direction: column;
+    }
+}
+
+.post-info-entry-card .date-area {
+    background-color: #26734d;
+    color: white;
+    font-size: 20px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+    .post-info-entry-card .date-area .day {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .post-info-entry-card .date-area .month {
+        font-size: 12px;
+    }
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card .date-area {
+        background-color: #26734d;
+        color: white;
+        font-size: 20px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        align-items: center;
+        align-content: start;
+        width: 100%;
+        background: linear-gradient(178deg, #26734d 0%, #339966 100%);
+        padding: 5px 0;
+    }
+
+        .post-info-entry-card .date-area .day {
+            font-size: 16px;
+            margin-bottom: 0;
+            margin: 0 5px;
+        }
+
+        .post-info-entry-card .date-area .month {
+            font-size: 10px;
+            margin-left: 10px;
+            position: relative;
+            top: 1px;
+        }
+}
+
+.post-info-entry-card .post-info-area {
+    flex-basis: 100%;
+}
+
+    .post-info-entry-card .post-info-area .post-title {
+        display: block;
+        text-decoration: none;
+        color: #666666;
+        margin: 5px 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .post-info-entry-card .post-info-area .post-abstract {
+        display: block;
+        text-decoration: none;
+        color: black;
+        margin: 0 20px 10px 20px;
+    }
+
+    .post-info-entry-card .post-info-area .open-links {
+        display: block;
+        margin: 0 20px 0 20px;
+        background-color: #666666;
+        background: linear-gradient(180deg, #555555 0%, #666666 100%);
+        padding: 5px;
+    }
+
+        .post-info-entry-card .post-info-area .open-links a {
+            display: inline-block;
+            margin-right: 10px;
+            color: white;
+        }
+
+            .post-info-entry-card .post-info-area .open-links a:hover {
+                color: orangered;
+            }
+
+    .post-info-entry-card .post-info-area .post-content-collapse {
+        min-height: 15px;
+        max-height: 80px;
+        overflow: hidden;
+        display: block;
+        background-color: #dddddd;
+        mask: linear-gradient( 180deg, rgba(220, 220, 220, 1) 0%, rgba(220, 220, 220, 0) 100% );
+        margin: 0 20px 15px 20px;
+        font-size: 10px;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 5px 5px;
+    }
+
+@media only screen and (max-width: 500px) {
+    .post-info-entry-card .post-info-area .post-title {
+        padding-top: 5px;
+        font-size: 16px;
+    }
+
+    .post-info-entry-card .post-info-area .post-abstract {
+        font-size: 12px;
+    }
+
+    .post-info-entry-card .post-info-area .post-content-collapse {
+        font-size: 9px;
+        max-height: 50px;
+    }
+}
+
+.post-info-entry-card .post-info-area .post-content-expanded {
+    display: block;
+}
+
+.post-info-entry-card .post-info-area .post-tags {
+    display: flex;
+    margin: 10px 20px;
+}
+
+    .post-info-entry-card .post-info-area .post-tags .post-tag-label {
+        margin-bottom: 5px;
+        margin-right: 12px;
+        position: relative;
+    }
+
+    .post-info-entry-card .post-info-area .post-tags .post-tag {
+        display: block;
+        padding: 2px 10px;
+        background-color: #dd6633;
+        margin-bottom: 5px;
+        margin-right: 12px;
+        border-radius: 2px;
+        /*box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.3);*/
+        color: white;
+        font-size: 10px;
+    }
+
+        .post-info-entry-card .post-info-area .post-tags .post-tag a {
+            text-decoration: none;
+            color: white;
+        }
+
+.search-dropdown {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 5px 20px 5px rgba(0, 0, 0, 0.5);
+    max-height: 60%;
+}
+
+    .search-dropdown .search-dropdown-header {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        border-bottom: 1px solid #dddddd;
+    }
+
+        .search-dropdown .search-dropdown-header .title {
+            flex: 1;
+            font-size: 18px;
+            margin: 15px 20px 10px 20px;
+        }
+
+        .search-dropdown .search-dropdown-header .close {
+            display: block;
+            height: 10px;
+            background-color: #666666;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px 10px 0 20px;
+        }
+
+            .search-dropdown .search-dropdown-header .close:hover {
+                background-color: red;
+            }
+
+    .search-dropdown .search-dropdown-content {
+        position: fixed;
+        margin-bottom: 10px;
+        overflow: auto;
+        padding: 0 20px;
+        bottom: 20px;
+    }
+
+        .search-dropdown .search-dropdown-content .post {
+            text-decoration: none;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+            .search-dropdown .search-dropdown-content .post .title {
+                display: block;
+                text-decoration: none;
+                color: black;
+            }
+
+            .search-dropdown .search-dropdown-content .post .new-window-link {
+                font-size: 12px;
+                display: block;
+                text-decoration: underline;
+            }
+
+.search-box {
+    margin: 10px 0 20px 0;
+    padding: 10px;
+    border: 1px solid #ccddcc;
+    border-radius: 4px;
+    background-color: #ddffdd;
+    display: flex;
+}
+
+    .search-box input {
+        flex: 1;
+        margin-right: 10px;
+    }

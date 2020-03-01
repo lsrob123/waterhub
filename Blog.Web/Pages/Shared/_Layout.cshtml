@@ -6,7 +6,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData[Constants.PageTitle]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/layout.css" />
+        <link rel="stylesheet" href="~/css/home.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
     <script src="~/js/bundle.js" asp-append-version="true"></script>
     <script src="~/js/init.js" asp-append-version="true"></script>
 </head>

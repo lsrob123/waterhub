@@ -24,17 +24,21 @@ namespace Blog.Web
             _blogService = blogService;
         }
 
+        public string AllTagsInText { get; set; }
         public string ErrorMessage { get; set; }
+
+        [BindProperty]
+        public Guid? ExistingPostKey { get; set; }
+
+        [BindProperty]
+        public string ExistingPostUrlFriendlyTitle { get; set; }
+
+        public bool IsExistingPost => ExistingPostKey.HasValue;
         public override string PageName => PageDefinitions.Admin.PageName;
         public override string PageTitle => PageDefinitions.Admin.PageTitle;
 
-        public Guid? ExistingPostKey { get; set; }
-        public bool IsExistingPost => ExistingPostKey.HasValue;
-
         [BindProperty]
         public Post PostInEdit { get; set; }
-
-        public string AllTagsInText { get; set; }
 
         public string SubmitButtonText { get; private set; }
 
@@ -59,6 +63,7 @@ namespace Blog.Web
             else
             {
                 ExistingPostKey = PostInEdit.Key;
+                ExistingPostUrlFriendlyTitle = PostInEdit.UrlFriendlyTitle;
                 SubmitButtonText = "Update";
                 AllTagsInText = JsonSerializer.Serialize(
                     response.AllTags is null ? new string[] { } : response.AllTags,
@@ -69,11 +74,15 @@ namespace Blog.Web
         public async Task<IActionResult> OnPostUploadImagesAsync(ICollection<IFormFile> files)
         {
             if (!IsExistingPost)
-                return Page();
+                return RefirectBackToAdminMain();
 
-            await _blogService.SaveUploadImagesAsync(PostInEdit.Key, files);
-            return RedirectToPage(PageName, new { title = PostInEdit.UrlFriendlyTitle });
+            await _blogService.SaveUploadImagesAsync(ExistingPostKey.Value, files);
+            return RefirectBackToAdminMain();
         }
 
+        private IActionResult RefirectBackToAdminMain()
+        {
+            return RedirectToPage(PageName, new { title = ExistingPostUrlFriendlyTitle });
+        }
     }
 }

@@ -36,13 +36,17 @@ namespace Blog.Web.Models
 
         public Post WithPostImages(IEnumerable<PostImage> postImages)
         {
-            var maxInternalId = Images?.Max(x => x.Value.InternalId) ?? 0;
+            var maxInternalId = 1;
+            if (Images != null && Images.Count > 0)
+            {
+                maxInternalId = Images.Max(x => x.Value.InternalId) + 1;
+            }
             foreach (var image in postImages)
             {
                 if (Images.ContainsKey(image.Key))
                     continue;
 
-                image.InternalId = ++maxInternalId;
+                image.InternalId = maxInternalId++;
                 Images.Add(image.Key, image);
             }
             return this;
