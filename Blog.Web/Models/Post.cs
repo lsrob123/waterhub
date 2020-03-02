@@ -52,17 +52,12 @@ namespace Blog.Web.Models
             return this;
         }
 
-        public Post DeletePostImage(Guid imageKey)
+        public Post DeletePostImage(Guid imageKey, Action<string, string> deleteFiles)
         {
-            Images = Images?.Where(x => x.Key != imageKey).ToList();
-            return this;
-        }
+            var deleted = Images.FirstOrDefault(x => x.Key == imageKey);
+            deleteFiles(deleted.FilePath, deleted.ThumbPath);
 
-        public Post UpdatePostImageName(Guid imageKey, string name)
-        {
-            var image = Images.FirstOrDefault(x => x.Key == imageKey);
-            if (image != null)
-                image.Name = name;
+            Images = Images?.Where(x => x.Key != imageKey).ToList();
             return this;
         }
 

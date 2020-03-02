@@ -23,7 +23,6 @@
 
     <link rel="stylesheet" href="~/jodit/jodit.min.css" />
     <script src="~/jodit/jodit.min.js"></script>
-    <script src="~/js/post-editor.js" asp-append-version="true"></script>
     <script src="~/js/bundle.js" asp-append-version="true"></script>
     <script src="~/js/init.js" asp-append-version="true"></script>
 </head>
@@ -84,11 +83,12 @@
                 <div class="form-row">
                     <button onclick="adminScreen.upsertPost()">@Model.SubmitButtonText</button>
                 </div>
-                <div id="post-submit-result" class="form-row"></div>
+                <div id="post-submit-result" class="form-row-last"></div>
                 <input type="hidden" asp-for="PostInEdit.Content" />
                 <input type="hidden" asp-for="PostInEdit.Key" />
                 <input type="hidden" asp-for="PostInEdit.TagsInText" />
                 <input type="hidden" asp-for="AllTagsInText" />
+                <input type="hidden" asp-for="PostImagesInText" />
 
                 @if (Model.IsExistingPost)
                 {
@@ -107,17 +107,20 @@
                             @foreach (var postImage in Model.PostInEdit.Images)
                             {
                                 var url = $"/posts/{Model.PostInEdit.UrlFriendlyTitle}/images/{postImage.DisplayName}";
+                                var thumnUrl = $"/post-images/thumbs/{postImage.Key}{postImage.Extension}";
                                 var urlField = $"admin-post-image-{postImage.DisplayName}";
                                 var messageField = $"admin-post-image-copied-{postImage.DisplayName}";
                                 var deleteFailedMessageField = $"admin-post-image-failed-to-delete-{postImage.DisplayName}";
                                 <div class="post-image">
-                                    <img onclick="adminScreen.copyPostImageUrl('@urlField','@messageField')" src="@url" alt="@url" />
-                                    <div>
-                                        <a class="dotted-underline" href="javascript:adminScreen.copyPostImageUrl('@urlField','@messageField')">Copy Link</a>
-                                        <div id="@urlField" class="url-field">@url</div>
-                                        <div id="@messageField" class="link-copied" style="display:none;">Copied!</div>
+                                    <img onclick="adminScreen.copyPostImageUrl('@urlField','@messageField')" src="@thumnUrl" alt="@url" />
+                                    <div class="links">
+                                        <div class="link" onclick="adminScreen.copyPostImageUrl('@urlField','@messageField')">Copy Link</div>
+                                        <div class="link" onclick="adminScreen.deletePostImage('@Model.PostInEdit.UrlFriendlyTitle','@postImage.Key','@deleteFailedMessageField')">Delete</div>
+                                    </div>
+                                    <div class="message">
+                                        <div id="@messageField" class="link-copied" style="display:none;">Link copied to clipboard.</div>
                                         <div id="@deleteFailedMessageField" class="failed-delete" style="display:none;"></div>
-                                        <a href="javascript:adminScreen.deletePostImage('@Model.PostInEdit.UrlFriendlyTitle','@postImage.Key','@deleteFailedMessageField')">Delete</a>
+                                        <div id="@urlField" class="url-field">@url</div>
                                     </div>
                                 </div>
                             }

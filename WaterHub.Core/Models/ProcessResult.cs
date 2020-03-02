@@ -53,37 +53,5 @@ namespace WaterHub.Core.Models
         public bool HasErrors => !(Errors is null) && Errors.Any();
         public bool IsOk => Status == HttpStatusCode.OK;
         public HttpStatusCode Status { get; set; }
-
-        //public ProcessResult<T> AsError(HttpStatusCode status, T data = default)
-        //{
-        //    return AsError(new Exception(status.ToString()), null, status, data);
-        //}
-
-        //public virtual ProcessResult<T> AsError(Exception exception, string errorCodeInLog, HttpStatusCode status,
-        //    T data = default)
-        //{
-        //    Data = data;
-        //    Status = status;
-        //    Errors = new List<Exception> { exception };
-        //    ErrorCodeInLog = errorCodeInLog;
-        //    return this;
-        //}
-
-        //public virtual ProcessResult<T> AsErrors(IEnumerable<Exception> exceptions, string errorCodeInLog,
-        //    HttpStatusCode status, T data = default)
-        //{
-        //    Data = data;
-        //    Status = status;
-        //    Errors = exceptions.ToList();
-        //    ErrorCodeInLog = errorCodeInLog;
-        //    return this;
-        //}
-
-        //public virtual ProcessResult<T> AsOk(T data = default)
-        //{
-        //    Data = data;
-        //    Status = HttpStatusCode.OK;
-        //    return this;
-        //}
     }
 }

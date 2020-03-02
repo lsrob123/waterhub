@@ -1,8 +1,6 @@
 ﻿using Blog.Web.Abstractions;
-using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 
 namespace Blog.Web.Controllers
 {
@@ -23,16 +21,11 @@ namespace Blog.Web.Controllers
         [Route("{urlFriendlyTitle}/images/{imageKey}")]
         public IActionResult DeleteImage([FromRoute]string urlFriendlyTitle, [FromRoute]Guid imageKey)
         {
-            var getPostResult = _blogService.GetPostByUrlFriendlyTitle(urlFriendlyTitle);
-            if (getPostResult.Post == null)
-                return NotFound("No post found");
-
-            getPostResult.Post.DeletePostImage(imageKey);
-            var upsertPostResult = _blogService.UpsertPost(getPostResult.Post);
-            if (upsertPostResult.IsOk)
+            var result = _blogService.DeletePostImage(urlFriendlyTitle, imageKey);
+            if (result.IsOk)
                 return Ok();
 
-            return StatusCode((int)upsertPostResult.Status, upsertPostResult.ErrorMessage);
+            return StatusCode((int)result.Status, result.ErrorMessage);
         }
 
         [HttpGet]

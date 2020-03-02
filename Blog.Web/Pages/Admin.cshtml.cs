@@ -16,16 +16,19 @@ namespace Blog.Web
     public class AdminModel : BlodPageModelBase<AdminModel>
     {
         private readonly IBlogService _blogService;
+        private readonly ISerializationService _serializationService;
 
         public AdminModel(ILogger<AdminModel> logger, IAuthService authService, ITextMapService textMapService,
-            IBlogService blogService)
+            IBlogService blogService, ISerializationService serializationService)
           : base(logger, authService, textMapService)
         {
             _blogService = blogService;
+            _serializationService = serializationService;
         }
 
         public string AllTagsInText { get; set; }
         public string ErrorMessage { get; set; }
+        public string PostImagesInText { get; set; }
 
         [BindProperty]
         public Guid? ExistingPostKey { get; set; }
@@ -65,9 +68,9 @@ namespace Blog.Web
                 ExistingPostKey = PostInEdit.Key;
                 ExistingPostUrlFriendlyTitle = PostInEdit.UrlFriendlyTitle;
                 SubmitButtonText = "Update";
-                AllTagsInText = JsonSerializer.Serialize(
-                    response.AllTags is null ? new string[] { } : response.AllTags,
-                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                AllTagsInText = _serializationService
+                    .Serialize(response.AllTags is null ? new string[] { } : response.AllTags);
+                PostImagesInText = _serializationService.Serialize(PostInEdit.Images ?? new List<PostImage>());
             }
         }
 

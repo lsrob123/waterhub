@@ -13,6 +13,7 @@ namespace Blog.Web.Models
         [Required]
         public string Content { get; set; }
 
+        public List<PostImage> Images { get; set; }
         public bool IsPublished { get; set; }
         public bool IsSticky { get; set; }
         public Guid Key { get; set; }
@@ -32,6 +33,7 @@ namespace Blog.Web.Models
             post.IsSticky = IsSticky;
             post.Tags = Tags;
             post.Abstract = Abstract;
+            post.Images = Images;
             return post;
         }
     }

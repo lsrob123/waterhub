@@ -28,6 +28,7 @@ namespace WaterHub.Core
         {
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<ISerializationService, SerializationService>();
             services.AddSingleton<IUserQuery>(x => x.GetRequiredService<THashedPasswordQuery>());
             services.AddSingleton<IHasSerilogSettings>(x => x.GetRequiredService<TSettings>());
             services.AddSingleton<IHasTextMapFilePath>(x => x.GetRequiredService<TSettings>());

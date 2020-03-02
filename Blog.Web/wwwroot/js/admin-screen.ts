@@ -1,6 +1,7 @@
 ﻿class AdminScreen {
     private readonly service: Service;
     private tags: string[] = [];
+    private postImages: PostImage[] = [];
     private allTags: string[] = [];
     private editorInstance: any;
     private postInfoEntries: PostInfoEntry[];
@@ -38,7 +39,14 @@
         } else {
             this.tags = [];
         }
-        this.renderTags();
+
+
+        const postImagesInText = (<HTMLInputElement>document.getElementById('PostImagesInText')).value;
+        if (!!postImagesInText) {
+            this.postImages = JSON.parse(postImagesInText);
+        } else {
+            this.postImages = [];
+        }
 
         const allTagsInText = (<HTMLInputElement>document.getElementById('AllTagsInText')).value;
         if (!!allTagsInText) {
@@ -94,13 +102,13 @@
             this.editorInstance.value,
             !!(<HTMLInputElement>document.getElementById('PostInEdit_IsSticky')).checked,
             !!(<HTMLInputElement>document.getElementById('PostInEdit_IsPublished')).checked,
-            this.tags
+            this.tags, this.postImages
         );
 
         if (response.ok) {
             //const url = this.service.getUrl(`${response.data.urlFriendlyTitle}`) // TODO: Dbl-check needed
             const url = `/admin/${response.data.urlFriendlyTitle}`;
-            document.getElementById('post-submit-result').innerHTML = `<div style="color:darkgreen;margin-bottom:15px;">Post submitted successfully.</div><div><a href="${url}" target="_self">Refresh Page</a></div>`;
+            document.getElementById('post-submit-result').innerHTML = `<div style="margin-bottom:15px;">Post submitted successfully.</div><div><a style="color:white;" href="${url}" target="_self">Refresh Page</a></div>`;
             window.setTimeout(function () {
                 window.location.href = url;
             }, 1000);

@@ -11,6 +11,8 @@ namespace Blog.Web.Abstractions
     {
         ProcessResult<Post> DeletePost(Guid postKey);
 
+        ProcessResult<Post> DeletePostImage(string urlFriendlyTitle, Guid imageKey);
+
         GetPostResponse GetPostByKey(Guid postKey);
 
         GetPostResponse GetPostByUrlFriendlyTitle(string urlFriendlyTitle);

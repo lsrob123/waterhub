@@ -194,6 +194,10 @@ button {
     margin-bottom: 10px;
 }
 
+.form-row-last {
+    margin-bottom: 30px;
+}
+
 .new-line-label {
     margin-bottom: 3px;
 }
@@ -268,7 +272,3 @@ button {
                 overflow: auto;
                 padding: 20px 20px 60px 20px;
             }
-
-.dotted-underline {
-    text-decoration: dotted;
-}

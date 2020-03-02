@@ -1,5 +1,4 @@
 ﻿using Blog.Web.Abstractions;
-using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +42,18 @@ namespace Blog.Web.Services
             return _repository.DeletePost(postKey);
         }
 
+        public ProcessResult<Post> DeletePostImage(string urlFriendlyTitle, Guid imageKey)
+        {
+            var getPostResult = GetPostByUrlFriendlyTitle(urlFriendlyTitle);
+            if (getPostResult.Post == null)
+                return new ProcessResult<Post>().AsError(new Exception("No post found"), null, HttpStatusCode.NotFound);
+
+            getPostResult.Post.DeletePostImage(imageKey, DeletePostImageFiles);
+
+            var upsertPostResult = UpsertPost(getPostResult.Post);
+            return upsertPostResult;
+        }
+
         public GetPostResponse GetPostByKey(Guid postKey)
         {
             var result = _repository.GetPostByKey(postKey);
@@ -68,12 +79,16 @@ namespace Blog.Web.Services
         public GetPostImagePathResult GetPostImagePaths(string urlFriendlyTitle, string imageName)
         {
             imageName = Path.GetFileNameWithoutExtension(imageName.Trim());
+            if (!int.TryParse(imageName, out var internalId))
+                return new GetPostImagePathResult()
+                   .AsError(HttpStatusCode.BadRequest, "Invalid image name");
+
             var postResult = GetPostByUrlFriendlyTitle(urlFriendlyTitle);
             if (postResult.Post == null)
                 return new GetPostImagePathResult()
                     .AsError(HttpStatusCode.NotFound, "No post found");
 
-            var postImage = postResult.Post.Images.SingleOrDefault(x => x.AppliedName == imageName);
+            var postImage = postResult.Post.Images.SingleOrDefault(x => x.InternalId == internalId);
             if (postImage == null)
                 return new GetPostImagePathResult()
                     .AsError(HttpStatusCode.NotFound, "No image found in the post");
@@ -83,14 +98,14 @@ namespace Blog.Web.Services
                 return new GetPostImagePathResult()
                     .AsError(HttpStatusCode.NotFound, "No image file found");
 
-            var thumbnailPath = GetPostImageThumbnailPath(postImage.FilePath);
+            var thumbnailPath = Path.Combine(_uploadImageRootPath, postImage.ThumbPath);
 
             return new GetPostImagePathResult().AsOk(filePath, thumbnailPath);
         }
 
         public string GetPostImageVirtualUrl(Post post, PostImage postImage)
         {
-            return $"/posts/{post.UrlFriendlyTitle}/images/${postImage.Name}{postImage.Extension}";
+            return $"/posts/{post.UrlFriendlyTitle}/images/${postImage.InternalId}{postImage.Extension}";
         }
 
         public ICollection<string> ListAllTags()
@@ -154,7 +169,7 @@ namespace Blog.Web.Services
                 {
                     await file.CopyToAsync(fileStream);
                 }
-                var thumbPath = GetPostImageThumbnailPath(postImage.ThumbPath);
+                var thumbPath = Path.Combine(_uploadImageRootPath, postImage.ThumbPath);
                 await _imageProcessService.ResizeByHeightAsync(filePath, thumbPath, _settings.ThumbHeight);
 
                 postImages.Add(postImage);
@@ -171,14 +186,15 @@ namespace Blog.Web.Services
             return result;
         }
 
+        private void DeletePostImageFiles(string filePath, string thumbPath)
+        {
+            File.Delete(Path.Combine(_uploadImageRootPath, filePath));
+            File.Delete(Path.Combine(_uploadImageRootPath, thumbPath));
+        }
+
         private string GetPostImagePath(string filePath)
         {
             return Path.Combine(_uploadImageRootPath, filePath);
-        }
-
-        private string GetPostImageThumbnailPath(string filePath)
-        {
-            return Path.Combine(_uploadImageRootPath, Config.Constants.Thumbs, filePath);
         }
     }
 }

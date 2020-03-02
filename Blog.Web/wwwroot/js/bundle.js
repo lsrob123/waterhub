@@ -85,11 +85,11 @@ var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
         this.deletePostImage = function (postUrlFriendlyTitle, postImageKey) { return __awaiter(_this, void 0, void 0, function () {
-            var rawResponse, data, message, e_1;
+            var rawResponse, message, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 5, , 6]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, fetch("/posts/" + postUrlFriendlyTitle + "/images/" + postImageKey, {
                                 method: 'DELETE',
                                 headers: {
@@ -98,24 +98,22 @@ var Service = /** @class */ (function () {
                             })];
                     case 1:
                         rawResponse = _a.sent();
-                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
-                        return [4 /*yield*/, rawResponse.json()];
+                        if (!!rawResponse.ok) {
+                            return [2 /*return*/, new ApiCallResult().withSuccess(true)];
+                        }
+                        return [4 /*yield*/, rawResponse.text()];
                     case 2:
-                        data = _a.sent();
-                        return [2 /*return*/, new ApiCallResult().withSuccess(true)];
-                    case 3: return [4 /*yield*/, rawResponse.text()];
-                    case 4:
                         message = _a.sent();
                         return [2 /*return*/, new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText)];
-                    case 5:
+                    case 3:
                         e_1 = _a.sent();
                         console.error(e_1);
                         return [2 /*return*/, new ApiCallResult().withLocalError(e_1)];
-                    case 6: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
-        this.upsertPost = function (key, title, abstract, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
+        this.upsertPost = function (key, title, abstract, content, isSticky, isPublished, tags, postImages) { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, data, message, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -133,7 +131,8 @@ var Service = /** @class */ (function () {
                                     content: content,
                                     isSticky: !!isSticky,
                                     isPublished: !!isPublished,
-                                    tags: tags
+                                    tags: tags,
+                                    images: postImages
                                 })
                             })];
                     case 1:
@@ -404,6 +403,7 @@ var AdminScreen = /** @class */ (function () {
     function AdminScreen(service) {
         var _this = this;
         this.tags = [];
+        this.postImages = [];
         this.allTags = [];
         this.init = function (editorInstance) {
             _this.editorInstance = editorInstance;
@@ -417,7 +417,13 @@ var AdminScreen = /** @class */ (function () {
             else {
                 _this.tags = [];
             }
-            _this.renderTags();
+            var postImagesInText = document.getElementById('PostImagesInText').value;
+            if (!!postImagesInText) {
+                _this.postImages = JSON.parse(postImagesInText);
+            }
+            else {
+                _this.postImages = [];
+            }
             var allTagsInText = document.getElementById('AllTagsInText').value;
             if (!!allTagsInText) {
                 _this.allTags = JSON.parse(allTagsInText);
@@ -473,12 +479,12 @@ var AdminScreen = /** @class */ (function () {
             var response, url_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, document.getElementById('PostInEdit_Abstract').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags)];
+                    case 0: return [4 /*yield*/, this.service.upsertPost(document.getElementById('PostInEdit_Key').value, document.getElementById('PostInEdit_Title').value, document.getElementById('PostInEdit_Abstract').value, this.editorInstance.value, !!document.getElementById('PostInEdit_IsSticky').checked, !!document.getElementById('PostInEdit_IsPublished').checked, this.tags, this.postImages)];
                     case 1:
                         response = _a.sent();
                         if (response.ok) {
                             url_1 = "/admin/" + response.data.urlFriendlyTitle;
-                            document.getElementById('post-submit-result').innerHTML = "<div style=\"color:darkgreen;margin-bottom:15px;\">Post submitted successfully.</div><div><a href=\"" + url_1 + "\" target=\"_self\">Refresh Page</a></div>";
+                            document.getElementById('post-submit-result').innerHTML = "<div style=\"margin-bottom:15px;\">Post submitted successfully.</div><div><a style=\"color:white;\" href=\"" + url_1 + "\" target=\"_self\">Refresh Page</a></div>";
                             window.setTimeout(function () {
                                 window.location.href = url_1;
                             }, 1000);

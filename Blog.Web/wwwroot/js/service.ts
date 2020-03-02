@@ -12,7 +12,6 @@ class Service {
             });
 
             if (!!rawResponse.ok) {
-                const data = await rawResponse.json();
                 return new ApiCallResult().withSuccess(true);
             }
 
@@ -24,8 +23,8 @@ class Service {
         }
     }
 
-    public upsertPost = async (key: string, title: string, abstract: string, content: string, isSticky: boolean, isPublished: boolean,
-        tags: string[])
+    public upsertPost = async (key: string, title: string, abstract: string, content: string, isSticky: boolean,
+        isPublished: boolean, tags: string[], postImages: PostImage[])
         : Promise<ApiCallResult> => {
         try {
             const rawResponse = await fetch('/api/posts', {
@@ -40,7 +39,8 @@ class Service {
                     content: content,
                     isSticky: !!isSticky,
                     isPublished: !!isPublished,
-                    tags: tags
+                    tags: tags,
+                    images: postImages
                 })
             });
 
