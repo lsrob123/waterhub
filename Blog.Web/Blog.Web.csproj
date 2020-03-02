@@ -2,44 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="bundleconfig.json" />
-    <Content Remove="wwwroot\js\admin-screen.ts" />
-    <Content Remove="wwwroot\js\app.ts" />
-    <Content Remove="wwwroot\js\home-screen.ts" />
-    <Content Remove="wwwroot\js\service.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="bundleconfig.json" />
-  </ItemGroup>
-
-
 
   <ItemGroup>
     <Folder Include="Services\" />
   </ItemGroup>
 
-
-
   <ItemGroup>
     <None Include="bundleconfig.json" />
   </ItemGroup>
 
-
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
-
-
 
   <ItemGroup>
     <ProjectReference Include="..\WaterHub.Core\WaterHub.Core.csproj" />

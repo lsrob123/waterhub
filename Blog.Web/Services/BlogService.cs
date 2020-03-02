@@ -33,7 +33,7 @@ namespace Blog.Web.Services
             if (!Directory.Exists(_uploadImageRootPath))
                 Directory.CreateDirectory(_uploadImageRootPath);
 
-            var thumbRootPath = Path.Combine(env.WebRootPath, _settings.UploadImageRootPath, Constants.Thumbs);
+            var thumbRootPath = Path.Combine(env.WebRootPath, _settings.UploadImageRootPath, Config.Constants.Thumbs);
             if (!Directory.Exists(thumbRootPath))
                 Directory.CreateDirectory(thumbRootPath);
         }
@@ -178,7 +178,7 @@ namespace Blog.Web.Services
 
         private string GetPostImageThumbnailPath(string filePath)
         {
-            return Path.Combine(_uploadImageRootPath, Constants.Thumbs, filePath);
+            return Path.Combine(_uploadImageRootPath, Config.Constants.Thumbs, filePath);
         }
     }
 }

@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Text.Json;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -174,6 +179,16 @@ namespace WaterHub.Core
         {
             entity.TimeUpdated = DateTimeOffset.UtcNow;
             return entity;
+        }
+
+        public static IWebHostBuilder UseWebHostSettings(this IWebHostBuilder webBuilder,
+            string fileName = Constants.WebHostSettings.DefaultSettingFile)
+        {
+            var json = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), fileName));
+            var settings = JsonSerializer.Deserialize<HostSettings>(json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            webBuilder.UseUrls(settings.Url);
+            return webBuilder;
         }
     }
 }
