@@ -30,7 +30,7 @@ namespace Blog.Web.Controllers
             getPostResult.Post.DeletePostImage(imageKey);
             var upsertPostResult = _blogService.UpsertPost(getPostResult.Post);
             if (upsertPostResult.IsOk)
-                return Ok(upsertPostResult.Data.Images ?? new List<PostImage>());
+                return Ok();
 
             return StatusCode((int)upsertPostResult.Status, upsertPostResult.ErrorMessage);
         }
@@ -45,8 +45,6 @@ namespace Blog.Web.Controllers
                 return StatusCode((int)result.Status, result.ErrorMessage);
             }
 
-            //using var image = System.IO.File.OpenRead(result.PostImageFilePath);
-            //return File(image, "image/jpeg");
             return PhysicalFile(result.PostImageFilePath, "image/jpeg");
         }
     }

@@ -56,3 +56,10 @@ class PostInfoEntry {
     textOpenArticleInNewWindow: string;
 }
 
+class PostImage {
+    key: string;
+    public extension: string;
+    public internalId: number;
+    public displayName: string;
+}
+

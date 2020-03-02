@@ -1,6 +1,29 @@
 ﻿/// <reference path="models.ts"/>
 
 class Service {
+    public deletePostImage = async (postUrlFriendlyTitle: string, postImageKey: string)
+        : Promise<ApiCallResult> => {
+        try {
+            const rawResponse = await fetch(`/posts/${postUrlFriendlyTitle}/images/${postImageKey}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!!rawResponse.ok) {
+                const data = await rawResponse.json();
+                return new ApiCallResult().withSuccess(true);
+            }
+
+            const message = await rawResponse.text();
+            return new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText);
+        } catch (e) {
+            console.error(e);
+            return new ApiCallResult().withLocalError(e);
+        }
+    }
+
     public upsertPost = async (key: string, title: string, abstract: string, content: string, isSticky: boolean, isPublished: boolean,
         tags: string[])
         : Promise<ApiCallResult> => {

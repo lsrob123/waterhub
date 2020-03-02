@@ -92,7 +92,7 @@
 
                 @if (Model.IsExistingPost)
                 {
-                    <div>
+                    <div class="form-row">
                         <form method="post" enctype="multipart/form-data">
                             <input type="file" required="required" name="files" multiple="multiple" accept="image/*" />
                             <input type="hidden" asp-for="ExistingPostKey" />
@@ -103,10 +103,23 @@
 
                     @if (Model.PostInEdit.Images != null)
                     {
-                        <div>
+                        <div class="post-images">
                             @foreach (var postImage in Model.PostInEdit.Images)
                             {
-
+                                var url = $"/posts/{Model.PostInEdit.UrlFriendlyTitle}/images/{postImage.DisplayName}";
+                                var urlField = $"admin-post-image-{postImage.DisplayName}";
+                                var messageField = $"admin-post-image-copied-{postImage.DisplayName}";
+                                var deleteFailedMessageField = $"admin-post-image-failed-to-delete-{postImage.DisplayName}";
+                                <div class="post-image">
+                                    <img onclick="adminScreen.copyPostImageUrl('@urlField','@messageField')" src="@url" alt="@url" />
+                                    <div>
+                                        <a class="dotted-underline" href="javascript:adminScreen.copyPostImageUrl('@urlField','@messageField')">Copy Link</a>
+                                        <div id="@urlField" class="url-field">@url</div>
+                                        <div id="@messageField" class="link-copied" style="display:none;">Copied!</div>
+                                        <div id="@deleteFailedMessageField" class="failed-delete" style="display:none;"></div>
+                                        <a href="javascript:adminScreen.deletePostImage('@Model.PostInEdit.UrlFriendlyTitle','@postImage.Key','@deleteFailedMessageField')">Delete</a>
+                                    </div>
+                                </div>
                             }
                         </div>
                     }

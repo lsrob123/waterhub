@@ -16,5 +16,6 @@ namespace Blog.Web.Models
         public int InternalId { get; set; }
         public string Name { get; set; }
         public string ThumbPath => Path.Combine(Constants.Thumbs, FilePath);
+        public string DisplayName => $"{InternalId}{Extension}";
     }
 }

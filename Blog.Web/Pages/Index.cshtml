@@ -30,7 +30,7 @@
                 <a class="post-abstract" asp-page="@PageDefinitions.Posts.PageName" asp-route-title="@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Abstract</a>
 
                 <div class="open-links">
-                    <a href="javascript:homeScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')" title="@T.GetMap("Click to read full article", "home")">@T.GetMap("Read full article", "home")</a>
+                    <a class="dotted-underline" href="javascript:homeScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')" title="@T.GetMap("Click to read full article", "home")">@T.GetMap("Read full article", "home")</a>
                     <a href="~/posts/@post.UrlFriendlyTitle" title="@T.GetMap("Open article in new window", "home")" target="@post.UrlFriendlyTitle">@T.GetMap("Open article in new window", "home")</a>
                 </div>
 

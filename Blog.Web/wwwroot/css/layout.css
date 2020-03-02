@@ -268,3 +268,7 @@ button {
                 overflow: auto;
                 padding: 20px 20px 60px 20px;
             }
+
+.dotted-underline {
+    text-decoration: dotted;
+}

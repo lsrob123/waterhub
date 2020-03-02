@@ -75,12 +75,48 @@ var PostInfoEntry = /** @class */ (function () {
     }
     return PostInfoEntry;
 }());
+var PostImage = /** @class */ (function () {
+    function PostImage() {
+    }
+    return PostImage;
+}());
 /// <reference path="models.ts"/>
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
-        this.upsertPost = function (key, title, abstract, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
+        this.deletePostImage = function (postUrlFriendlyTitle, postImageKey) { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, data, message, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, fetch("/posts/" + postUrlFriendlyTitle + "/images/" + postImageKey, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })];
+                    case 1:
+                        rawResponse = _a.sent();
+                        if (!!!rawResponse.ok) return [3 /*break*/, 3];
+                        return [4 /*yield*/, rawResponse.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, new ApiCallResult().withSuccess(true)];
+                    case 3: return [4 /*yield*/, rawResponse.text()];
+                    case 4:
+                        message = _a.sent();
+                        return [2 /*return*/, new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText)];
+                    case 5:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        return [2 /*return*/, new ApiCallResult().withLocalError(e_1)];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.upsertPost = function (key, title, abstract, content, isSticky, isPublished, tags) { return __awaiter(_this, void 0, void 0, function () {
+            var rawResponse, data, message, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -112,15 +148,15 @@ var Service = /** @class */ (function () {
                         message = _a.sent();
                         return [2 /*return*/, new ApiCallResult().withError(message, rawResponse.status, rawResponse.statusText)];
                     case 5:
-                        e_1 = _a.sent();
-                        console.error(e_1);
-                        return [2 /*return*/, new ApiCallResult().withLocalError(e_1)];
+                        e_2 = _a.sent();
+                        console.error(e_2);
+                        return [2 /*return*/, new ApiCallResult().withLocalError(e_2)];
                     case 6: return [2 /*return*/];
                 }
             });
         }); };
         this.listLatestPosts = function () { return __awaiter(_this, void 0, void 0, function () {
-            var rawResponse, data, e_2;
+            var rawResponse, data, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -137,8 +173,8 @@ var Service = /** @class */ (function () {
                         return [2 /*return*/, data];
                     case 3: return [2 /*return*/, []];
                     case 4:
-                        e_2 = _a.sent();
-                        console.error(e_2);
+                        e_3 = _a.sent();
+                        console.error(e_3);
                         return [2 /*return*/, null];
                     case 5: return [2 /*return*/];
                 }
@@ -147,7 +183,7 @@ var Service = /** @class */ (function () {
         this.listLatestPostInfoEntries = function (includeAllPosts) {
             if (includeAllPosts === void 0) { includeAllPosts = false; }
             return __awaiter(_this, void 0, void 0, function () {
-                var path, rawResponse, data, e_3;
+                var path, rawResponse, data, e_4;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -165,8 +201,8 @@ var Service = /** @class */ (function () {
                             return [2 /*return*/, data];
                         case 3: return [2 /*return*/, []];
                         case 4:
-                            e_3 = _a.sent();
-                            console.error(e_3);
+                            e_4 = _a.sent();
+                            console.error(e_4);
                             return [2 /*return*/, null];
                         case 5: return [2 /*return*/];
                     }
@@ -176,7 +212,7 @@ var Service = /** @class */ (function () {
         this.listPostInfoEntriesByKeywords = function (keywords, includeAllPosts) {
             if (includeAllPosts === void 0) { includeAllPosts = false; }
             return __awaiter(_this, void 0, void 0, function () {
-                var path, rawResponse, data, e_4;
+                var path, rawResponse, data, e_5;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -194,8 +230,8 @@ var Service = /** @class */ (function () {
                             return [2 /*return*/, data];
                         case 3: return [2 /*return*/, []];
                         case 4:
-                            e_4 = _a.sent();
-                            console.error(e_4);
+                            e_5 = _a.sent();
+                            console.error(e_5);
                             return [2 /*return*/, null];
                         case 5: return [2 /*return*/];
                     }
@@ -486,6 +522,44 @@ var AdminScreen = /** @class */ (function () {
                         _a.postInfoEntries = _b.sent();
                         this.isPostListFromLatest = false;
                         this.renderPostList();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.copyPostImageUrl = function (urlField, messageField) {
+            var messageBlock = document.getElementById(messageField);
+            messageBlock.style.display = "none";
+            var content = document.getElementById(urlField);
+            var selection = window.getSelection();
+            var range = document.createRange();
+            range.selectNodeContents(content);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand("copy");
+                messageBlock.style.display = "block";
+                window.setTimeout(function () { messageBlock.style.display = "none"; }.bind(_this), 3000);
+            }
+            catch (e) {
+                console.error(e);
+            }
+            selection.removeAllRanges();
+        };
+        this.deletePostImage = function (posturlFriendlyTitle, postImageKey, messageField) { return __awaiter(_this, void 0, void 0, function () {
+            var result, messageBlock;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.service.deletePostImage(posturlFriendlyTitle, postImageKey)];
+                    case 1:
+                        result = _a.sent();
+                        if (result.ok) {
+                            window.location.href = "/admin/" + posturlFriendlyTitle;
+                            return [2 /*return*/];
+                        }
+                        messageBlock = document.getElementById(messageField);
+                        messageBlock.innerText = result.status + " " + result.message;
+                        messageBlock.style.display = "block";
+                        window.setTimeout(function () { messageBlock.style.display = "none"; }.bind(this), 3000);
                         return [2 /*return*/];
                 }
             });

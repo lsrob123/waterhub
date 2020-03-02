@@ -129,6 +129,41 @@
         this.renderPostList();
     }
 
+    public copyPostImageUrl = (urlField: string, messageField: string) => {
+        const messageBlock = document.getElementById(messageField);
+        messageBlock.style.display = "none";
+
+        const content = document.getElementById(urlField);
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(content);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand("copy");
+            messageBlock.style.display = "block";
+            window.setTimeout(function () { messageBlock.style.display = "none"; }.bind(this), 3000);
+        } catch (e) {
+            console.error(e);
+        }
+        selection.removeAllRanges();
+    }
+
+    public deletePostImage =
+        async (posturlFriendlyTitle: string, postImageKey: string, messageField: string) => {
+            const result = await this.service.deletePostImage(posturlFriendlyTitle, postImageKey);
+            if (result.ok) {
+                window.location.href = `/admin/${posturlFriendlyTitle}`;
+                return;
+            }
+
+            const messageBlock = document.getElementById(messageField);
+            messageBlock.innerText = `${result.status} ${result.message}`;
+            messageBlock.style.display = "block";
+            window.setTimeout(function () { messageBlock.style.display = "none"; }.bind(this), 3000);
+        }
+
     private renderPostList() {
         this.postInfoEntriesElement.innerHTML = '';
         if (!this.postInfoEntries) return;
