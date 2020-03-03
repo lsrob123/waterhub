@@ -32,7 +32,9 @@
                     </div>
                     @if (authService.IsLoggedIn())
                     {
-                        <a asp-page="@PageDefinitions.Admin.PageName">@T.GetMap(PageDefinitions.Admin.PageTitle)</a>
+                        <div class="page-link">
+                            <a asp-page="@PageDefinitions.Admin.PageName">@T.GetMap(PageDefinitions.Admin.PageTitle)</a>
+                        </div>
                     }
                 </div>
             </div>

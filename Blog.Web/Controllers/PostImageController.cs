@@ -1,4 +1,5 @@
 ﻿using Blog.Web.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -17,6 +18,7 @@ namespace Blog.Web.Controllers
             _blogService = blogService;
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("{urlFriendlyTitle}/images/{imageKey}")]
         public IActionResult DeleteImage([FromRoute]string urlFriendlyTitle, [FromRoute]Guid imageKey)

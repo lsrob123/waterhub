@@ -74,7 +74,7 @@ namespace Blog.Web
 
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
-                //options.Conventions.AuthorizePage($"/{PageDefinitions.Admin.PageName}");
+                options.Conventions.AuthorizePage($"/{PageDefinitions.Admin.PageName}");
             }); ;
         }
     }
