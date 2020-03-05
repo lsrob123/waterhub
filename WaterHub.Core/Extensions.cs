@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 using WaterHub.Core.Abstractions;
@@ -175,21 +174,25 @@ namespace WaterHub.Core
             };
         }
 
-        public static T WithUpdateOnTimeUpdated<T>(this T entity)
-          where T : EntityBase
+        public static IWebHostBuilder UseWebHostSettings(this IWebHostBuilder webBuilder, string fileName = null)
         {
-            entity.TimeUpdated = DateTimeOffset.UtcNow;
-            return entity;
-        }
+            var rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            var filePath = string.IsNullOrWhiteSpace(fileName)
+                ? Path.Combine(rootPath, "hostsettings.json")
+                : Path.Combine(rootPath, fileName);
 
-        public static IWebHostBuilder UseWebHostSettings(this IWebHostBuilder webBuilder,
-            string fileName = Constants.WebHostSettings.DefaultSettingFile)
-        {
-            var json = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), fileName));
+            var json = File.ReadAllText(filePath);
             var settings = JsonSerializer.Deserialize<HostSettings>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             webBuilder.UseUrls(settings.Url);
             return webBuilder;
+        }
+
+        public static T WithUpdateOnTimeUpdated<T>(this T entity)
+                  where T : EntityBase
+        {
+            entity.TimeUpdated = DateTimeOffset.UtcNow;
+            return entity;
         }
     }
 }

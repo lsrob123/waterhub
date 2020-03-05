@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Hosting;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -12,7 +14,8 @@ namespace WaterHub.Core.Services
         private readonly SortedDictionary<TextMapKey, string> _maps
             = new SortedDictionary<TextMapKey, string>();
 
-        public TextMapService(IHasTextMapFilePath settings) : this(LoadFromFile(settings))
+        public TextMapService(IHostingEnvironment env, IHasTextMapFilePath settings) 
+            : this(LoadFromFile(env, settings))
         { }
 
         public TextMapService(string json)
@@ -47,9 +50,9 @@ namespace WaterHub.Core.Services
             return key;
         }
 
-        private static string LoadFromFile(IHasTextMapFilePath settings)
+        private static string LoadFromFile(IHostingEnvironment env, IHasTextMapFilePath settings)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), settings.TextMapFilePath);
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, settings.TextMapFilePath);
             if (!File.Exists(path))
                 return null;
 

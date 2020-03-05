@@ -1,8 +1,8 @@
-using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.Diagnostics;
+using System.Linq;
 using WaterHub.Core;
 
 namespace Gallery.Web
@@ -20,12 +20,12 @@ namespace Gallery.Web
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-            webBuilder.UseStartup<Startup>();
-            webBuilder.UseWebHostSettings();
-        });
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseWebHostSettings();
+                });
         }
 
-    public static void Main(string[] args)
+        public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using LiteDB;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
-using LiteDB;
 using WaterHub.Core.Abstractions;
 
 namespace WaterHub.Core.Persistence
@@ -12,7 +13,7 @@ namespace WaterHub.Core.Persistence
 
         protected LiteDbStoreBase(IHasLiteDbDatabaseName settings)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "data", settings.LiteDbDatabaseName);
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", settings.LiteDbDatabaseName);
             var folderPath = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);

@@ -2,7 +2,6 @@
 using Gallery.Web.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using WaterHub.Core.Models;
 
 namespace Gallery.Web.Config
@@ -27,7 +26,7 @@ namespace Gallery.Web.Config
 
         public string AdminHashedPassword => _configuration.GetValue<string>(nameof(AdminHashedPassword));
         public string LiteDbDatabaseName => _configuration.GetValue<string>(nameof(LiteDbDatabaseName));
-        public SerilogSettings SerilogSettings => SerilogSettings.CreateDefaultSettings(_env.IsDevelopment());
+        public SerilogSettings SerilogSettings => SerilogSettings.CreateDefaultSettings(_env);
         public string TextMapFilePath => _configuration.GetValue<string>(nameof(TextMapFilePath));
         public int UploadImageIconHeight => _configuration.GetValue<int>(nameof(UploadImageIconHeight));
         public string UploadImageRootPath => _configuration.GetValue<string>(nameof(UploadImageRootPath));

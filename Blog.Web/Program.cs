@@ -1,8 +1,8 @@
-using System.Diagnostics;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.Diagnostics;
+using System.Linq;
 using WaterHub.Core;
 
 namespace Blog.Web

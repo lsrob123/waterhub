@@ -1,6 +1,7 @@
 ﻿using Blog.Web.Abstractions;
 using Blog.Web.Models;
 using LiteDB;
+using Microsoft.Extensions.Hosting;
 using WaterHub.Core.Persistence;
 
 namespace Blog.Web.Repositories

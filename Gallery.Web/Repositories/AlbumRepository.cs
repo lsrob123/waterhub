@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Gallery.Web.Abstractions;
+﻿using Gallery.Web.Abstractions;
 using Gallery.Web.Models;
 using LiteDB;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gallery.Web.Repositories
 {

@@ -1,6 +1,7 @@
 ﻿using Gallery.Web.Abstractions;
 using Gallery.Web.Models;
 using LiteDB;
+using Microsoft.Extensions.Hosting;
 using WaterHub.Core.Persistence;
 
 namespace Gallery.Web.Repositories
@@ -12,7 +13,7 @@ namespace Gallery.Web.Repositories
             BsonMapper.Global.Entity<Album>().Id(x => x.Key);
 
             Albums = Database.GetCollection<Album>(nameof(Albums));
-            
+
             Albums.EnsureIndex(x => x.Name, true);
             Albums.EnsureIndex(x => x.TimeCreated, false);
         }
