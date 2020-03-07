@@ -1,15 +1,5 @@
 . ".\appsettings.ps1"
 
-function Publish {
-    Write-Host "Publishing to $publishFolder..."
-
-    if (Test-Path -Path $publishFolder ) { 
-        $existingFiles = $publishFolder + "\*"
-        Remove-Item -Path $existingFiles -Recurse
-    }
-    dotnet publish .\ --force -o $publishFolder
-}
-
 function Copy-Folder-Files {
     Param ([string]$source, [string]$destination)
 
@@ -36,10 +26,10 @@ function Backup-Files {
 
 function Copy-Service-Files {
     $backupTime = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
-    $backupFolder = $rootFolder + "\_backups\" + $serviceName + "\" + $backupTime+"\"
+    $backupFolder = $rootFolder + "\_backups\" + $serviceName + "\" + $backupTime + "\"
     Backup-Files -existingFileFolder $destinationFolder -backupFolder $backupFolder
-
-    Copy-Folder-Files -source $publishFolder -destination $destinationFolder
+    Copy-Folder-Files -source $publishUnzip -destination $destinationFolder
+    Remove-Item -Path $publishUnzip -Recurse
 }
 
 $serviceName = Get-Service-Name
@@ -50,9 +40,14 @@ $rootFolder = "c:\applications";
 $source = Get-Location
 $destinationFolder = $rootFolder + "\" + $serviceName
 $executablePath = $destinationFolder + "\" + $executableName
-$publishFolder = Get-Publish-Folder
 
-Publish
+$publishZip = Get-Publish-Zip
+$publishUnzip = Get-Publish-Unzip
+
+if ( Test-Path -Path $publishUnzip ) {
+    Remove-Item -Path $publishUnzip -Recurse
+}
+Expand-Archive -Path $publishZip -DestinationPath $publishUnzip
 
 If (Get-Service $serviceName -ErrorAction SilentlyContinue) {
     If ((Get-Service $serviceName).Status -eq 'Running') {

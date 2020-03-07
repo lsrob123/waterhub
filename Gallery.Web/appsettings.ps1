@@ -14,3 +14,13 @@ function Get-Publish-Folder {
     $serviceName = Get-Service-Name
     return "C:\applications\_publish_collections\" + $serviceName
 }
+
+function Get-Publish-Zip {
+    $serviceName = Get-Service-Name
+    return "C:\applications\_publish_collections\" + $serviceName + ".zip"
+}
+
+function Get-Publish-Unzip {
+    $serviceName = Get-Service-Name
+    return "C:\applications\_publish_collections\" + $serviceName + "_unzip"
+}
