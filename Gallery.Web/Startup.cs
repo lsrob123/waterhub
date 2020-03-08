@@ -74,6 +74,7 @@ namespace Gallery.Web
             });
 
             services.AddRazorPages();
+            services.AddProgressiveWebApp();
         }
     }
 }

@@ -18,6 +18,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.59" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Remove="wwwroot\js\api-call-result.ts" />
