@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 using WaterHub.Core.Services;
@@ -20,6 +20,30 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
+        public static string LogAndReturnErrorCode<T>(this ILogger<T> logger, Exception e, string message=null)
+            where T:class
+        {
+            var errorCode = Guid.NewGuid().ToString();
+            message = string.IsNullOrWhiteSpace(message) ? e.Message : message;
+            logger.LogError(exception: e, $"[{errorCode}] {message}");
+            return errorCode;
+        }
+
+        public static ProcessResult LogAndReturnProcessResult<T>(this ILogger<T> logger, Exception e, string message = null)
+            where T : class
+        {
+            var errorCode = logger.LogAndReturnErrorCode(e, message);
+            return new ProcessResult()
+                .AsError(HttpStatusCode.InternalServerError, message: message, errorCodeInLog: errorCode);
+        }
+
+        public static IServiceCollection AddSmtpService<TSettings>(this IServiceCollection services)
+            where TSettings: IHasSmtpSettings
+        {
+            services.AddSingleton<IHasSmtpSettings>(x => x.GetRequiredService<TSettings>());
+            return services;
+        }
+
         public static IServiceCollection AddWaterHubCoreServices<TSettings, THashedPasswordQuery>
             (this IServiceCollection services)
             where TSettings : IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings
