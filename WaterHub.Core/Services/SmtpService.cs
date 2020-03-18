@@ -1,18 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 
 public class SmtpService
 {
-    protected readonly SmtpSettings Settings;
     protected readonly ILogger<SmtpService> Logger;
+    protected readonly SmtpSettings Settings;
 
     public SmtpService(IHasSmtpSettings hasSmtpSettings, ILogger<SmtpService> logger)
     {
@@ -29,34 +30,45 @@ public class SmtpService
             new InternetAddress[] { new MailboxAddress(from.Name, from.Address) },
             to.Select(x => new MailboxAddress(x.Name, x.Address)),
             subject)
+        {
+            Body = new TextPart(isHtml ? TextFormat.Html : TextFormat.Plain)
             {
-                Body = new TextPart(isHtml ? TextFormat.Html : TextFormat.Plain)
-                {
-                    Text = body
-                }
+                Text = body
             }
+        }
         ).ToList();
 
         var exceptions = new List<Exception>();
-        using (var client = new SmtpClient())
+
+        using var client = new SmtpClient();
+        try
         {
-            try
+            client.Connect(Settings.Host, Settings.Port, SecureSocketOptions.SslOnConnect);
+
+            client.Authenticate(Settings.Username, Settings.Password);
+
+            foreach (var message in messages)
             {
-                client.Connect(Settings.Host, Settings.Port, SecureSocketOptions.SslOnConnect);
-
-                client.Authenticate(Settings.Username, Settings.Password);
-
-                foreach (var message in messages)
+                try
                 {
                     client.Send(message);
                 }
+                catch (Exception individualSendException)
+                {
+                    exceptions.Add(individualSendException);
+                }
+            }
 
-                client.Disconnect(true);
-            }
-            catch (Exception upperLevelException)
-            {
-                Logger.LogError(exception)
-            }
+            client.Disconnect(true);
+
+            if (!exceptions.Any())
+                return new ProcessResult().AsOk();
+
+            return Logger.LogAndReturnProcessResult(new AggregateException(exceptions));
+        }
+        catch (Exception exception)
+        {
+            return Logger.LogAndReturnProcessResult(exception);
         }
     }
 }
