@@ -26,6 +26,7 @@ button {
 
     button:hover {
         background: #26734d;
+        color: orange;
     }
 
     input {
@@ -112,7 +113,7 @@ button {
         }
 
             .header .page-links a:hover {
-                color: orangered;
+                color: orange;
             }
 
 @media only screen and (min-width: 940px) {

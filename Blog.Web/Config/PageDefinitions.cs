@@ -17,9 +17,14 @@
             public const string PageName = nameof(Posts), PageTitle = nameof(Posts), Context = nameof(Posts);
         }
 
-        public static class Sponsors
+        public static class Businesses
         {
-            public const string PageName = nameof(Sponsors), PageTitle = nameof(Sponsors), Context = nameof(Sponsors);
+            public const string PageName = nameof(Businesses), PageTitle = nameof(Businesses), Context = nameof(Businesses);
+        }
+
+        public static class Products
+        {
+            public const string PageName = nameof(Products), PageTitle = nameof(Products), Context = nameof(Products);
         }
     }
 }

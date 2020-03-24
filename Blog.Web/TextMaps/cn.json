@@ -49,8 +49,13 @@
     "context": "posts"
   },
   {
-    "key": "Sponsors",
-    "value": "商业推广",
-    "context": "Sponsors"
+    "key": "Businesses",
+    "value": "商业机会",
+    "context": "Businesses"
+  },
+  {
+    "key": "Products",
+    "value": "精品分享",
+    "context": "Products"
   }
 ]

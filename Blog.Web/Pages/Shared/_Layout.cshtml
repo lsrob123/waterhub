@@ -29,7 +29,10 @@
                         <a href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
                     </div>
                     <div class="page-link">
-                        <a asp-page="@PageDefinitions.Sponsors.PageName">@T.GetMap(PageDefinitions.Sponsors.PageTitle, PageDefinitions.Sponsors.Context)</a>
+                        <a asp-page="@PageDefinitions.Products.PageName">@T.GetMap(PageDefinitions.Products.PageTitle, PageDefinitions.Products.Context)</a>
+                    </div>
+                    <div class="page-link">
+                        <a asp-page="@PageDefinitions.Businesses.PageName">@T.GetMap(PageDefinitions.Businesses.PageTitle, PageDefinitions.Businesses.Context)</a>
                     </div>
                     @if (authService.IsLoggedIn())
                     {
