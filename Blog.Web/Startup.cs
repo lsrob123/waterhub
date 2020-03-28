@@ -55,6 +55,7 @@ namespace Blog.Web
             services.AddSingleton<ISettings, Settings>();
             services.AddSingleton<IBlogRepository, BlogRepository>();
             services.AddWaterHubCoreServices<ISettings, IBlogRepository>();
+            services.AddSmtpService<ISettings>();
             services.AddSingleton<IBlogService, BlogService>();
 
             services.AddAuthentication(options =>

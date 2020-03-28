@@ -24,6 +24,7 @@ namespace WaterHub.Core
             where TSettings : IHasSmtpSettings
         {
             services.AddSingleton<IHasSmtpSettings>(x => x.GetRequiredService<TSettings>());
+            services.AddSingleton<ISmtpService, SmtpService>();
             return services;
         }
 
@@ -141,8 +142,9 @@ namespace WaterHub.Core
         }
 
         public static string LogAndReturnErrorCode<T>(this ILogger<T> logger, Exception e, string message = null)
-                                                                                                                    where T : class
+            where T : class
         {
+            message ??= e.Message;
             var errorCode = Guid.NewGuid().ToString();
             message = string.IsNullOrWhiteSpace(message) ? e.Message : message;
             logger.LogError(exception: e, $"[{errorCode}] {message}");
@@ -152,6 +154,7 @@ namespace WaterHub.Core
         public static ProcessResult LogAndReturnProcessResult<T>(this ILogger<T> logger, Exception e, string message = null)
             where T : class
         {
+            message ??= e.Message;
             var errorCode = logger.LogAndReturnErrorCode(e, message);
             return new ProcessResult()
                 .AsError(HttpStatusCode.InternalServerError, message: message, errorCodeInLog: errorCode);

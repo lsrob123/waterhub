@@ -10,10 +10,15 @@
 
         }
 
-        public EmailContact(string name, string address = null)
+        public EmailContact(string address, string name = null)
         {
             Name = name;
             Address = address;
         }
+
+        public static implicit operator EmailContact(string address)
+        {
+            return new EmailContact(address);
+        }  
     }
 }

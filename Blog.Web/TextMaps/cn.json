@@ -1,7 +1,11 @@
 ﻿[
   {
-    "key": "Health Note",
-    "value": "健康笔记"
+    "key": "Health Findings",
+    "value": "健康新发现"
+  },
+  {
+    "key": "Submit",
+    "value":  "提交"
   },
   {
     "key": "Home",

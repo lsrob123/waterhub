@@ -6,11 +6,12 @@ using MimeKit.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 using WaterHub.Core.Models;
 
-public class SmtpService
+public class SmtpService : ISmtpService
 {
     protected readonly ILogger<SmtpService> Logger;
     protected readonly SmtpSettings Settings;
@@ -21,8 +22,8 @@ public class SmtpService
         Logger = logger;
     }
 
-    public virtual ProcessResult SendMessages(EmailContact from, IEnumerable<EmailContact> to, string subject, string body,
-        bool isHtml = false)
+    public virtual async Task<ProcessResult> SendMessagesAsync
+        (EmailContact from, IEnumerable<EmailContact> to, string subject, string body, bool isHtml = false)
     {
         //var receipients=to.Select()
 
@@ -51,7 +52,7 @@ public class SmtpService
             {
                 try
                 {
-                    client.Send(message);
+                    await client.SendAsync(message);
                 }
                 catch (Exception individualSendException)
                 {
@@ -64,11 +65,16 @@ public class SmtpService
             if (!exceptions.Any())
                 return new ProcessResult().AsOk();
 
-            return Logger.LogAndReturnProcessResult(new AggregateException(exceptions));
+            return Logger.LogAndReturnProcessResult(new AggregateException(exceptions), "Failed to send to individual recipients");
         }
         catch (Exception exception)
         {
-            return Logger.LogAndReturnProcessResult(exception);
+            return Logger.LogAndReturnProcessResult(exception, "Failed to send message");
         }
+    }
+
+    public Task<ProcessResult> SendMessagesAsync(EmailContact from, EmailContact to, string subject, string body, bool isHtml = false)
+    {
+        return SendMessagesAsync(from, new EmailContact[] { to }, subject, body, isHtml);
     }
 }

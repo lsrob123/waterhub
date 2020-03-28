@@ -4,5 +4,29 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Businesses.PageTitle, PageDefinitions.Businesses.Context);
 }
 
-    <h1>Businesses</h1>
+<div class="biz-form">
+    <div class="biz-form-group">
+        <h2>咨询 Vasayo 直销网络</h2>
+        <form method="post">
+            <div class="biz-form-row">
+                您的邮件地址
+                <input type="email" required="required" asp-for="VasayoForm.Email" />
+            </div>
+            <div class="biz-form-row">
+                希望我们了解的更多信息
+                <div>
+                    <textarea asp-for="VasayoForm.MoreInfo" rows="4"></textarea>
+                </div>
+            </div>
+            <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
+            @if (Model.HasVasayoFormErrorMessage)
+            {
+                <div class="biz-form-row red">
+                    @Model.VasayoFormErrorMessage
+                </div>
+            }
+        </form>
+    </div>
+    <div class="biz-form-group"></div>
+</div>
 

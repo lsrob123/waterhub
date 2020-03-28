@@ -1,0 +1,22 @@
+﻿.biz-form {
+}
+
+    .biz-form .biz-form-group {
+        display: block;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+        .biz-form .biz-form-group .biz-form-row {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+            .biz-form .biz-form-group .biz-form-row input {
+                display: block;
+            }
+
+            .biz-form .biz-form-group .biz-form-row button {
+                display: block;
+            }

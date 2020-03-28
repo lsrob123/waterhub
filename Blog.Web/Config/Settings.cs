@@ -30,5 +30,11 @@ namespace Blog.Web.Config
         public string UploadImageRootPath => _configuration.GetValue<string>(nameof(UploadImageRootPath));
 
         public int ThumbHeight => _configuration.GetValue<int>(nameof(ThumbHeight));
+
+        public string VasayoEmailAddress => _configuration.GetValue<string>(nameof(VasayoEmailAddress));
+
+        public string SupportEmailAddress => _configuration.GetValue<string>(nameof(SupportEmailAddress));
+
+        public SmtpSettings SmtpSettings => _configuration.GetValue<SmtpSettings>(nameof(SmtpSettings));
     }
 }
