@@ -4,25 +4,27 @@ using System.Text.Json.Serialization;
 
 namespace Blog.Web.Models
 {
-    public class VasayoForm
+    public class ContactForm
     {
         [Required]
         public string Email { get; set; }
-        public string MoreInfo { get; set; }
+        [Required]
+        public string Subject { get; set; }
+        [Required]
+        public string Body { get; set; }
         public string ErrorMessage { get; set; }
 
         [JsonIgnore]
         public bool HasErrorMessage => !string.IsNullOrWhiteSpace(ErrorMessage);
 
-        public static implicit operator VasayoForm(string json)
+        public static implicit operator ContactForm(string json)
         {
-            return JsonSerializer.Deserialize<VasayoForm>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return JsonSerializer.Deserialize<ContactForm>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public static implicit operator string(VasayoForm form)
+        public static implicit operator string(ContactForm form)
         {
             return JsonSerializer.Serialize(form);
         }
-
     }
 }

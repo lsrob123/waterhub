@@ -45,6 +45,8 @@ namespace WaterHub.Core
             services.AddSingleton<IImageProcessService, ImageProcessService>();
             services.AddSingleton<IAuthService, AuthService>();
 
+            services.AddScoped<ISiteMapService, SiteMapService>();
+
             var settings = services.BuildServiceProvider().GetRequiredService<TSettings>();
             Log.Logger = new LoggerConfiguration()
                          .Enrich.FromLogContext()

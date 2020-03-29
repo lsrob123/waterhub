@@ -3,20 +3,21 @@
 
     .biz-form .biz-form-group {
         display: block;
-        padding: 10px;
+        padding: 0 10px 10px 10px;
         margin-bottom: 10px;
     }
 
         .biz-form .biz-form-group .biz-form-row {
             display: block;
-            padding: 10px;
             margin-bottom: 10px;
         }
 
             .biz-form .biz-form-group .biz-form-row input {
                 display: block;
+                width: 100%;
             }
 
-            .biz-form .biz-form-group .biz-form-row button {
+            .biz-form .biz-form-group .biz-form-row textarea {
                 display: block;
+                width: 100%;
             }

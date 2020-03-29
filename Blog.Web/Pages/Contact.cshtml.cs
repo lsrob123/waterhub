@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WaterHub.Core.Abstractions;
 
-namespace Blog.Web
+namespace Blog.Web.Pages
 {
-    public class BusinessesModel : BlodPageModelBase<BusinessesModel>
+    public class ContactModel : BlodPageModelBase<ContactModel>
     {
         private readonly ISettings _settings;
         private readonly ISmtpService _smtpService;
 
-        public BusinessesModel(ILogger<BusinessesModel> logger, IAuthService authService, ITextMapService textMapService,
+        public ContactModel(ILogger<ContactModel> logger, IAuthService authService, ITextMapService textMapService,
             ISettings settings, ISmtpService smtpService)
         : base(logger, authService, textMapService)
         {
@@ -26,28 +26,31 @@ namespace Blog.Web
         public override string PageTitle => PageDefinitions.Businesses.PageTitle;
 
         [BindProperty]
-        public VasayoForm VasayoForm { get; set; }
+        public ContactForm ContactForm { get; set; }
 
         [TempData]
         public string LastSubmittedFormJson { get; set; }
 
         public void OnGet()
         {
-            VasayoForm = LastSubmittedFormJson ?? new VasayoForm();
+            ContactForm = LastSubmittedFormJson ?? new ContactForm();
         }
 
-        public async Task<IActionResult> OnPostVasayoFormAsync()
+        public async Task<IActionResult> OnPostContactFormAsync()
         {
             var result = await _smtpService.SendMessagesAsync
-                (VasayoForm.Email, _settings.VasayoEmailAddress, "Vasayo Form", VasayoForm.MoreInfo);
+                (ContactForm.Email, _settings.SupportEmailAddress, ContactForm.Subject, ContactForm.Body);
 
             if (result.HasErrors)
-                VasayoForm.ErrorMessage = result.ErrorMessage;
+                ContactForm.ErrorMessage = result.ErrorMessage;
 
             if (result.IsOk)
-                VasayoForm.MoreInfo = null;
+            {
+                ContactForm.Subject = null;
+                ContactForm.Body = null;
+            }
 
-            LastSubmittedFormJson = VasayoForm;
+            LastSubmittedFormJson = ContactForm;
 
             return RedirectToPage();
         }

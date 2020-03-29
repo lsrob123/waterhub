@@ -1,0 +1,45 @@
+﻿@page
+@model ContactModel
+@{
+    ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Contact.PageTitle, PageDefinitions.Contact.Context);
+}
+
+<div class="contact-form">
+    <div class="contact-form-group">
+        <h3>所有频道和关联网站</h3>
+        <div class="contact-socials">
+            <div class="contact-social-item">
+                <div><img class="social-logo" src="~/images/qr-health-findings.svg" /></div>
+                <div>
+                    <a href="/">@T.GetMap("Health Findings")</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contact-form-group">
+        <h3>发信息给我们</h3>
+        <form method="post">
+            <div class="contact-form-row">
+                您的邮件地址
+                <input type="email" required="required" asp-for="ContactForm.Email" />
+            </div>
+            <div class="contact-form-row">
+                主题
+                <input type="text" required="required" asp-for="ContactForm.Subject" />
+            </div>
+            <div class="contact-form-row">
+                内容
+                <textarea asp-for="ContactForm.Body" rows="10"></textarea>
+            </div>
+            <div class="contact-form-row">
+                <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
+            </div>
+            @if (Model.ContactForm.HasErrorMessage)
+            {
+                <div class="contact-form-row red">
+                    @Model.ContactForm.ErrorMessage
+                </div>
+            }
+        </form>
+    </div>
+</div>

@@ -4,6 +4,10 @@
     "value": "健康新发现"
   },
   {
+    "key": "SiteMap",
+    "value": "网站地图"
+  },
+  {
     "key": "Submit",
     "value":  "提交"
   },
@@ -61,5 +65,10 @@
     "key": "Products",
     "value": "精品分享",
     "context": "Products"
+  },
+  {
+    "key": "Contact",
+    "value": "联络我们",
+    "context": "Contact"
   }
 ]

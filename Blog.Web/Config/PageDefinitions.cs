@@ -7,6 +7,11 @@
             public const string PageName = "Index", PageTitle = nameof(Home);
         }
 
+        public static class SiteMap
+        {
+            public const string PageName = nameof(SiteMap), PageTitle = nameof(SiteMap);
+        }
+
         public static class Admin
         {
             public const string PageName = nameof(Admin), PageTitle = nameof(Admin);
@@ -25,6 +30,11 @@
         public static class Products
         {
             public const string PageName = nameof(Products), PageTitle = nameof(Products), Context = nameof(Products);
+        }
+
+        public static class Contact
+        {
+            public const string PageName = nameof(Contact), PageTitle = nameof(Contact), Context = nameof(Contact);
         }
     }
 }
