@@ -102,13 +102,8 @@
         .post-info-entry-card .post-info-area .open-links a {
             display: inline-block;
             margin-right: 10px;
-            color: wheat;
             text-decoration: none;
         }
-
-            .post-info-entry-card .post-info-area .open-links a:hover {
-                color: orangered;
-            }
 
     .post-info-entry-card .post-info-area .post-content-collapse {
         min-height: 15px;

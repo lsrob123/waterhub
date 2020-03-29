@@ -11,8 +11,14 @@ h3 {
 }
 
 a {
+    text-decoration: none;
     color: darkgreen;
 }
+
+    a:hover {
+        text-decoration: underline;
+        color: #FF7500;
+    }
 
 button {
     display: inline-block;
@@ -30,7 +36,7 @@ button {
 
     button:hover {
         background: #26734d;
-        color: orange;
+        color: #FF7500;
     }
 
 input {
@@ -121,7 +127,7 @@ textarea {
         }
 
             .header .page-links a:hover {
-                color: orange;
+                color: #FF7500;
             }
 
 @media only screen and (min-width: 940px) {
