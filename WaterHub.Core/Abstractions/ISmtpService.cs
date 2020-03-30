@@ -7,9 +7,9 @@ namespace WaterHub.Core.Abstractions
     public interface ISmtpService
     {
         Task<ProcessResult> SendMessagesAsync
-            (EmailContact from, IEnumerable<EmailContact> to, string subject, string body, bool isHtml = false);
+            (EmailAccount from, IEnumerable<EmailAccount> to, string subject, string body, bool isHtml = false);
 
         Task<ProcessResult> SendMessagesAsync
-            (EmailContact from, EmailContact to, string subject, string body, bool isHtml = false);
+            (EmailAccount from, EmailAccount to, string subject, string body, bool isHtml = false);
     }
 }

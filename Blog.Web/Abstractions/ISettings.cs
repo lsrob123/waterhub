@@ -1,4 +1,5 @@
 ﻿using WaterHub.Core.Abstractions;
+using WaterHub.Core.Models;
 
 namespace Blog.Web.Abstractions
 {
@@ -9,7 +10,7 @@ namespace Blog.Web.Abstractions
         int PostsFromSearchCount { get; }
         string UploadImageRootPath { get; }
         int ThumbHeight { get; }
-        string VasayoEmailAddress { get; }
-        string SupportEmailAddress { get; }
+        EmailAccount VasayoEmailAccount { get; }
+        EmailAccount SupportEmailAccount { get; }
     }
 }

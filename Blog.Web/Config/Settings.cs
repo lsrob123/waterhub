@@ -1,6 +1,7 @@
 ﻿using Blog.Web.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using WaterHub.Core;
 using WaterHub.Core.Models;
 
 namespace Blog.Web.Config
@@ -17,6 +18,7 @@ namespace Blog.Web.Config
         }
 
         public string AdminHashedPassword => _configuration.GetValue<string>(nameof(AdminHashedPassword));
+
         public string LiteDbDatabaseName => _configuration.GetValue<string>(nameof(LiteDbDatabaseName));
 
         public SerilogSettings SerilogSettings => SerilogSettings.CreateDefaultSettings(_env);
@@ -31,10 +33,10 @@ namespace Blog.Web.Config
 
         public int ThumbHeight => _configuration.GetValue<int>(nameof(ThumbHeight));
 
-        public string VasayoEmailAddress => _configuration.GetValue<string>(nameof(VasayoEmailAddress));
+        public EmailAccount VasayoEmailAccount => _configuration.GetObject<EmailAccount>(nameof(VasayoEmailAccount));
 
-        public string SupportEmailAddress => _configuration.GetValue<string>(nameof(SupportEmailAddress));
+        public EmailAccount SupportEmailAccount => _configuration.GetObject<EmailAccount>(nameof(SupportEmailAccount));
 
-        public SmtpSettings SmtpSettings => _configuration.GetValue<SmtpSettings>(nameof(SmtpSettings));
+        public SmtpSettings SmtpSettings => _configuration.GetObject<SmtpSettings>(nameof(SmtpSettings));
     }
 }

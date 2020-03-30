@@ -39,13 +39,18 @@ namespace Blog.Web
         public async Task<IActionResult> OnPostVasayoFormAsync()
         {
             var result = await _smtpService.SendMessagesAsync
-                (VasayoForm.Email, _settings.VasayoEmailAddress, "Vasayo Form", VasayoForm.MoreInfo);
+                (VasayoForm.Email, _settings.VasayoEmailAccount, "Vasayo Form", VasayoForm.MoreInfo);
 
             if (result.HasErrors)
+            {
                 VasayoForm.ErrorMessage = result.ErrorMessage;
+            }
 
             if (result.IsOk)
+            {
                 VasayoForm.MoreInfo = null;
+                VasayoForm.HadSuccessfulSend = true;
+            }
 
             LastSubmittedFormJson = VasayoForm;
 

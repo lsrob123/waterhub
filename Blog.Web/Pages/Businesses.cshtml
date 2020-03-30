@@ -28,6 +28,12 @@
                     @Model.VasayoForm.ErrorMessage
                 </div>
             }
+            @if (Model.VasayoForm.HadSuccessfulSend)
+            {
+                <div class="biz-form-row">
+                    成功送出！
+                </div>
+            }
         </form>
     </div>
 </div>

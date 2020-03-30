@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,11 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
+        public static T GetObject<T>(this IConfiguration configuration, string sectionName)
+        {
+            return configuration.GetSection(sectionName).Get<T>();
+        }
+
         public static IServiceCollection AddSmtpService<TSettings>(this IServiceCollection services)
             where TSettings : IHasSmtpSettings
         {
@@ -143,23 +149,23 @@ namespace WaterHub.Core
             return userModel?.IsAdmin == true;
         }
 
-        public static string LogAndReturnErrorCode<T>(this ILogger<T> logger, Exception e, string message = null)
+        public static string LogAndReturnErrorCode<T>(this ILogger<T> logger, Exception e, string displayMessage = null)
             where T : class
         {
-            message ??= e.Message;
+            displayMessage ??= e.Message;
             var errorCode = Guid.NewGuid().ToString();
-            message = string.IsNullOrWhiteSpace(message) ? e.Message : message;
-            logger.LogError(exception: e, $"[{errorCode}] {message}");
+            displayMessage = string.IsNullOrWhiteSpace(displayMessage) ? e.Message : displayMessage;
+            logger.LogError(exception: e, $"[{errorCode}] {displayMessage}");
             return errorCode;
         }
 
-        public static ProcessResult LogAndReturnProcessResult<T>(this ILogger<T> logger, Exception e, string message = null)
+        public static ProcessResult LogAndReturnProcessResult<T>(this ILogger<T> logger, Exception e, string displayMessage = null)
             where T : class
         {
-            message ??= e.Message;
-            var errorCode = logger.LogAndReturnErrorCode(e, message);
+            displayMessage ??= e.Message;
+            var errorCode = logger.LogAndReturnErrorCode(e, displayMessage);
             return new ProcessResult()
-                .AsError(HttpStatusCode.InternalServerError, message: message, errorCodeInLog: errorCode);
+                .AsError(HttpStatusCode.InternalServerError, message: displayMessage, errorCodeInLog: errorCode);
         }
 
         public static ClaimsPrincipal ToClaimsPrincipal<TUserModel>(this TUserModel user, string authenticationScheme)

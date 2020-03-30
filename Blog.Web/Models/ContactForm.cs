@@ -1,21 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Blog.Web.Abstractions;
 
 namespace Blog.Web.Models
 {
-    public class ContactForm
+    public class ContactForm : FormBase
     {
-        [Required]
-        public string Email { get; set; }
         [Required]
         public string Subject { get; set; }
         [Required]
         public string Body { get; set; }
-        public string ErrorMessage { get; set; }
-
-        [JsonIgnore]
-        public bool HasErrorMessage => !string.IsNullOrWhiteSpace(ErrorMessage);
 
         public static implicit operator ContactForm(string json)
         {

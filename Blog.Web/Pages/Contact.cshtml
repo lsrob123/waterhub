@@ -32,7 +32,7 @@
                 <textarea asp-for="ContactForm.Body" rows="10"></textarea>
             </div>
             <div class="contact-form-row">
-                <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
+                <button asp-page-handler="ContactForm">@T.GetMap("Submit")</button>
             </div>
             @if (Model.ContactForm.HasErrorMessage)
             {
@@ -40,6 +40,13 @@
                     @Model.ContactForm.ErrorMessage
                 </div>
             }
+            @if (Model.ContactForm.HadSuccessfulSend)
+            {
+                <div class="biz-form-row">
+                    成功送出！
+                </div>
+            }
+
         </form>
     </div>
 </div>

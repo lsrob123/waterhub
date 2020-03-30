@@ -39,15 +39,18 @@ namespace Blog.Web.Pages
         public async Task<IActionResult> OnPostContactFormAsync()
         {
             var result = await _smtpService.SendMessagesAsync
-                (ContactForm.Email, _settings.SupportEmailAddress, ContactForm.Subject, ContactForm.Body);
+                (ContactForm.Email, _settings.SupportEmailAccount, ContactForm.Subject, ContactForm.Body);
 
             if (result.HasErrors)
+            {
                 ContactForm.ErrorMessage = result.ErrorMessage;
+            }
 
             if (result.IsOk)
             {
                 ContactForm.Subject = null;
                 ContactForm.Body = null;
+                ContactForm.HadSuccessfulSend = true;
             }
 
             LastSubmittedFormJson = ContactForm;
