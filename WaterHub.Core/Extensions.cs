@@ -21,6 +21,11 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
+        public static bool IsChecked(this HttpRequest request, string checkboxName)
+        {
+            return request.Form[checkboxName].Any(x => x.Equals("on", StringComparison.OrdinalIgnoreCase));
+        }
+
         public static T GetObject<T>(this IConfiguration configuration, string sectionName)
         {
             return configuration.GetSection(sectionName).Get<T>();

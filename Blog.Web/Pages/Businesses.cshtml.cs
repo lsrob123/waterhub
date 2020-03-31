@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 
 namespace Blog.Web
@@ -38,6 +41,13 @@ namespace Blog.Web
 
         public async Task<IActionResult> OnPostVasayoFormAsync()
         {
+            if (!Request.IsChecked("IsHumanInput"))
+            {
+                VasayoForm.ErrorMessage = "请点击确认无误";
+                LastSubmittedFormJson = VasayoForm;
+                return RedirectToPage();
+            }
+
             var result = await _smtpService.SendMessagesAsync
                 (VasayoForm.Email, _settings.VasayoEmailAccount, "Vasayo Form", VasayoForm.MoreInfo);
 

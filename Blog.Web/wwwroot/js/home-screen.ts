@@ -1,6 +1,5 @@
 ﻿class HomeScreen {
     private readonly service: Service;
-    private readonly me = this;
 
     constructor(service: Service) {
         this.service = service;

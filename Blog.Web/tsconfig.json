@@ -16,8 +16,11 @@
   "compileOnSave": true,
   "files": [
     "wwwroot/js/models.ts",
+    "wwwroot/js/constants.ts",
     "wwwroot/js/service.ts",
     "wwwroot/js/home-screen.ts",
+    "wwwroot/js/businesses-screen.ts",
+    "wwwroot/js/contact-screen.ts",
     "wwwroot/js/admin-screen.ts",
     "wwwroot/js/app.ts"
   ],

@@ -13,11 +13,14 @@
         <form method="post">
             <div class="biz-form-row">
                 您的邮件地址
-                <input type="email" required="required" asp-for="VasayoForm.Email" />
+                <input class="input-newline" type="email" required="required" asp-for="VasayoForm.Email" />
             </div>
             <div class="biz-form-row">
                 您的更多想法
                 <textarea asp-for="VasayoForm.MoreInfo" rows="4"></textarea>
+            </div>
+            <div id="c-businesses">
+               
             </div>
             <div class="biz-form-row">
                 <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>

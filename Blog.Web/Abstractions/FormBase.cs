@@ -17,5 +17,7 @@ namespace Blog.Web.Abstractions
         public bool HasErrorMessage => !string.IsNullOrWhiteSpace(ErrorMessage);
 
         public bool HadSuccessfulSend { get; set; }
+
+        public bool IsHumanInput { get; set; }
     }
 }

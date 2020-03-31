@@ -21,15 +21,18 @@
         <form method="post">
             <div class="contact-form-row">
                 您的邮件地址
-                <input type="email" required="required" asp-for="ContactForm.Email" />
+                <input class="input-newline" type="email" required="required" asp-for="ContactForm.Email" />
             </div>
             <div class="contact-form-row">
                 主题
-                <input type="text" required="required" asp-for="ContactForm.Subject" />
+                <input class="input-newline" type="text" required="required" asp-for="ContactForm.Subject" />
             </div>
             <div class="contact-form-row">
                 内容
                 <textarea asp-for="ContactForm.Body" rows="10"></textarea>
+            </div>
+            <div id="c-contact">
+
             </div>
             <div class="contact-form-row">
                 <button asp-page-handler="ContactForm">@T.GetMap("Submit")</button>

@@ -9,4 +9,7 @@ window.onload = () => {
     if (!!adminScreenEditorElement) {
         adminScreen.init(new Jodit(adminScreenEditorElement));
     }
+
+    businessesScreen.init();
+    contactScreen.init();
 }

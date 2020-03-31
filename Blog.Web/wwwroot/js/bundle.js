@@ -80,6 +80,13 @@ var PostImage = /** @class */ (function () {
     }
     return PostImage;
 }());
+var Constants = /** @class */ (function () {
+    function Constants() {
+    }
+    Constants.captachaBusinesses = '<div class="biz-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
+    Constants.captachaContact = '<div class="contact-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
+    return Constants;
+}());
 /// <reference path="models.ts"/>
 var Service = /** @class */ (function () {
     function Service() {
@@ -246,7 +253,6 @@ var Service = /** @class */ (function () {
 }());
 var HomeScreen = /** @class */ (function () {
     function HomeScreen(service) {
-        this.me = this;
         this.searchBoxDebounceId = null;
         this.isSearchBoxFocused = false;
         this.service = service;
@@ -398,6 +404,51 @@ var HomeScreen = /** @class */ (function () {
         this.modalPostContent.innerHTML = null;
     };
     return HomeScreen;
+}());
+/// <reference path="constants.ts"/>
+var BusinessesScreen = /** @class */ (function () {
+    function BusinessesScreen(service) {
+        this.service = service;
+        this.setCaptchaBox = this.setCaptchaBox.bind(this);
+    }
+    Object.defineProperty(BusinessesScreen.prototype, "captchaBox", {
+        get: function () {
+            return document.getElementById('c-businesses');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BusinessesScreen.prototype.setCaptchaBox = function () {
+        this.captchaBox.innerHTML = Constants.captachaBusinesses;
+    };
+    BusinessesScreen.prototype.init = function () {
+        if (!this.captchaBox)
+            return;
+        window.setTimeout(this.setCaptchaBox, 500);
+    };
+    return BusinessesScreen;
+}());
+var ContactScreen = /** @class */ (function () {
+    function ContactScreen(service) {
+        this.service = service;
+        this.setCaptchaBox = this.setCaptchaBox.bind(this);
+    }
+    Object.defineProperty(ContactScreen.prototype, "captchaBox", {
+        get: function () {
+            return document.getElementById('c-contact');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ContactScreen.prototype.setCaptchaBox = function () {
+        this.captchaBox.innerHTML = Constants.captachaContact;
+    };
+    ContactScreen.prototype.init = function () {
+        if (!this.captchaBox)
+            return;
+        window.setTimeout(this.setCaptchaBox, 500);
+    };
+    return ContactScreen;
 }());
 var AdminScreen = /** @class */ (function () {
     function AdminScreen(service) {
@@ -650,8 +701,12 @@ var AdminScreen = /** @class */ (function () {
 }());
 /// <reference path="service.ts"/>
 /// <reference path="home-screen.ts"/>
+/// <reference path="businesses-screen.ts"/>
+/// <reference path="contact-screen.ts"/>
 /// <reference path="admin-screen.ts"/>
 var service = new Service();
 var homeScreen = new HomeScreen(service);
 var adminScreen = new AdminScreen(service);
+var businessesScreen = new BusinessesScreen(service);
+var contactScreen = new ContactScreen(service);
 //# sourceMappingURL=bundle.js.map

@@ -4,6 +4,7 @@ using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 
 namespace Blog.Web.Pages
@@ -38,6 +39,13 @@ namespace Blog.Web.Pages
 
         public async Task<IActionResult> OnPostContactFormAsync()
         {
+            if (!Request.IsChecked("IsHumanInput"))
+            {
+                ContactForm.ErrorMessage = "请点击确认无误";
+                LastSubmittedFormJson = ContactForm;
+                return RedirectToPage();
+            }
+
             var result = await _smtpService.SendMessagesAsync
                 (ContactForm.Email, _settings.SupportEmailAccount, ContactForm.Subject, ContactForm.Body);
 

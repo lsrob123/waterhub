@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <None Include="bundleconfig.json" />
+    <None Include="wwwroot\js\businesses-screen.ts" />
+    <None Include="wwwroot\js\contact-screen.ts" />
+    <None Include="wwwroot\js\constants.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,5 +46,10 @@
     <None Update="uninstall.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Remove="wwwroot\js\businesses.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\contact-screen.ts" />
+    <TypeScriptCompile Remove="wwwroot\js\constants.ts" />
   </ItemGroup>
 </Project>
