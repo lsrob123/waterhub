@@ -20,7 +20,7 @@ namespace Blog.Web.Models
         public bool HasTags => Tags != null && Tags.Any();
         public bool IsPublished { get; set; } = true;
         public bool IsSticky { get; set; }
-        public string MonthCreated => $"{TimeCreated:yyyy.MM}";
+        public string MonthCreated => $"{TimeCreated:yyyy.MM}.";
         public ICollection<string> Tags { get; set; }
 
         public string TagsInText => JsonSerializer.Serialize(

@@ -47,7 +47,10 @@
                 <div class="form-row">
                     <button onclick="adminScreen.createPost()">Create New Post</button>
                 </div>
-                <div class="form-row"><lable>Published <input type="checkbox" asp-for="PostInEdit.IsPublished" /></lable></div>
+                <div class="form-row">
+                    <label><input class="checkbox" type="checkbox" asp-for="PostInEdit.IsPublished" />Published</label> &nbsp;
+                    <label><input class="checkbox" type="checkbox" asp-for="PostInEdit.IsSticky" />Sticky</label>
+                </div>
                 <div class="form-row">Title <input type="text" size="100" asp-for="PostInEdit.Title" /></div>
                 <div class="form-row">
                     <div class="tag-line-element">
@@ -79,7 +82,7 @@
                 <div class="form-row black">
                     <textarea id="post-eidtor-content" name="post-eidtor-content"></textarea>
                 </div>
-                <div class="form-row"><lable>Sticky <input type="checkbox" asp-for="PostInEdit.IsSticky" /></lable></div>
+                <div class="form-row"></div>
                 <div class="form-row">
                     <button onclick="adminScreen.upsertPost()">@Model.SubmitButtonText</button>
                 </div>

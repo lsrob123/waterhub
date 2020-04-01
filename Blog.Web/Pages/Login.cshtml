@@ -16,7 +16,7 @@
 
     @if (Model.IsLoggedIn)
     {
-        <span>You are logged in as @Model.UserName</span>
+        <div class="form-row">You are logged in as @Model.UserName</div>
         <div class="top-gap">
             <form method="post">
                 <button asp-page-handler="Logout">@Model.LogOut</button>

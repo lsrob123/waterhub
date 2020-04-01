@@ -24,17 +24,6 @@
             border-radius: 2px;
         }
 
-        .biz-form .biz-form-group .biz-form-row .checkbox {
-            position: relative;
-            top: 4px;
-            width: 30px;
-            cursor: pointer;
-        }
-
-        .biz-form .biz-form-group .biz-form-row label{
-            cursor:pointer;
-        }
-
         .biz-form .biz-form-group .biz-form-row textarea {
             display: block;
             width: 100%;

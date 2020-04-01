@@ -20,8 +20,8 @@
 }
 
 .post-info-entry-card .date-area {
-    background-color: #26734d;
-    background: linear-gradient(178deg, #26734d 0%, #26734d 50%, #339966 100%);
+    background-color: #24375b;
+    background: linear-gradient(178deg, #24375b 0%, #2c426d 50%, #3a5792 100%);
     color: white;
     font-size: 20px;
     width: 80px;
@@ -43,7 +43,7 @@
 
 @media only screen and (max-width: 500px) {
     .post-info-entry-card .date-area {
-        background-color: #26734d;
+        background-color: #24375b;
         color: white;
         font-size: 20px;
         display: flex;
@@ -52,7 +52,7 @@
         align-items: center;
         align-content: start;
         width: 100%;
-        background: linear-gradient(178deg, #26734d 0%, #339966 100%);
+        background: linear-gradient(178deg, #24375b 0%, #3a5792 100%);
         padding: 5px 0;
     }
 
@@ -94,15 +94,14 @@
     .post-info-entry-card .post-info-area .open-links {
         display: block;
         margin: 0 20px 0 20px;
-        background-color: #555555;
-        background: linear-gradient(180deg, #444444 0%, #666666 100%);
-        padding: 5px 10px;
+        background-color: #b6c5e2;
+        background: linear-gradient(180deg, #b6c5e2 0%, #c8d3e9 100%);
+        padding: 10px 10px;
     }
 
         .post-info-entry-card .post-info-area .open-links a {
             display: inline-block;
             margin-right: 10px;
-            text-decoration: none;
         }
 
     .post-info-entry-card .post-info-area .post-content-collapse {
@@ -111,8 +110,8 @@
         overflow: hidden;
         display: block;
         background-color: #dddddd;
-        mask: linear-gradient( 180deg, rgba(220, 220, 220, 1) 0%, rgba(220, 220, 220, 0) 100% );
-        -webkit-mask: linear-gradient( 180deg, rgba(220, 220, 220, 1) 0%, rgba(220, 220, 220, 0) 100% );
+        mask: linear-gradient( 180deg, rgba(230, 230, 230, 1) 0%, rgba(230, 230, 230, 0) 100% );
+        -webkit-mask: linear-gradient( 180deg, rgba(230, 230, 230, 1) 0%, rgba(230, 230, 230, 0) 100% );
         margin: 0 20px 15px 20px;
         font-size: 10px;
         text-decoration: none;
@@ -234,9 +233,9 @@
 .search-box {
     margin: 10px 0 20px 0;
     padding: 10px;
-    border: 1px solid #ccddcc;
+    border: 1px solid #c8d3e9;
     border-radius: 4px;
-    background-color: #ddffdd;
+    background-color: #edf0f8;
     display: flex;
     box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.2);
 }
