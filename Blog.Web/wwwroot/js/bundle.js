@@ -424,7 +424,7 @@ var BusinessesScreen = /** @class */ (function () {
     BusinessesScreen.prototype.init = function () {
         if (!this.captchaBox)
             return;
-        window.setTimeout(this.setCaptchaBox, 500);
+        window.setTimeout(this.setCaptchaBox, 100);
     };
     return BusinessesScreen;
 }());
@@ -446,7 +446,7 @@ var ContactScreen = /** @class */ (function () {
     ContactScreen.prototype.init = function () {
         if (!this.captchaBox)
             return;
-        window.setTimeout(this.setCaptchaBox, 500);
+        window.setTimeout(this.setCaptchaBox, 100);
     };
     return ContactScreen;
 }());

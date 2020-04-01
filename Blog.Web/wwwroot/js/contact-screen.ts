@@ -17,6 +17,6 @@
     public init() {
         if (!this.captchaBox) return;
 
-        window.setTimeout(this.setCaptchaBox, 500);
+        window.setTimeout(this.setCaptchaBox, 100);
     }
 }
