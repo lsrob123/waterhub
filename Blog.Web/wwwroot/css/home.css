@@ -193,7 +193,7 @@
         .search-dropdown .search-dropdown-header .close {
             display: block;
             height: 10px;
-            background-color: #666666;
+            background-color: #496db6;
             border-radius: 6px;
             padding: 10px;
             cursor: pointer;
@@ -231,7 +231,7 @@
             }
 
 .search-box {
-    margin: 10px 0 20px 0;
+    margin: 5px 0 25px 0;
     padding: 10px;
     border: 1px solid #c8d3e9;
     border-radius: 4px;
@@ -241,6 +241,11 @@
 }
 
     .search-box input {
-        flex: 1;
+        flex-grow: 1;
         margin-right: 10px;
+        min-width: 0;
+    }
+
+    .search-box button {
+        display: table;
     }
