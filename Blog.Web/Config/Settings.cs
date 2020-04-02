@@ -38,5 +38,7 @@ namespace Blog.Web.Config
         public EmailAccount SupportEmailAccount => _configuration.GetObject<EmailAccount>(nameof(SupportEmailAccount));
 
         public SmtpSettings SmtpSettings => _configuration.GetObject<SmtpSettings>(nameof(SmtpSettings));
+
+        public string SiteName => _configuration.GetValue<string>(nameof(SiteName));
     }
 }

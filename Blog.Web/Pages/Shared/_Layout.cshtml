@@ -1,11 +1,16 @@
 ﻿@inject IAuthService authService;
+@inject ISiteInfoService siteInfoService;
+
+@{
+    var pageTitle = siteInfoService.GetFullPageTitleForLayout((string)ViewData[Constants.PageTitle]);
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData[Constants.PageTitle]</title>
+    <title>@pageTitle</title>
     <link rel="icon" href="~/images/Leaves01_192.png" />
 
     <environment include="Development">

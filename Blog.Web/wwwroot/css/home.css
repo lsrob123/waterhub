@@ -102,22 +102,28 @@
         .post-info-entry-card .post-info-area .open-links a {
             display: inline-block;
             margin-right: 10px;
+            color: #1050b0;
         }
 
-    .post-info-entry-card .post-info-area .post-content-collapse {
-        min-height: 15px;
-        max-height: 80px;
-        overflow: hidden;
-        display: block;
-        background-color: #dddddd;
-        mask: linear-gradient( 180deg, rgba(230, 230, 230, 1) 0%, rgba(230, 230, 230, 0) 100% );
-        -webkit-mask: linear-gradient( 180deg, rgba(230, 230, 230, 1) 0%, rgba(230, 230, 230, 0) 100% );
-        margin: 0 20px 15px 20px;
-        font-size: 10px;
-        text-decoration: none;
-        cursor: pointer;
-        padding: 5px 5px;
-    }
+            .post-info-entry-card .post-info-area .open-links a:hover {
+                text-decoration: underline;
+                color: #FF7500;
+            }
+
+            .post-info-entry-card .post-info-area .post-content-collapse {
+                min-height: 15px;
+                max-height: 80px;
+                overflow: hidden;
+                display: block;
+                background-color: #dddddd;
+                mask: linear-gradient( 180deg, rgba(200, 220, 255, 0.6) 0%, rgba(200, 220, 255, 0) 100% );
+                -webkit-mask: linear-gradient( 180deg, rgba(200, 220, 255, 0.6) 0%, rgba(200, 220, 255, 0) 100% );
+                margin: 0 20px 15px 20px;
+                font-size: 10px;
+                text-decoration: none;
+                cursor: pointer;
+                padding: 5px 5px;
+            }
 
 @media only screen and (max-width: 500px) {
     .post-info-entry-card .post-info-area .post-title {

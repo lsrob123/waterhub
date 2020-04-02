@@ -5,6 +5,7 @@ namespace Blog.Web.Abstractions
 {
     public interface ISettings :IHasTextMapFilePath, IHasLiteDbDatabaseName, IHasSerilogSettings, IHasSmtpSettings
     {
+        string SiteName { get; }
         string AdminHashedPassword { get; }
         int LatestPostsCount { get; }
         int PostsFromSearchCount { get; }
