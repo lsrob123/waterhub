@@ -34,9 +34,9 @@ namespace Gallery.Web.Pages
         [BindProperty]
         public bool IsVisible { get; set; }
 
-        public override string PageName => "album";
+        public override string PageName => "Albums";
 
-        public override string PageTitle => "Album";
+        public override string PageTitle => "Albums";
 
         public IEnumerable<UploadImage> SucceededFiles { get; set; }
 

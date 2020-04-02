@@ -14,5 +14,9 @@
   {
     "key": "Close",
     "value": "关闭"
+  },
+  {
+    "key": "Albums",
+    "value": "影集"
   }
 ]

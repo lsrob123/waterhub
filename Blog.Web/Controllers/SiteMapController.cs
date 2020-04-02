@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Microsoft.AspNetCore.Mvc;
 using WaterHub.Core.Abstractions;
@@ -10,6 +12,7 @@ namespace Blog.Web.Controllers
     public class SiteMapController : ControllerBase
     {
         private readonly ISiteMapService _siteMapService;
+        private readonly IBlogService _blogService;
         private readonly List<SiteMapUrl> _fixedPageUrls = new List<SiteMapUrl>
         {
             new SiteMapUrl
@@ -30,9 +33,10 @@ namespace Blog.Web.Controllers
             },
          };
 
-        public SiteMapController(ISiteMapService siteMapService)
+        public SiteMapController(ISiteMapService siteMapService, IBlogService blogService)
         {
             _siteMapService = siteMapService;
+            _blogService = blogService;
         }
 
         [Route("sitemap")]
@@ -41,22 +45,13 @@ namespace Blog.Web.Controllers
             string baseUrl = "https://health-findings.com/";
             _siteMapService.Clear();
 
-            //// get a list of published articles
-            //var posts = await _blogService.PostService.GetPostsAsync();
-
-            //// get last modified date of the home page
-            //var siteMapBuilder = new SitemapBuilder();
-
-            //// add the home page to the sitemap
-            //siteMapBuilder.AddUrl(baseUrl, modified: DateTime.UtcNow, changeFrequency: ChangeFrequency.Weekly, priority: 1.0);
-
-            //// add the blog posts to the sitemap
-            //foreach (var post in posts)
-            //{
-            //    siteMapBuilder.AddUrl(baseUrl + post.Slug, modified: post.Published, changeFrequency: null, priority: 0.9);
-            //}
-
             _siteMapService.AddRange(_fixedPageUrls, baseUrl);
+
+            var posts = _blogService.ListLatestPostInfoEntries(300);
+            _siteMapService.AddRange(posts.Select(x => new SiteMapUrl
+            {
+                Url = $"posts/{x.UrlFriendlyTitle}"
+            }), baseUrl);
 
             string xml = await Task.FromResult(_siteMapService.ToString());
             return Content(xml, "text/xml");
