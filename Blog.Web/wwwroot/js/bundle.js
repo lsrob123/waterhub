@@ -91,6 +91,9 @@ var Constants = /** @class */ (function () {
 var Service = /** @class */ (function () {
     function Service() {
         var _this = this;
+        this.fixImageStylesInPost = function (html) {
+            return html.replace('style="width: 300px;"', 'class="image-in-post"');
+        };
         this.deletePostImage = function (postUrlFriendlyTitle, postImageKey) { return __awaiter(_this, void 0, void 0, function () {
             var rawResponse, message, e_1;
             return __generator(this, function (_a) {

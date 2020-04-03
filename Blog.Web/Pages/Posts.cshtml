@@ -5,13 +5,53 @@
 }
 
 
-@if (!(Model.PostInDisplay is null))
+@if (Model.PostInDisplay != null)
 {
-    <div>
-        @Model.PostInDisplay.Title
+    <div class="post-screen">
+        <div class="post-title-area">
+            <div class="post-title">
+                @Model.PostInDisplay.Title
+            </div>
+            <div class="date-created">
+                @Model.PostInDisplay.DateCreated
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.PostInDisplay.Abstract))
+        {
+            <div class="post-abstract">
+                @Model.PostInDisplay.Abstract
+            </div>
+        }
+        @if (Model.PostInDisplay.HasTags)
+        {
+            <div class="post-tags">
+                <div class="post-tag-label">@T.GetMap("Tags")</div>
+                @foreach (var tag in Model.PostInDisplay.Tags)
+                {
+                    <div class="post-tag">
+                        <a href="javascript:homeScreen.searchByTag('@tag')">@tag</a>
+                    </div>
+                }
+            </div>
+        }
+        <div class="post-content">
+            @Html.Raw(Model.PostInDisplay.CorrectedContent)
+        </div>
     </div>
-    <div>
-        @Html.Raw(Model.PostInDisplay.Content)
-    </div>
+
+    @if (Model.MorePosts != null && Model.MorePosts.Any())
+    {
+        <div class="more-posts">
+            <div class="group-title">更多帖子</div>
+            <ul>
+                @foreach (var post in Model.MorePosts)
+                {
+                    <li>
+                        <a href="~/posts/@post.UrlFriendlyTitle" target="@post.UrlFriendlyTitle">@post.Title</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
 }
 

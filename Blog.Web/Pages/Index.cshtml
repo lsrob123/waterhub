@@ -36,12 +36,12 @@
 
                 <div id="div-@post.UrlFriendlyTitle" class="post-content-collapse" title="@T.GetMap("Click to read full article", "home")"
                      onclick="homeScreen.displayFullContent('@post.Title','@post.UrlFriendlyTitle')">
-                    @Html.Raw(post.Content)
+                    @Html.Raw(post.CorrectedContent)
                 </div>
 
                 @if (post.HasTags)
                 {
-                    <div class="post-tags">
+                    <div class="post-tags post-tags-home" style="margin-left:20px;">
                         <div class="post-tag-label">@T.GetMap("Tags")</div>
                         @foreach (var tag in post.Tags)
                         {

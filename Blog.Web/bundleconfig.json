@@ -5,7 +5,8 @@
       "wwwroot/css/layout.css",
       "wwwroot/css/home.css",
       "wwwroot/css/businesses.css",
-      "wwwroot/css/contact.css"
+      "wwwroot/css/contact.css",
+      "wwwroot/css/posts.css"
     ]
   },
   {

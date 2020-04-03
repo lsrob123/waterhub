@@ -4,5 +4,11 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Products.PageTitle, PageDefinitions.Products.Context);
 }
 
+@if (Model.SuspendBusinessDisplay)
+{
+    <div class="coming-soon">本页即将推出 ......</div>
+}
+else
+{
     <h1>Products</h1>
-
+}

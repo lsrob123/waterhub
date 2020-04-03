@@ -28,6 +28,8 @@ namespace Blog.Web
 
         public override string PageTitle => PageDefinitions.Businesses.PageTitle;
 
+        public bool SuspendBusinessDisplay => _settings.SuspendBusinessDisplay;
+
         [BindProperty]
         public VasayoForm VasayoForm { get; set; }
 

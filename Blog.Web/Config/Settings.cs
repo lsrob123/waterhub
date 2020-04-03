@@ -40,5 +40,7 @@ namespace Blog.Web.Config
         public SmtpSettings SmtpSettings => _configuration.GetObject<SmtpSettings>(nameof(SmtpSettings));
 
         public string SiteName => _configuration.GetValue<string>(nameof(SiteName));
+
+        public bool SuspendBusinessDisplay => _configuration.GetValue<bool>(nameof(SuspendBusinessDisplay));
     }
 }

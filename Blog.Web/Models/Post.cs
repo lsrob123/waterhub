@@ -16,11 +16,14 @@ namespace Blog.Web.Models
         [Required]
         public string Content { get; set; }
 
+        public string CorrectedContent => Content?.Replace("style=\"width: 300px;\"", "class=\"image-in-post\"");
+
         public int DayCreated => TimeCreated.Day;
         public bool HasTags => Tags != null && Tags.Any();
         public bool IsPublished { get; set; } = true;
         public bool IsSticky { get; set; }
         public string MonthCreated => $"{TimeCreated:yyyy.MM}.";
+        public string DateCreated => $"{TimeCreated:yyyy.MM.dd}.";
         public ICollection<string> Tags { get; set; }
 
         public string TagsInText => JsonSerializer.Serialize(

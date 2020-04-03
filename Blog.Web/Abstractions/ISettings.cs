@@ -13,5 +13,6 @@ namespace Blog.Web.Abstractions
         int ThumbHeight { get; }
         EmailAccount VasayoEmailAccount { get; }
         EmailAccount SupportEmailAccount { get; }
+        bool SuspendBusinessDisplay { get; }
     }
 }

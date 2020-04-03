@@ -1,6 +1,10 @@
 ﻿/// <reference path="models.ts"/>
 
 class Service {
+    public fixImageStylesInPost = (html: string): string => {
+        return html.replace('style="width: 300px;"', 'class="image-in-post"');
+    }
+
     public deletePostImage = async (postUrlFriendlyTitle: string, postImageKey: string)
         : Promise<ApiCallResult> => {
         try {

@@ -4,40 +4,46 @@
     ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Businesses.PageTitle, PageDefinitions.Businesses.Context);
 }
 
-<div class="biz-form">
-    <div class="biz-form-group">
-        <h3>Vasayo 慷慨的直销奖励体系</h3>
-    </div>
-    <div class="biz-form-group">
-        <h3>进一步交流了解或加入 Vasayo 直销网络</h3>
-        <form method="post">
-            <div class="biz-form-row">
-                您的邮件地址
-                <input class="input-newline" type="email" required="required" asp-for="VasayoForm.Email" />
-            </div>
-            <div class="biz-form-row">
-                您的更多想法
-                <textarea asp-for="VasayoForm.MoreInfo" rows="4"></textarea>
-            </div>
-            <div id="c-businesses">
-               
-            </div>
-            <div class="biz-form-row">
-                <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
-            </div>
-            @if (Model.VasayoForm.HasErrorMessage)
-            {
-                <div class="biz-form-row red">
-                    @Model.VasayoForm.ErrorMessage
-                </div>
-            }
-            @if (Model.VasayoForm.HadSuccessfulSend)
-            {
+@if (Model.SuspendBusinessDisplay)
+{
+    <div class="coming-soon">本页即将推出 ......</div>
+}
+else
+{
+    <div class="biz-form">
+        <div class="biz-form-group">
+            <h3>Vasayo 慷慨的直销奖励体系</h3>
+        </div>
+        <div class="biz-form-group">
+            <h3>进一步交流了解或加入 Vasayo 直销网络</h3>
+            <form method="post">
                 <div class="biz-form-row">
-                    成功送出！
+                    您的邮件地址
+                    <input class="input-newline" type="email" required="required" asp-for="VasayoForm.Email" />
                 </div>
-            }
-        </form>
-    </div>
-</div>
+                <div class="biz-form-row">
+                    您的更多想法
+                    <textarea asp-for="VasayoForm.MoreInfo" rows="4"></textarea>
+                </div>
+                <div id="c-businesses">
 
+                </div>
+                <div class="biz-form-row">
+                    <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
+                </div>
+                @if (Model.VasayoForm.HasErrorMessage)
+                {
+                    <div class="biz-form-row red">
+                        @Model.VasayoForm.ErrorMessage
+                    </div>
+                }
+                @if (Model.VasayoForm.HadSuccessfulSend)
+                {
+                    <div class="biz-form-row">
+                        成功送出！
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+}
