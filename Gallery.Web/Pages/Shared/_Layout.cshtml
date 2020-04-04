@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData[Constants.PageTitle]</title>
+    <meta name="description" content="生活影集 绚丽色彩">
+    <link rel="icon" href="~/images/vibrant-gallery_192.png" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/js/bundle.js" asp-append-version="true"></script>
 </head>
@@ -17,7 +19,18 @@
         @RenderBody()
     </div>
     <div class="footer">
-
+        <div class="footer-item">
+            <a href="https://health-findings.com" title="健康新发现 - 健康 美食 旅游 营养补充">健康新发现</a>
+        </div>
+        <div class="footer-item">
+            <a href="mailto:info@vibrant-gallery.com" title="需要联络我们的请电邮 info@vibrant-gallery.com">联络我们</a>
+        </div>
+        <div class="footer-item">
+            <a href="mailto:info@vibrant-gallery.com" title="欢迎和本站交换链接。详情请电邮 info@vibrant-gallery.com">链接交换</a>
+        </div>
+        <div class="footer-item">
+            版权所有&copy;2020-2022
+        </div>
     </div>
 
     @RenderSection("Scripts", required: false)

@@ -1,7 +1,9 @@
 ﻿@page
+@inject ISettings settings
+@inject ISiteInfoService siteInfoService
 @model IndexModel
 @{
-    ViewData[Constants.PageTitle] = @T.GetMap(PageDefinitions.Home.PageTitle);
+    ViewData[Constants.PageTitle] = siteInfoService.GetPageTitle(PageDefinitions.Home.PageTitle);
 }
 
 @if (Model.IsLoggedIn)
@@ -35,7 +37,7 @@
                                         <img class="thumb-in-index" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
                                     </a>
                                     <div class="album-image-footer" id="@uploadImage.ProcessedFileName">
-                                        <img class="album-image-footer-icon" src="~/images/share-square.svg" 
+                                        <img class="album-image-footer-icon" src="~/images/share-square.svg"
                                              onclick="javascript: album.showToolTip(service.getUrl(@Html.Raw(@$"'images/{uploadImage.UriPath}'")), '@uploadImage.ProcessedFileName');" />
                                         <img class="album-image-footer-icon" src="~/images/copy.svg"
                                              onclick="javascript: album.copyHyperLink('spn_@uploadImage.ProcessedFileName');" />
@@ -64,5 +66,6 @@
 
 @section PageHeader
 {
+    @T.GetMap(@settings.SiteName)
     <a class="header-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
 }

@@ -43,7 +43,8 @@ a:hover {
     }
 
         .header .header-link:hover {
-            font-weight: bold;
+            color: hotpink;
+            text-shadow: 1px 1px rgba(0,0,0,0.7);
         }
 
 .content {
@@ -64,7 +65,28 @@ a:hover {
     bottom: 0;
     height: 40px;
     background-color: #2a373d;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content: center;
 }
+
+    .footer .footer-item {
+        white-space: nowrap;
+        color: white;
+        margin: 10px 10px 0 10px;
+        font-weight: normal;
+    }
+
+        .footer .footer-item a {
+            color: white;
+            text-decoration: none;
+        }
+
+            .footer .footer-item a:hover {
+                color: hotpink;
+                text-shadow: 1px 1px rgba(0,0,0,0.7);
+            }
 
 .top-gap {
     margin-top: 20px;

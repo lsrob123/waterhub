@@ -1,14 +1,14 @@
 {
-  "name": "Progressive Web App",
-  "short_name": "PWA",
-  "description": "Creating PWA in ASP.NET Core.",
+  "name": "绚影集",
+  "short_name": "绚影集",
+  "description": "生活影集 绚丽色彩",
   "icons": [
     {
-      "src": "/images/icon192x192.png",
+      "src": "/images/vibrant-gallery_192.png",
       "sizes": "192x192"
     },
     {
-      "src": "/images/icon512x512.png",
+      "src": "/images/vibrant-gallery_512.png",
       "sizes": "512x512"
     }
   ],

@@ -56,6 +56,7 @@ namespace Gallery.Web
             services.AddWaterHubCoreServices<ISettings, ISettings>();
             services.AddSingleton<IAlbumRepository, AlbumRepository>();
             services.AddSingleton<IAlbumService, AlbumService>();
+            services.AddSingleton<ISiteInfoService, SiteInfoService>();
 
             services.AddAuthentication(options =>
             {

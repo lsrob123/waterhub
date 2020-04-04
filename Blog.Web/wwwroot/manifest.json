@@ -1,7 +1,7 @@
 {
-  "name": "Progressive Web App",
-  "short_name": "PWA",
-  "description": "Creating PWA in ASP.NET Core.",
+  "name": "健康新发现",
+  "short_name": "健康新发现",
+  "description": "健康 美食 旅游 营养补充",
   "icons": [
     {
       "src": "/images/Leaves01_192.png",

@@ -1,7 +1,9 @@
 ﻿@page "{albumName?}"
+@inject ISettings settings
+@inject ISiteInfoService siteInfoService;
 @model AlbumsModel
 @{
-    ViewData[Constants.PageTitle] = T.GetMap(Model.AlbumName ?? "_test");
+    ViewData[Constants.PageTitle] = siteInfoService.GetPageTitle(Model.AlbumName ?? "_test");
 }
 
 @if (Model.IsNotFound)
@@ -78,6 +80,7 @@ else if (Model.IsLoggedIn)
 
 @section PageHeader
 {
+    @T.GetMap(@settings.SiteName)
     <a class="header-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
     <span class="arrow">&#9654;</span> @T.GetMap(Model.AlbumName)
 }

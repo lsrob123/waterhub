@@ -21,8 +21,8 @@ namespace Gallery.Web.Config
         public string AlbumRootPath => _configuration.GetValue<string>(nameof(AlbumRootPath));
         public int DaysOfAlbumsDisplayed => _configuration.GetValue<int>(nameof(DaysOfAlbumsDisplayed));
 
-        public string DefaultThumbnailUriPathForAlbum => _configuration
-            .GetValue<string>(nameof(DefaultThumbnailUriPathForAlbum));
+        public string DefaultThumbnailUriPathForAlbum =>
+            _configuration.GetValue<string>(nameof(DefaultThumbnailUriPathForAlbum));
 
         public string AdminHashedPassword => _configuration.GetValue<string>(nameof(AdminHashedPassword));
         public string LiteDbDatabaseName => _configuration.GetValue<string>(nameof(LiteDbDatabaseName));
@@ -31,6 +31,8 @@ namespace Gallery.Web.Config
         public int UploadImageIconHeight => _configuration.GetValue<int>(nameof(UploadImageIconHeight));
         public string UploadImageRootPath => _configuration.GetValue<string>(nameof(UploadImageRootPath));
         public int UploadImageThumbnailHeight => _configuration.GetValue<int>(nameof(UploadImageThumbnailHeight));
+        public string SiteName => _configuration.GetValue<string>(nameof(SiteName));
+        public string DomainName => _configuration.GetValue<string>(nameof(DomainName));
 
         public UserModelBase GetUser(string username)
         {
