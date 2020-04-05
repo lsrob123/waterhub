@@ -21,16 +21,6 @@ namespace WaterHub.Core
 {
     public static class Extensions
     {
-        public static bool IsChecked(this HttpRequest request, string checkboxName)
-        {
-            return request.Form[checkboxName].Any(x => x.Equals("on", StringComparison.OrdinalIgnoreCase));
-        }
-
-        public static T GetObject<T>(this IConfiguration configuration, string sectionName)
-        {
-            return configuration.GetSection(sectionName).Get<T>();
-        }
-
         public static IServiceCollection AddSmtpService<TSettings>(this IServiceCollection services)
             where TSettings : IHasSmtpSettings
         {
@@ -103,7 +93,7 @@ namespace WaterHub.Core
         }
 
         public static TProcessResult AsErrors<TProcessResult, TData>(this TProcessResult result,
-                            IEnumerable<Exception> exceptions, string errorCodeInLog, HttpStatusCode status, TData data = default)
+            IEnumerable<Exception> exceptions, string errorCodeInLog, HttpStatusCode status, TData data = default)
             where TProcessResult : ProcessResult<TData>
         {
             result.Data = data;
@@ -120,7 +110,7 @@ namespace WaterHub.Core
         }
 
         public static TProcessResult AsOk<TProcessResult, TData>(this TProcessResult result, TData data = default)
-                    where TProcessResult : ProcessResult<TData>
+            where TProcessResult : ProcessResult<TData>
         {
             result.Data = data;
             result.Status = HttpStatusCode.OK;
@@ -148,10 +138,20 @@ namespace WaterHub.Core
             return entity;
         }
 
+        public static T GetObject<T>(this IConfiguration configuration, string sectionName)
+        {
+            return configuration.GetSection(sectionName).Get<T>();
+        }
+
         public static bool IsAdmin(this ClaimsPrincipal claimsPrincipal)
         {
             var userModel = claimsPrincipal.ToUserModel<UserModelBase>();
             return userModel?.IsAdmin == true;
+        }
+
+        public static bool IsChecked(this HttpRequest request, string checkboxName)
+        {
+            return request.Form[checkboxName].Any(x => x.Equals("on", StringComparison.OrdinalIgnoreCase));
         }
 
         public static string LogAndReturnErrorCode<T>(this ILogger<T> logger, Exception e, string displayMessage = null)
@@ -198,7 +198,7 @@ namespace WaterHub.Core
         }
 
         public static TUserModel ToUserModel<TUserModel>(this ClaimsPrincipal claimsPrincipal)
-                    where TUserModel : class, IUserModelBase, new()
+            where TUserModel : class, IUserModelBase, new()
         {
             var username = claimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
             if (string.IsNullOrWhiteSpace(username))

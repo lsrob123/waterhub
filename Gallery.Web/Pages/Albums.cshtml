@@ -80,7 +80,8 @@ else if (Model.IsLoggedIn)
 
 @section PageHeader
 {
-    @T.GetMap(@settings.SiteName)
-    <a class="header-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
-    <span class="arrow">&#9654;</span> @T.GetMap(Model.AlbumName)
+    <div class="arrow">&#9654;</div>
+    <div class="page-title">
+        @T.GetMap(Model.AlbumName)
+    </div>
 }

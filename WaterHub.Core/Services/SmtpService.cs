@@ -6,7 +6,6 @@ using MimeKit.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
@@ -26,7 +25,6 @@ public class SmtpService : ISmtpService
     public virtual async Task<ProcessResult> SendMessagesAsync
         (EmailAccount from, IEnumerable<EmailAccount> to, string subject, string body, bool isHtml = false)
     {
-
         var messages = to
            .Select(x => CreateMimeMessage(from, to, subject, body, isHtml))
            .ToList();
@@ -65,6 +63,16 @@ public class SmtpService : ISmtpService
         }
     }
 
+    public Task<ProcessResult> SendMessagesAsync(EmailAccount from, EmailAccount to, string subject, string body, bool isHtml = false)
+    {
+        return SendMessagesAsync(from, new EmailAccount[] { to }, subject, body, isHtml);
+    }
+
+    private static MailboxAddress CreateMailboxAddress(EmailAccount from)
+    {
+        return from.HasAccountName ? new MailboxAddress(from.Name, from.Address) : new MailboxAddress(from.Address);
+    }
+
     private MimeMessage CreateMimeMessage(EmailAccount from, IEnumerable<EmailAccount> to, string subject,
         string body, bool isHtml = false)
     {
@@ -74,18 +82,10 @@ public class SmtpService : ISmtpService
         {
             Text = isHtml ? body : $"{originalSender}{Environment.NewLine}{Environment.NewLine}{body}"
         };
-        return new MimeMessage(new InternetAddress[] { new MailboxAddress(Settings.SmtpEmailAddress) },
-                           to.Select(x => CreateMailboxAddress(x) as InternetAddress),
-                           subject, mimeEntity);
-    }
 
-    private static MailboxAddress CreateMailboxAddress(EmailAccount from)
-    {
-        return from.HasAccountName ? new MailboxAddress(from.Name, from.Address) : new MailboxAddress(from.Address);
-    }
-
-    public Task<ProcessResult> SendMessagesAsync(EmailAccount from, EmailAccount to, string subject, string body, bool isHtml = false)
-    {
-        return SendMessagesAsync(from, new EmailAccount[] { to }, subject, body, isHtml);
+        return new MimeMessage(
+            new InternetAddress[] { new MailboxAddress(Settings.SmtpEmailAddress) },
+            to.Select(x => CreateMailboxAddress(x) as InternetAddress),
+            subject, mimeEntity);
     }
 }

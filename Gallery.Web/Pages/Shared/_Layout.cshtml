@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject ISettings settings
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,9 +13,10 @@
 </head>
 <body>
     <div class="header">
-        <div class="page-title">
-            @RenderSection(Constants.PageHeader, false)
-        </div>
+        <img src="~/images/vibrant-gallery.svg" class="logo" />
+        <a class="header-link" href="/">@T.GetMap(@settings.SiteName)</a>
+        <a class="header-link" href="/">@T.GetMap(PageDefinitions.Home.PageTitle)</a>
+        @RenderSection(Constants.PageHeader, false)
     </div>
     <div class="content">
         @RenderBody()
