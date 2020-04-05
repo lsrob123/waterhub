@@ -83,7 +83,7 @@ a:hover {
     background-color: #2a373d;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -103,6 +103,18 @@ a:hover {
                 color: hotpink;
                 text-shadow: 1px 1px rgba(0,0,0,0.7);
             }
+
+
+@media only screen and (max-width: 500px) {
+    .content {
+        bottom: 80px;
+    }
+
+    .footer {
+        height: 80px;
+    }
+}
+
 
 .top-gap {
     margin-top: 20px;
