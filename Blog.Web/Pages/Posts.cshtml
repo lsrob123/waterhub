@@ -29,7 +29,7 @@
                 @foreach (var tag in Model.PostInDisplay.Tags)
                 {
                     <div class="post-tag">
-                        <a href="javascript:homeScreen.searchByTag('@tag')">@tag</a>
+                        @tag
                     </div>
                 }
             </div>
