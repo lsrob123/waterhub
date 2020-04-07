@@ -9,9 +9,15 @@ button {
     cursor: pointer;
 }
 
-a:hover {
-    color: hotpink;
+a {
+    color: white;
+    text-decoration: none;
 }
+
+    a:hover {
+        color: hotpink;
+        text-decoration: underline;
+    }
 
 .header {
     position: absolute;
@@ -104,7 +110,6 @@ a:hover {
                 text-shadow: 1px 1px rgba(0,0,0,0.7);
             }
 
-
 @media only screen and (max-width: 500px) {
     .content {
         bottom: 80px;
@@ -115,9 +120,56 @@ a:hover {
     }
 }
 
-
-.top-gap {
+.group-space {
     margin-top: 20px;
+    padding: 10px 20px;
+}
+
+    .group-space .group-title {
+        padding: 5px 250px 5px 10px;
+        background-image: linear-gradient(to right, rgba(230,230,255,0.30), rgb(38, 50, 56));
+        display: table;
+        border-radius: 4px 0 0 4px;
+        margin-bottom: 10px;
+    }
+
+    .group-space .group-content {
+    }
+
+.contact-socials {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+}
+
+    .contact-socials .contact-social-item {
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+
+.contact-link-content {
+    padding: 20px;
+}
+
+    .contact-link-content a {
+        color: wheat;
+        text-decoration: none;
+    }
+
+        .contact-link-content a:hover {
+            color: hotpink;
+            text-decoration: underline;
+        }
+
+.social-logo {
+    height: 90px;
 }
 
 .panel-tools {

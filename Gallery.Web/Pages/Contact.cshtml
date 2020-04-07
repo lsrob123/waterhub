@@ -1,0 +1,45 @@
+﻿@page
+@inject ISettings settings
+@inject ISiteInfoService siteInfoService
+@model Gallery.Web.Pages.ContactModel
+@{
+    ViewData[Constants.PageTitle] = siteInfoService.GetPageTitle(PageDefinitions.Contact.PageTitle);
+}
+
+<div class="group-space">
+    <div class="group-title">
+        有关链接
+    </div>
+    <div class="group-content contact-socials">
+        <div class="contact-social-item">
+            <div><img class="social-logo" src="~/images/qr-vibrant-gallery.svg" /></div>
+            <div>
+                <a href="/">绚影集</a>
+            </div>
+        </div>
+        <div class="contact-social-item">
+            <div><img class="social-logo" src="~/images/qr-health-findings.svg" /></div>
+            <div>
+                <a href="https://health-findings.com">健康新发现</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="group-space">
+    <div class="group-title">
+        欢迎与我们交换链接或者展开其他讨论
+    </div>
+    <div class="group-content contact-link-content">
+        请按<a class="contact-link" href="mailto:info@vibrant-gallery.com" title="请电邮 info@vibrant-gallery.com">此链接</a>电邮联络我们。谢谢！
+    </div>
+</div>
+
+@section PageHeader
+{
+    <div class="arrow">&#9654;</div>
+    <div class="page-title">
+        @T.GetMap(PageDefinitions.Contact.PageTitle)
+    </div>
+}
