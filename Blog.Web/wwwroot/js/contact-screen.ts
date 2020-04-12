@@ -1,4 +1,6 @@
-﻿class ContactScreen {
+﻿/// <reference path="constants.ts"/>
+
+class ContactScreen {
     private readonly service: Service;
 
     constructor(service: Service) {
@@ -10,6 +12,10 @@
         return <HTMLElement>document.getElementById('c-contact');
     }
 
+    public get submitButton(): HTMLButtonElement {
+        return <HTMLButtonElement>document.getElementById('submit-contact');
+    }
+
     public setCaptchaBox() {
         this.captchaBox.innerHTML = Constants.captachaContact;
     }
@@ -18,5 +24,9 @@
         if (!this.captchaBox) return;
 
         window.setTimeout(this.setCaptchaBox, 100);
+    }
+
+    public handleCaptcha(checkbox: HTMLInputElement) {
+        this.submitButton.disabled = !checkbox.checked;
     }
 }

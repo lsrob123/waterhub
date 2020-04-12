@@ -41,7 +41,7 @@
 
             </div>
             <div class="contact-form-row">
-                <button asp-page-handler="ContactForm">@T.GetMap("Submit")</button>
+                <button id="submit-contact" disabled asp-page-handler="ContactForm">@T.GetMap("Submit")</button>
             </div>
             @if (Model.ContactForm.HasErrorMessage)
             {

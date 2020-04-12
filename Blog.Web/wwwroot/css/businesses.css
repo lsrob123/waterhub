@@ -17,13 +17,6 @@
                 width: 100%;
             }
 
-        .biz-form .biz-form-group .captcha {
-            display: table;
-            background-color: #e0e0e0;
-            padding: 4px 20px 10px 0;
-            border-radius: 2px;
-        }
-
         .biz-form .biz-form-group .biz-form-row textarea {
             display: block;
             width: 100%;

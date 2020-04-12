@@ -1,4 +1,4 @@
 ﻿class Constants {
-    public static captachaBusinesses: string = '<div class="biz-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
-    public static captachaContact: string = '<div class="contact-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
+    public static captachaBusinesses: string = '<div class="biz-form-row recaptcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" onclick="businessesScreen.handleCaptcha(this)" />确认输入</label> <img class="recaptcha-icon" src="images/recaptcha.svg" /></div>';
+    public static captachaContact: string = '<div class="contact-form-row recaptcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" onclick="contactScreen.handleCaptcha(this)" />确认输入</label> <img class="recaptcha-icon" src="images/recaptcha.svg" /></div>';
 }

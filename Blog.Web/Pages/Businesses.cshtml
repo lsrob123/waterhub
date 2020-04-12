@@ -29,7 +29,7 @@ else
 
                 </div>
                 <div class="biz-form-row">
-                    <button asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
+                    <button id="submit-businesses" disabled asp-page-handler="VasayoForm">@T.GetMap("Submit")</button>
                 </div>
                 @if (Model.VasayoForm.HasErrorMessage)
                 {

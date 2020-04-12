@@ -34,10 +34,16 @@ button {
     white-space: nowrap;
 }
 
-
     button:hover {
         background: #4060a0;
         color: #FF7500;
+    }
+
+    button:disabled {
+        background: #6080c0;
+        color: #c8d3e9;
+        border: 1px solid #6080c0;
+        cursor: not-allowed;
     }
 
 input {
@@ -55,7 +61,7 @@ textarea {
 
 .checkbox {
     position: relative;
-    top: 4px;
+    top: 6px;
     width: 30px;
     cursor: pointer;
 }
@@ -372,3 +378,17 @@ label {
     color: orangered;
     margin: 20px;
 }
+
+.recaptcha {
+    width: 145px;
+    background-color: #e0e0e0;
+    padding: 4px 0 12px 3px;
+    border-radius: 2px;
+}
+
+    .recaptcha .recaptcha-icon {
+        width: 25px;
+        position: relative;
+        top: 7px;
+        margin-left: 10px;
+    }

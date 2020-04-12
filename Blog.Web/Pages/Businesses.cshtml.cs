@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Blog.Web.Abstractions;
+﻿using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 
@@ -24,6 +22,9 @@ namespace Blog.Web
             _smtpService = smtpService;
         }
 
+        [TempData]
+        public string LastSubmittedFormJson { get; set; }
+
         public override string PageName => PageDefinitions.Businesses.PageName;
 
         public override string PageTitle => PageDefinitions.Businesses.PageTitle;
@@ -32,9 +33,6 @@ namespace Blog.Web
 
         [BindProperty]
         public VasayoForm VasayoForm { get; set; }
-
-        [TempData]
-        public string LastSubmittedFormJson { get; set; }
 
         public void OnGet()
         {
@@ -45,7 +43,7 @@ namespace Blog.Web
         {
             if (!Request.IsChecked("IsHumanInput"))
             {
-                VasayoForm.ErrorMessage = "请点击确认无误";
+                VasayoForm.ErrorMessage = "请点击确认输入";
                 LastSubmittedFormJson = VasayoForm;
                 return RedirectToPage();
             }

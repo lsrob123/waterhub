@@ -83,8 +83,8 @@ var PostImage = /** @class */ (function () {
 var Constants = /** @class */ (function () {
     function Constants() {
     }
-    Constants.captachaBusinesses = '<div class="biz-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
-    Constants.captachaContact = '<div class="contact-form-row captcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" />确认无误</label></div>';
+    Constants.captachaBusinesses = '<div class="biz-form-row recaptcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" onclick="businessesScreen.handleCaptcha(this)" />确认输入</label> <img class="recaptcha-icon" src="images/recaptcha.svg" /></div>';
+    Constants.captachaContact = '<div class="contact-form-row recaptcha"><label><input class="checkbox" type="checkbox" id="IsHumanInput" name="IsHumanInput" onclick="contactScreen.handleCaptcha(this)" />确认输入</label> <img class="recaptcha-icon" src="images/recaptcha.svg" /></div>';
     return Constants;
 }());
 /// <reference path="models.ts"/>
@@ -421,6 +421,13 @@ var BusinessesScreen = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(BusinessesScreen.prototype, "submitButton", {
+        get: function () {
+            return document.getElementById('submit-businesses');
+        },
+        enumerable: true,
+        configurable: true
+    });
     BusinessesScreen.prototype.setCaptchaBox = function () {
         this.captchaBox.innerHTML = Constants.captachaBusinesses;
     };
@@ -429,8 +436,12 @@ var BusinessesScreen = /** @class */ (function () {
             return;
         window.setTimeout(this.setCaptchaBox, 100);
     };
+    BusinessesScreen.prototype.handleCaptcha = function (checkbox) {
+        this.submitButton.disabled = !checkbox.checked;
+    };
     return BusinessesScreen;
 }());
+/// <reference path="constants.ts"/>
 var ContactScreen = /** @class */ (function () {
     function ContactScreen(service) {
         this.service = service;
@@ -443,6 +454,13 @@ var ContactScreen = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ContactScreen.prototype, "submitButton", {
+        get: function () {
+            return document.getElementById('submit-contact');
+        },
+        enumerable: true,
+        configurable: true
+    });
     ContactScreen.prototype.setCaptchaBox = function () {
         this.captchaBox.innerHTML = Constants.captachaContact;
     };
@@ -450,6 +468,9 @@ var ContactScreen = /** @class */ (function () {
         if (!this.captchaBox)
             return;
         window.setTimeout(this.setCaptchaBox, 100);
+    };
+    ContactScreen.prototype.handleCaptcha = function (checkbox) {
+        this.submitButton.disabled = !checkbox.checked;
     };
     return ContactScreen;
 }());

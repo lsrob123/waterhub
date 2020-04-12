@@ -12,6 +12,10 @@ class BusinessesScreen {
         return <HTMLElement>document.getElementById('c-businesses');
     }
 
+    public get submitButton(): HTMLButtonElement {
+        return <HTMLButtonElement>document.getElementById('submit-businesses');
+    }
+
     public setCaptchaBox() {
         this.captchaBox.innerHTML = Constants.captachaBusinesses;
     }
@@ -20,5 +24,9 @@ class BusinessesScreen {
         if (!this.captchaBox) return;
 
         window.setTimeout(this.setCaptchaBox, 100);
+    }
+
+    public handleCaptcha(checkbox: HTMLInputElement) {
+        this.submitButton.disabled = !checkbox.checked;
     }
 }

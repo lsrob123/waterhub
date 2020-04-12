@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Blog.Web.Abstractions;
+﻿using Blog.Web.Abstractions;
 using Blog.Web.Config;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using WaterHub.Core;
 using WaterHub.Core.Abstractions;
 
@@ -22,15 +22,15 @@ namespace Blog.Web.Pages
             _smtpService = smtpService;
         }
 
-        public override string PageName => PageDefinitions.Businesses.PageName;
-
-        public override string PageTitle => PageDefinitions.Businesses.PageTitle;
-
         [BindProperty]
         public ContactForm ContactForm { get; set; }
 
         [TempData]
         public string LastSubmittedFormJson { get; set; }
+
+        public override string PageName => PageDefinitions.Businesses.PageName;
+
+        public override string PageTitle => PageDefinitions.Businesses.PageTitle;
 
         public void OnGet()
         {
@@ -41,7 +41,7 @@ namespace Blog.Web.Pages
         {
             if (!Request.IsChecked("IsHumanInput"))
             {
-                ContactForm.ErrorMessage = "请点击确认无误";
+                ContactForm.ErrorMessage = "请点击确认输入";
                 LastSubmittedFormJson = ContactForm;
                 return RedirectToPage();
             }
