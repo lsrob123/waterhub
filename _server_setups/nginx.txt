@@ -1,0 +1,15 @@
+    server {
+        listen       80;
+        server_name  vibrant-gallery.com;
+        return 301 https://vibrant-gallery.com$request_uri;
+    }
+
+    server {
+        listen       443 ssl;
+        server_name  vibrant-gallery.com;
+        ssl_certificate      C:\applications\app.gallery.web\_server_setups\vibrant-gallery_com.crt;
+        ssl_certificate_key  C:\applications\app.gallery.web\_server_setups\vibrant-gallery.key;
+        location / {
+            proxy_pass  http://localhost:62492/;
+        }
+    }
