@@ -224,7 +224,12 @@ namespace WaterHub.Core
             var json = File.ReadAllText(filePath);
             var settings = JsonSerializer.Deserialize<HostSettings>(json,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            webBuilder.UseUrls(settings.Url);
+            webBuilder
+                .UseUrls(settings.Url)
+                .UseKestrel(options =>
+                {
+                    options.Limits.MaxRequestBodySize = settings.FileUploadLimitInMB * 1048576;
+                });
             return webBuilder;
         }
 

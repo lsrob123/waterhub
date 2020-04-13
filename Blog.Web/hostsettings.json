@@ -1,3 +1,4 @@
 ﻿{
-  "url": "http://*:62490"
+  "Url": "http://*:62490",
+  "FileUploadLimitInMB": 50 
 }

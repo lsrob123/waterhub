@@ -37,7 +37,7 @@ else if (Model.IsLoggedIn)
     </div>
 }
 
-@if (!Model.IsNotFound && Model.Album.Visibility == Visibility.Public)
+@if (!Model.IsNotFound && (Model.Album.Visibility == Visibility.Public || Model.IsLoggedIn))
 {
     @if (!Model.IsLoggedIn)
     {
@@ -73,7 +73,7 @@ else if (Model.IsLoggedIn)
         }
         else
         {
-            <span>(Empty)</span>
+            <div class="group-space">(Empty)</div>
         }
     </div>
 }

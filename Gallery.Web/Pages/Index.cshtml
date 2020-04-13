@@ -26,7 +26,13 @@
                 <div class="album-day-title">@albumDay.Key.ToString("yyyy-MM-dd")</div>
                 @foreach (var album in albumDay.Value)
                 {
-                    <a class="album-day-box-title" href="/albums/@album.Name" target="@album.Name"> @album.Name </a>
+            <a class="album-day-box-title" href="/albums/@album.Name" target="@album.Name">
+                @album.Name
+                @if (Model.IsLoggedIn && album.Visibility == Visibility.Private)
+                {
+                    <span class="red"> &nbsp; (hidden)</span>
+                }
+            </a>
                     <div class="album-day-box">
                         @if (album.HasUploadImages)
                         {
