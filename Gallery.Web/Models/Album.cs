@@ -38,6 +38,7 @@ namespace Gallery.Web.Models
         public Visibility Visibility { get; protected set; }
 
         public ICollection<UploadImage> SortedUploadImages => UploadImages?.Values.OrderBy(x => x.DisplayOrder).ToList();
+        public ICollection<UploadImage> FirstFour => UploadImages?.Values.OrderBy(x => x.DisplayOrder).Take(4).ToList();
 
         public Album MarkAsNormal()
         {

@@ -24,36 +24,42 @@
         {
             <div class="album-day">
                 <div class="album-day-title">@albumDay.Key.ToString("yyyy-MM-dd")</div>
-                @foreach (var album in albumDay.Value)
-                {
-            <a class="album-day-box-title" href="/albums/@album.Name" target="@album.Name">
-                @album.Name
-                @if (Model.IsLoggedIn && album.Visibility == Visibility.Private)
-                {
-                    <span class="red"> &nbsp; (hidden)</span>
-                }
-            </a>
-                    <div class="album-day-box">
-                        @if (album.HasUploadImages)
-                        {
-                            foreach (var uploadImage in album.SortedUploadImages)
+                <div class="album-day-container">
+
+                    @foreach (var album in albumDay.Value)
+                    {
+                        <div class="album-block">
+                            <a class="album-title" href="/albums/@album.Name" target="@album.Name">
+                                @album.Name
+                                @if (Model.IsLoggedIn && album.Visibility == Visibility.Private)
+                                {
+                                    <span class="red"> &nbsp; (hidden)</span>
+                                }
+                            </a>
+
+                            <img class="copy-album-url-icon" src="~/images/copy.svg"
+                                 onclick="javascript: album.copyHyperLink('spn_@album.Name');" />
+
+                            <span class="invisible" id="spn_@album.Name">@Html.Raw(@$"albums/{album.Name}")</span>
+
+
+                            @if (album.HasUploadImages)
                             {
-                                <div class="album-image">
-                                    <a href="/images/@uploadImage.UriPath" target="@uploadImage.ProcessedFileName">
-                                        <img class="thumb-in-index" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
-                                    </a>
-                                    <div class="album-image-footer" id="@uploadImage.ProcessedFileName">
-                                        <img class="album-image-footer-icon" src="~/images/share-square.svg"
-                                             onclick="javascript: album.showToolTip(service.getUrl(@Html.Raw(@$"'images/{uploadImage.UriPath}'")), '@uploadImage.ProcessedFileName');" />
-                                        <img class="album-image-footer-icon" src="~/images/copy.svg"
-                                             onclick="javascript: album.copyHyperLink('spn_@uploadImage.ProcessedFileName');" />
-                                        <span class="invisible" id="spn_@uploadImage.ProcessedFileName">@Html.Raw(@$"images/{uploadImage.UriPath}")</span>
-                                    </div>
+
+                                <div class="album-images">
+
+                                    @foreach (var uploadImage in album.FirstFour)
+                                    {
+
+                                        <img onclick="window.open('/albums/@album.Name','@album.Name')" src="/images/@uploadImage.IconUriPath" alt="@uploadImage.ProcessedFileName" />
+                                    }
+
                                 </div>
+
                             }
-                        }
-                    </div>
-                }
+                        </div>
+                    }
+                </div>
             </div>
         }
     }
@@ -72,5 +78,5 @@
 
 @section PageHeader
 {
-  
+
 }

@@ -110,7 +110,7 @@ a {
                 text-shadow: 1px 1px rgba(0,0,0,0.7);
             }
 
-@media only screen and (max-width: 500px) {
+/*@media only screen and (max-width: 500px) {
     .content {
         bottom: 80px;
     }
@@ -118,7 +118,7 @@ a {
     .footer {
         height: 80px;
     }
-}
+}*/
 
 .group-space {
     margin-top: 20px;
@@ -188,53 +188,86 @@ a {
 }
 
     .albums .album-day {
-        margin-bottom: 30px;
+        margin-bottom: 40px;
     }
 
         .albums .album-day .album-day-title {
-            margin: 20px 5px 10px 10px;
+            margin: 20px 5px 5px 0;
             padding: 5px 250px 5px 10px;
             background-image: linear-gradient(to right, rgba(230,230,255,0.30), rgb(38, 50, 56));
             display: table;
             border-radius: 4px 0 0 4px;
         }
 
-        .albums .album-day .album-day-box-title {
-            display: table;
-            text-decoration: none;
-            color: wheat;
-            cursor: pointer;
-            margin: 12px 10px 5px 15px;
-        }
 
-            .albums .album-day .album-day-box-title:hover {
-                color: orangered;
-                text-decoration: underline;
-            }
-
-        .albums .album-day .album-day-box {
+        .albums .album-day .album-day-container {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: start;
+            justify-content: flex-start;
             align-items: flex-start;
             align-content: flex-start;
-            margin-top: 5px;
         }
 
-.album-image {
-    display: block;
-    margin: 10px 10px 15px 10px;
-    padding: 3px;
-    background-color: white;
-    box-shadow: 0px 3px 20px 5px rgba(0,0,0,0.8);
-    cursor: inherit;
+            .albums .album-day .album-day-container .album-block {
+                display: table;
+            }
+
+                .albums .album-day .album-day-container .album-block .album-title {
+                    display: inline-table;
+                    text-decoration: none;
+                    color: wheat;
+                    cursor: pointer;
+                    margin: 5px 10px 0 10px;
+                    font-size: 18px;
+                }
+
+                    .albums .album-day .album-day-container .album-block .album-title:hover {
+                        color: orangered;
+                        text-decoration: underline;
+                    }
+
+
+                .albums .album-day .album-day-container .album-block .copy-album-url-icon {
+                    width: 12px;
+                    display: inline;
+                    cursor: pointer;
+                    position: relative;
+                    top: 5px;
+                    padding: 4px;
+                }
+
+                    .albums .album-day .album-day-container .album-block .copy-album-url-icon:hover {
+                        background-color: orangered;
+                        border-radius: 2px;
+                    }
+
+                .albums .album-day .album-day-container .album-block .album-images {
+                    width: 200px;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    align-content: center;
+                    background-color: white;
+                    box-shadow: 0px 3px 20px 5px rgba(0,0,0,0.8);
+                    padding: 2px;
+                    margin: 5px 10px 15px 10px;
+                }
+
+                    .albums .album-day .album-day-container .album-block .album-images img {
+                        width: 49%;
+                        margin: 1px;
+                        cursor: pointer;
+                    }
+
+@media only screen and (max-width: 500px) {
+    .albums .album-day .album-day-container .album-block .album-images {
+        width: auto;
+    }
 }
 
-    .album-image a {
-        text-decoration: none;
-        cursor: pointer;
-    }
 
 .thumb-in-index {
     display: block;
@@ -289,6 +322,7 @@ a {
     }
 
 .album-info {
+    margin: 10px 20px 0 20px;
 }
 
 .photos {
@@ -298,7 +332,6 @@ a {
     justify-content: start;
     align-items: flex-start;
     align-content: flex-start;
-    margin-top: 10px;
 }
 
     .photos .photo-block {
@@ -313,6 +346,17 @@ a {
             text-decoration: none;
             cursor: pointer;
         }
+
+@media only screen and (max-width: 768px) {
+    .photos .photo-block {
+        width: 100%;
+    }
+
+        .photos .photo-block img {
+            width: 100%;
+            height: auto;
+        }
+}
 
 .thumb-in-album {
     height: 200px;
